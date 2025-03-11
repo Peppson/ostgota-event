@@ -5,11 +5,11 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
-
-        // Jw todo add interfaces
-        builder.Services.AddScoped<DataService>();
+        builder.Services.AddScoped<DataService>(); // Jw: Todo add interface
+        builder.Services.AddScoped<DatabaseInitializer>();
         builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db");
 
         var app = builder.Build();
@@ -23,16 +23,15 @@ public class Program
         app.UseAuthorization();
         app.MapControllers();
 
-
-        // Ensure SQLite is seeded on firstboot todo move too Core/Data?
-        var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
-        using (var scope = scopeFactory.CreateScope())
+        // Ensure SQLite DB is created and seeded on firstboot, bool for debugging
+        bool resetDatabaseToDefault = false;
+        using (var scope = app.Services.CreateScope())
         {
-            var db = scope.ServiceProvider.GetRequiredService<Database>();
-            if (db.Database.EnsureCreated())
-            {
-                //SeedData.Initialize(db);
-            }
+            var db = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+            if (resetDatabaseToDefault)
+                db.ResetDatabase();
+            else
+                db.InitDatabase();
         }
 
         app.Run();
