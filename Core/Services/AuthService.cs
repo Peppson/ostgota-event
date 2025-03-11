@@ -6,7 +6,7 @@ namespace Core.Services;
 public interface IAuthService
 {
     User? Login(string username, string password);
-    User? Register(string username, string password);
+    User? Register(string username, string password, string email, string? phonenumber);
 }
 
 // TODO: Implement better auth
@@ -30,17 +30,25 @@ public class AuthService : IAuthService
             return null;
         }
 
-        return new User(user.Username, user.Role);
+        return user;
+
+        /*public int Id { get; set; }
+    public required string Username { get; set; }
+    public required string PasswordHash { get; set; }
+    public UserRoles Role { get; set; } = UserRoles.User;
+    public required string Email { get; set; }
+    public string? PhoneNumber { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;*/
     }
 
-    public User? Register(string username, string password)
+    public User? Register(string username, string password, string email, string? phonenumber)
     {
         if (_database.Users.Any(u => u.Username == username))
         {
             return null;
         }
 
-        var user = new User(username, BCrypt.Net.BCrypt.HashPassword(password));
+        var user = new User(){ Username = username, PasswordHash = BCrypt.Net.BCrypt.HashPassword(password), Email = email, PhoneNumber = phonenumber }; 
 
         _database.Users.Add(user);
         return user;
