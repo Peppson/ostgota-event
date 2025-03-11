@@ -22,9 +22,3 @@ public class User
 
     // todo
 }
-
-public enum UserRoles
-{
-    Admin,
-    User
-}
