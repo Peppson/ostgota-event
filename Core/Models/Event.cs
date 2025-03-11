@@ -5,11 +5,11 @@ public class Event
     [Key]
     public int Id { get; set; }
     [Required]
-    public string Name { get; set; }
+    public required string Name { get; set; }
     [Required]
-    public string Description { get; set; }
+    public required string Description { get; set; }
     [Required]
-    public string City { get; set; }
+    public required string City { get; set; }
     [Required]
     public AccessType AccessType { get; set; }
     [Required]
@@ -21,5 +21,5 @@ public class Event
     [Required]
     public int TicketsMax { get; set; }
     public bool HasSeat { get; set; } = false;
-    public string? ImagePath { get; set; }
+    public string? ImagePath { get; set; } // What to do if no path? default background?
 }

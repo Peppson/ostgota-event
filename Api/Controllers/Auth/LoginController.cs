@@ -1,7 +1,4 @@
-﻿using Core.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Data.Models;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Api.Controllers.Auth
 {

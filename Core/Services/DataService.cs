@@ -2,32 +2,26 @@ namespace Core.Data;
 
 public class DataService
 {
-    private readonly AppDbContext _context;
+    private readonly Database _Db;
 
-    public DataService(AppDbContext context)
+    public DataService(Database DbContext) // Todo add interface
     {
-        _context = context;
+        _Db = DbContext;
     }
 
     public async Task<User?> GetUserByEmail(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return await _Db.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<List<Event>> GetAllEvents()
     {
-        return await _context.Events.ToListAsync();
+        return await _Db.Events.ToListAsync();
     }
 
     public async Task AddEvent(Event ev)
     {
-        _context.Events.Add(ev);
-        await _context.SaveChangesAsync();
+        _Db.Events.Add(ev);
+        await _Db.SaveChangesAsync();
     }
 }
-
-
-
-// repository pattern DB
-// Mocka  
-// init default values

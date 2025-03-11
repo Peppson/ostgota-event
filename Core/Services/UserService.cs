@@ -2,7 +2,7 @@ namespace Core.Services;
 
 public class UserService
 {
-    private readonly IRepository<User> _userRepository;
+    /* private readonly IRepository<User> _userRepository;
 
     public UserService(IRepository<User> userRepository)
     {
@@ -29,7 +29,7 @@ public class UserService
             user.Tickets.Remove(ticket);
             await _userRepository.SaveChangesAsync();
         }
-    }
+    } */
 
 
     /*
