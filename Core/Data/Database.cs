@@ -1,8 +1,10 @@
-﻿namespace Data;
+﻿namespace Core.Data;
 
-public class Database : IDatabase
-{
-    public List<Event> Events { get; set; } = [];
-    public List<User> Users { get; set; } = [];
-    public List<Ticket> Tickets { get; set; } = [];
+public class Database : DbContext
+{   
+    public Database(DbContextOptions<Database> options) : base(options) {}
+
+    public DbSet<User> Users { get; set; }
+    public DbSet<Event> Events { get; set; }
+    public DbSet<Ticket> Tickets { get; set; }
 }

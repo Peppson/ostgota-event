@@ -1,0 +1,3 @@
+
+Check SQLite direcly in browser
+https://inloop.github.io/sqlite-viewer/

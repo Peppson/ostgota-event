@@ -7,10 +7,10 @@ namespace Api.Controllers.Auth
 {
     public class RegisterController : Controller
     {
-
-        public static Results<Ok<Response>, BadRequest<string>> Handle( Request request, IAuthService authService)
-        {
-            var result = authService.Register(request.Username, request.Password);
+        public static async Task<Results<Ok<Response>, BadRequest<string>>> Handle(Request request, IAuthService authService)
+        {   
+            // Sorry Viktor, var tvungen att greja lite här för att få skiten att kompilera :) - JeppaJogg
+            var result = await authService.Register(request.Username, request.Password, request.Email, null); // <<<<< denna null
             if (result == null)
             {
                 return TypedResults.BadRequest("Username already exists");

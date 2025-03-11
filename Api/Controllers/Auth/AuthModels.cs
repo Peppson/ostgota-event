@@ -1,8 +1,4 @@
-﻿using Data.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿namespace Api.Controllers.Auth;
 
-namespace Api.Controllers.Auth
-{
-    public record Request(string Username, string Password);
-    public record Response(string Username, UserRoles Role);
-}
+public record Request(string Username, string Password, string Email);
+public record Response(string Username, UserRoles Role);
