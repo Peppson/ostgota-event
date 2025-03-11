@@ -1,0 +1,58 @@
+
+### Östgöta Event ###
+
+
+Tekniker:
+ - Swagger
+ - Https only
+ - EFCore SQLite (inbyggd)
+ - Controllers 
+ - reqnroll testStuite (ingen prio)
+ - Chad popup kundtjänst?
+
+
+Feature branches
+Max 10 events
+
+Inlogg:
+  - Kund 
+  - Admin
+  - Ej inloggad
+
+Controllers:
+/"" 
+  - gifs på olika aktiviteter, växlar mellan på 5 sek interval?
+
+/Lista med events
+
+/Path per event
+  - Statisk bild på event
+  - Googlemaps 
+  - Fejk knapp (till event)?
+
+/Skapa event (admin)?
+
+/Login
+ - popup ruta?
+ - kräva login vid bokning?
+ - if not logged in login 
+ 
+
+Events:
+Halloween lövsta 
+ekenäs julmarknad 
+Medeltidsveckan 
+kisa marknad 
+Kalv klappning
+Skogsröjet
+Volvo kör bara?
+
+
+Sidor:
+ - Home 
+ - Lista > klicka till dom (sorting)
+ - Event sida per event (dynamisk)
+ - Login popup
+ - Admin enklare sida med (länkat från header)
+ - ChadGPT kundtjänst?
+ 
