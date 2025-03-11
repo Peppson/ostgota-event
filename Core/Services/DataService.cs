@@ -2,19 +2,30 @@ namespace Core.Data;
 
 public class DataService
 {
-    /* public Task<Pizza> GetPizzasAsync()
+    private readonly AppDbContext _context;
+
+    public DataService(AppDbContext context)
     {
-        return Task.FromResult(new Pizza()
-        {
-            PizzaId = 1,
-            Name = "Vesuvio",
-            Description = "God",
-            Price = 15.99M,
-            Vegetarian = false,
-            Vegan = false
-        });
-    } */
+        _context = context;
+    }
+
+    public async Task<User?> GetUserByEmail(string email)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    }
+
+    public async Task<List<Event>> GetAllEvents()
+    {
+        return await _context.Events.ToListAsync();
+    }
+
+    public async Task AddEvent(Event ev)
+    {
+        _context.Events.Add(ev);
+        await _context.SaveChangesAsync();
+    }
 }
+
 
 
 // repository pattern DB
