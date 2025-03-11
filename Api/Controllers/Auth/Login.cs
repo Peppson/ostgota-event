@@ -1,8 +1,9 @@
-using TicketToCode.Api.Services;
+using Core.Services;
+using Data.Models;
 
-namespace TicketToCode.Api.Endpoints.Auth;
+namespace Api.Endpoints.Auth;
 
-public class Login : IEndpoint
+public class Login 
 {
     // Mapping
     public static void MapEndpoint(IEndpointRouteBuilder app) => app
@@ -33,7 +34,7 @@ public class Login : IEndpoint
             SameSite = SameSiteMode.Strict,
             Expires = DateTimeOffset.UtcNow.AddDays(7)
         });
-        var response = new Response(result.Username, result.Role);
+        var response = new Response(result.Username, Convert.ToString(result.Role));
         return TypedResults.Ok(response);
     }
 } 

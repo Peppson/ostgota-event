@@ -1,8 +1,9 @@
-using TicketToCode.Api.Services;
+using Core.Services;
 
-namespace TicketToCode.Api.Endpoints.Auth;
 
-public class Register : IEndpoint
+namespace Api.Endpoints.Auth;
+
+public class Register 
 {
     // Mapping
     public static void MapEndpoint(IEndpointRouteBuilder app) => app
