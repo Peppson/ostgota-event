@@ -10,21 +10,15 @@ public class User
     public string? PhoneNumber { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-
+    
     public List<Ticket>? Tickets { get; set; } = null; // Todo relation <<<<<<
 
     public void AddTicket(Ticket ticket)
-    {
+    {   
         Tickets.Add(ticket);
     }
 
     // RM
 
     // todo
-}
-
-public enum UserRoles
-{
-    Admin,
-    User
 }

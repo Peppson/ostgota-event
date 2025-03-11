@@ -14,11 +14,3 @@ public class Event
     public string? ImagePath { get; set; }
     public bool HasSeat { get; set; } = false;
 }
-
-public enum AccessType
-{
-    Free,
-    Paid,
-    MemberOnly
-}
-
