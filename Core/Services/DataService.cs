@@ -1,19 +1,32 @@
-namespace Core.Data;
+namespace Core.Services;
 
-public class DataService
+public class DataService(Database DbContext) : IDataService
 {
-    private readonly Database _db;
+    private readonly Database _db = DbContext;
 
-    public DataService(Database DbContext) // Todo add interface
+    public async Task<User?> GetUserByName(string username)
     {
-        _db = DbContext;
+        return await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
-    public async Task<User?> GetUserByEmail(string email)
+    public async Task<bool> DoesUserExist(string username)
     {
-        return await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return await _db.Users.AnyAsync(u => u.Username == username);
     }
 
+    public async Task<List<User>> GetAllUsers()
+    {
+        return await _db.Users.ToListAsync();
+    }
+
+    public async Task AddUser(User user)
+    {
+        _db.Users.Add(user);
+        await _db.SaveChangesAsync();
+    }
+
+
+    // Todo...
     public async Task<List<Event>> GetAllEvents()
     {
         return await _db.Events.ToListAsync();
@@ -22,6 +35,17 @@ public class DataService
     public async Task AddEvent(Event ev)
     {
         _db.Events.Add(ev);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<List<Ticket>> GetAllTickets()
+    {
+        return await _db.Tickets.ToListAsync();
+    }
+
+    public async Task AddTicket(Ticket ticket)
+    {
+        _db.Tickets.Add(ticket);
         await _db.SaveChangesAsync();
     }
 }

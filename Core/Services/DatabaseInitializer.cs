@@ -1,31 +1,25 @@
 namespace Core.Services;
 
-public class DatabaseInitializer
+public class DatabaseInitializer(Database db)
 {
-    private readonly Database _db;
+    private readonly Database _db = db;
 
-    public DatabaseInitializer(Database db)
+    public async Task InitDatabase()
     {
-        _db = db;
-    }
-
-    public void InitDatabase()
-    {
-        // Check if the database was created if so seed it
+        // Check if new database was created if so seed it
         if (_db.Database.EnsureCreated())
         {
-            SeedDatabase();
+            await SeedDatabase();
         }
     }
 
-    public void ResetDatabase()
+    public async Task ResetDatabase()
     {
         try
         {
-            // ¯\_(ツ)_/¯ 
-            _db.Database.EnsureDeleted();
+            _db.Database.EnsureDeleted(); // ¯\_(ツ)_/¯ 
             _db.Database.EnsureCreated();
-            SeedDatabase();
+            await SeedDatabase();
         }
         catch (Exception ex)
         {
@@ -33,25 +27,34 @@ public class DatabaseInitializer
         }
     }
 
-    private void SeedDatabase()
+    private async Task SeedDatabase()
     {
         var user = new User
         {
             Username = "user",
-            PasswordHash = "password",
+            PasswordHash = "password",          // Todo add hashing
             Email = "user@example.com",
             PhoneNumber = "123-456-7890",
             //Role = UserRoles.User,            // default
             //CreatedAt = DateTime.UtcNow,      // default
-            // Tickets...
+            //Tickets...                        // List<Tickets>
         };
-        _db.Users.Add(user);
-        _db.SaveChanges();
-        
+
+        var admin = new User
+        {
+            Username = "admin",
+            PasswordHash = "password",          // Todo add hashing
+            Email = "admin@example.com",
+            PhoneNumber = "123-456-7890",
+            Role = UserRoles.Admin,
+            //CreatedAt = DateTime.UtcNow,      // default
+            //Tickets...                        // List<Tickets>
+        };
+
         var sampleEvent = new Event
         {
-            Name = "Sample Event",
-            Description = "Sample event description.",
+            Name = "Chad Event",
+            Description = "Chad event description.",
             City = "Chad City",
             AccessType = AccessType.Free, 
             StartTime = DateTime.UtcNow,
@@ -61,8 +64,11 @@ public class DatabaseInitializer
             //HasSeat = false,                  // default
             //ImagePath = ""                    // nullable
         };
-        _db.Events.Add(sampleEvent);
-        _db.SaveChanges();
+
+        await _db.Users.AddAsync(user);
+        await _db.Users.AddAsync(admin);
+        await _db.Events.AddAsync(sampleEvent);
+        await _db.SaveChangesAsync();
 
         var ticket = new Ticket
         {
@@ -73,7 +79,8 @@ public class DatabaseInitializer
             Price = 29.99m,
             //Seat = "A1",                      // nullable
         };
-        _db.Tickets.Add(ticket);
-        _db.SaveChanges();
+
+        await _db.Tickets.AddAsync(ticket);
+        await _db.SaveChangesAsync();
     }
 }

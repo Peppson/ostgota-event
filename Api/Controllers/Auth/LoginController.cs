@@ -8,9 +8,9 @@ namespace Api.Controllers.Auth
     {
 
         [HttpPost]
-        public static Results<Ok<Response>, NotFound<string>> LogIn(Request request, IAuthService authService, HttpContext context)
+        public static async Task<Results<Ok<Response>, NotFound<string>>> LogIn(Request request, IAuthService authService, HttpContext context)
         {
-            var result = authService.Login(request.Username, request.Password); //authorizes the login from userinput by authentication service.
+            var result = await authService.Login(request.Username, request.Password); //authorizes the login from userinput by authentication service.
             if (result == null)
             {
                 return TypedResults.NotFound("Invalid username or password");

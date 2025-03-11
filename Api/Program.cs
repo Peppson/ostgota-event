@@ -2,13 +2,13 @@ namespace Api;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
-        builder.Services.AddScoped<DataService>(); // Jw: Todo add interface
+        builder.Services.AddScoped<IDataService, DataService>();
         builder.Services.AddScoped<DatabaseInitializer>();
         builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db");
 
@@ -29,9 +29,9 @@ public class Program
         {
             var db = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
             if (resetDatabaseToDefault)
-                db.ResetDatabase();
+                await db.ResetDatabase();
             else
-                db.InitDatabase();
+                await db.InitDatabase();
         }
 
         app.Run();
