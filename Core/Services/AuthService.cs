@@ -1,7 +1,7 @@
-using TicketToCode.Core.Data;
-using TicketToCode.Core.Models;
+using Data.Models;
+using Data;
 
-namespace TicketToCode.Api.Services;
+namespace Core.Services;
 
 public interface IAuthService
 {

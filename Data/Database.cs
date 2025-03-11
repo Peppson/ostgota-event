@@ -1,6 +1,6 @@
-﻿using TicketToCode.Core.Models;
+﻿using Data.Models;
 
-namespace TicketToCode.Core.Data;
+namespace Data;
 
 public interface IDatabase
 {
