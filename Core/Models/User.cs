@@ -5,20 +5,26 @@ public class User
     public int Id { get; set; }
     public required string Username { get; set; }
     public required string PasswordHash { get; set; }
-    public UserRoles Role { get; set; } = UserRoles.User;
     public required string Email { get; set; }
     public string? PhoneNumber { get; set; }
+    public UserRoles Role { get; set; } = UserRoles.User;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public required List<Ticket> Tickets { get; set; }
 
-    
-    public List<Ticket>? Tickets { get; set; } = null; // Todo relation <<<<<<
 
     public void AddTicket(Ticket ticket)
     {   
         Tickets.Add(ticket);
     }
 
-    // RM
+    public bool RemoveTicket(Ticket ticket)
+    {   
+        Tickets.RemoveAll(e => e.Id == ticket.Id);
 
-    // todo
+    }
+
+    public void RemoveTicket(int ticketId)
+    {   
+        Tickets.RemoveAll(e => e.Id == ticketId);
+    }
 }
