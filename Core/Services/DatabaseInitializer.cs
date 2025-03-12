@@ -15,9 +15,9 @@ public class DatabaseInitializer(Database db)
 
     public async Task ResetDatabase()
     {
-        try
+        try // ¯\_(ツ)_/¯ 
         {
-            _db.Database.EnsureDeleted(); // ¯\_(ツ)_/¯ 
+            _db.Database.EnsureDeleted(); 
             _db.Database.EnsureCreated();
             await SeedDatabase();
         }
@@ -46,7 +46,7 @@ public class DatabaseInitializer(Database db)
             PasswordHash = "password",          // Todo add hashing
             Email = "admin@example.com",
             PhoneNumber = "123-456-7890",
-            Role = UserRoles.Admin,
+            Role = UserRole.Admin,
             //CreatedAt = DateTime.UtcNow,      // default
             //Tickets...                        // List<Tickets>
         };

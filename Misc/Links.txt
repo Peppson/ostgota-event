@@ -1,3 +1,9 @@
 
-Check SQLite direcly in browser
+Check SQLite DB directly in browser:
 https://inloop.github.io/sqlite-viewer/
+
+Repo:
+https://github.com/Ett-bra-team-som-samarbetar-bra/ostgota-event
+
+KanBan Board:
+https://github.com/orgs/Ett-bra-team-som-samarbetar-bra/projects/1/views/1
