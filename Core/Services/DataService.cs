@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+
 namespace Core.Services;
 
 public class DataService(Database DbContext) : IDataService
@@ -26,14 +28,17 @@ public class DataService(Database DbContext) : IDataService
     }
 
     public async Task RemoveUser(User user)
-    {   
+    {
         _db.Users.Remove(user);
         await _db.SaveChangesAsync();
     }
 
-    public async Task<Event?> GetEventByName(string name)
+
+    // EVENTS
+
+    public async Task<Event?> GetEventById(int id)
     {
-        return await _db.Events.FirstOrDefaultAsync(u => u.Name == name);
+        return await _db.Events.FirstOrDefaultAsync(u => u.Id == id);
     }
 
     public async Task<Event?> DoesEventExist(string name)
@@ -46,17 +51,7 @@ public class DataService(Database DbContext) : IDataService
         return await _db.Events.ToListAsync();
     }
 
-    public async Task AddEvent(Event ev)
-    {
-        _db.Events.Add(ev);
-        await _db.SaveChangesAsync();
-    }
-
-    public async Task RemoveEvent(Event ev)
-    {
-        _db.Events.Remove(ev);
-        await _db.SaveChangesAsync();
-    }
+    // TICKETS
 
     public async Task<List<Ticket>> GetAllTickets()
     {

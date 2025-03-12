@@ -6,6 +6,8 @@ public class EventController(IDataService dataService) : Controller
 {
     private readonly IDataService _dataService = dataService;
 
+
+    // get all events
     [HttpGet("get")]
     public async Task<ActionResult<List<Event>>> GetAllEvents()
     {
@@ -19,4 +21,46 @@ public class EventController(IDataService dataService) : Controller
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+
+    // Get event by id 
+    [HttpGet("get/id/{id}")]
+    public async Task<ActionResult<Event>> GetEventById(int id)
+    {
+        try
+        {
+            var events = await _dataService.GetEventById(id);
+            if (events == null)
+            {
+                return NotFound($"Event with id: {id} was not found");
+            }
+            return Ok(events);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    // Get event by name
+    [HttpGet("get/name/{name}")]
+    public async Task<ActionResult<Event>> GetEventByName(string name)
+    {
+        try
+        {
+            var events = await _dataService.DoesEventExist(name);
+            if (events == null)
+            {
+                return NotFound($"Event with name: {name} was not found");
+            }
+            return Ok(events);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+
 }
+
+
