@@ -13,7 +13,7 @@ class Program
             .AddInteractiveServerComponents();
         
         builder.Services.AddScoped(sp => new HttpClient {
-            BaseAddress = new Uri(builder.Configuration["FrontendUrl"] ?? "https://localhost:7189")
+            BaseAddress = new Uri($"{builder.Configuration["FrontendUrl"]!}/")
         });
 
         var app = builder.Build();

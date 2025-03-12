@@ -24,7 +24,7 @@ else
     {
         try
         {
-            var events = await HttpClient.GetFromJsonAsync<List<Event>>($"http://localhost:5236/api/event/get");
+            var events = await HttpClient.GetFromJsonAsync<List<Event>>($"api/event/get");
             eventDetails = events?.FirstOrDefault()!;
         }
         catch (Exception ex)
@@ -35,7 +35,7 @@ else
 
     private string GetBackgroundImageUrl(string? imagePath)
     {
-        // Return a default image if no ImagePath is provided
+        // Return a default image if no ImagePath is null
         if (string.IsNullOrWhiteSpace(imagePath))
         {
             return "/images/raps.jpg";
