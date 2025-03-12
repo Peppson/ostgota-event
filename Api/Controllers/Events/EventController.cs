@@ -6,7 +6,6 @@ public class EventController(IDataService dataService) : Controller
 {
     private readonly IDataService _dataService = dataService;
 
-
     // get all events
     [HttpGet("get")]
     public async Task<ActionResult<List<Event>>> GetAllEvents()
@@ -47,7 +46,7 @@ public class EventController(IDataService dataService) : Controller
     {
         try
         {
-            var events = await _dataService.DoesEventExist(name);
+            var events = await _dataService.GetEventByName(name);
             if (events == null)
             {
                 return NotFound($"Event with name: {name} was not found");
@@ -75,15 +74,19 @@ public class EventController(IDataService dataService) : Controller
         }
     }
 
-
     //delete event
-    [HttpDelete("delete")]
+    [HttpDelete("delete/{id}")]
     public async Task<ActionResult<Event>> DeleteEvent(int id)
     {
         try
         {
-            await _dataService.RemoveEvent(id);
-            return Ok(id);
+            var deletedEvent = await _dataService.RemoveEvent(id);
+            if (deletedEvent == null)
+            {
+                return NotFound("Event not found.");
+            }
+
+            return Ok(deletedEvent.Id);
         }
         catch (Exception ex)
         {
@@ -91,6 +94,24 @@ public class EventController(IDataService dataService) : Controller
         }
     }
 
+    // Update event
+    [HttpPut("update/{id}")]
+    public async Task<ActionResult<Event>> UpdateEvent(int id, Event ev)
+    {
+        try
+        {
+            var updatedEvent = await _dataService.UpdateEvent(id, ev);
+            if (updatedEvent == null)
+            {
+                return NotFound("Event not found.");
+            }
+            return Ok(updatedEvent);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
 
 }
 

@@ -11,10 +11,11 @@ public interface IDataService
 
     // Event
     Task<Event?> GetEventById(int id);
-    Task<Event?> DoesEventExist(string name);
+    Task<Event?> GetEventByName(string name);
     Task<List<Event>> GetAllEvents();
     Task<Event> AddEvent(Event ev);
-    Task<Event> RemoveEvent(int eventId);
+    Task<Event?> RemoveEvent(int eventId);
+    Task<Event?> UpdateEvent(int eventId, Event updatedEvent);
 
     // Ticket
     Task<List<Ticket>> GetAllTickets();
