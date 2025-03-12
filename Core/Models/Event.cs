@@ -45,6 +45,20 @@ public class Event
     }
 
 
+
+    public void CancelTicket(int count)
+    {
+        if (count <= 0)
+        {
+            throw new ArgumentException("Antalet biljetter måste vara minst 1.");
+        }
+        if (count > _ticketsSold)
+        {
+            throw new InvalidOperationException("Inte tillräckligt många biljetter att ta bort");
+        }
+        _ticketsSold -= count;
+    }
+
 }
 
 public enum AccessType
