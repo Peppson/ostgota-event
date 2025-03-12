@@ -400,4 +400,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Project
-Core/Data/*.db 
+Core/Data/*.db* 

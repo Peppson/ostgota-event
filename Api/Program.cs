@@ -23,6 +23,12 @@ public class Program
         app.UseAuthorization();
         app.MapControllers();
 
+        // Enforce HTTPS only
+        if (app.Environment.IsProduction())
+        {
+            app.UseHsts();
+        }
+
         // Ensure SQLite DB is created and seeded on firstboot, bool for debugging
         bool resetDatabaseToDefault = false;
         using (var scope = app.Services.CreateScope())
