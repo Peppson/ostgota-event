@@ -1,0 +1,38 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@rendermode InteractiveServer
+ @inject ProtectedSessionStorage SessionStorage
+ @inject NavigationManager NavigationManager
+ @inject HttpClient HttpClient
+
+<h3>Login</h3>
+<p>Hello! Please login here:</p>
+<input type="text" @bind="username" />
+<input type="password" @bind="password"/>
+<button @onclick="() => LogInUser()">Log in</button>
+
+@code {
+    private string? username;
+    private string? password;
+
+    public record LoginRequest(string Username, string Password);
+
+    public async void LogInUser()
+    {
+        Console.WriteLine("entered functions");
+        var loggedInUser = new LoginRequest(username, password);
+        var user = await HttpClient.PostAsJsonAsync("/api/auth/login", loggedInUser);
+
+        if(user == null)
+        {
+            Console.WriteLine("user was null");
+        }
+
+        Console.WriteLine("user found");
+
+        await SessionStorage.SetAsync("user", user);
+        NavigationManager.NavigateTo("/");
+        Console.WriteLine("should be navigated");
+    }
+
+}

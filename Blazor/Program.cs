@@ -1,4 +1,5 @@
 using Blazor.Components;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace Blazor;
 
@@ -11,6 +12,8 @@ class Program
         // Add services to the container.
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
+
+        builder.Services.AddScoped<ProtectedSessionStorage>();
         
         builder.Services.AddScoped(sp => new HttpClient {
             BaseAddress = new Uri($"{builder.Configuration["FrontendUrl"]!}/")

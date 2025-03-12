@@ -1,7 +1,7 @@
 ﻿@using Blazor.Models;
 @using Core.Models;
 @using Core.Services;
-@inject NavigationManager navigationManager
+@inject NavigationManager NavigationManager
 
 @page "/admin"
 
@@ -76,7 +76,7 @@
 
 @code {
 
-    public bool isAdmin = true;//user.Role == UserRole.Admin;
+    public bool isAdmin = false;//user.Role == UserRole.Admin;
 
     public static List<EventDto> events { get; set; } = new List<EventDto>();
     public int eventNumber { get; } = events.Count();
@@ -92,8 +92,7 @@
 
     public void Redirect()
     {
-        Task.Delay(3000);
-        navigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/");
     }
 
 }
