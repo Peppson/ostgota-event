@@ -57,6 +57,17 @@ public class DataService(Database DbContext) : IDataService
         return ev;
     }
 
+    public async Task<Event> RemoveEvent(int eventId)
+    {
+        var existingEvent = await _db.Events.FindAsync(eventId);
+        if (existingEvent == null)
+            throw new KeyNotFoundException("Event not found");
+
+        _db.Events.Remove(existingEvent);
+        await _db.SaveChangesAsync();
+        return existingEvent;
+    }
+
     // TICKETS
 
     public async Task<List<Ticket>> GetAllTickets()

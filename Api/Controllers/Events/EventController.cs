@@ -76,6 +76,22 @@ public class EventController(IDataService dataService) : Controller
     }
 
 
+    //delete event
+    [HttpDelete("delete")]
+    public async Task<ActionResult<Event>> DeleteEvent(int id)
+    {
+        try
+        {
+            await _dataService.RemoveEvent(id);
+            return Ok(id);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+
 }
 
 
