@@ -32,7 +32,7 @@ public class DatabaseInitializer(Database db)
         var user = new User
         {
             Username = "user",
-            PasswordHash = "password",          // Todo add hashing
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("password"),
             Email = "user@example.com",
             PhoneNumber = "123-456-7890",
             //Role = UserRoles.User,            // default
@@ -43,7 +43,7 @@ public class DatabaseInitializer(Database db)
         var admin = new User
         {
             Username = "admin",
-            PasswordHash = "password",          // Todo add hashing
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("password"),
             Email = "admin@example.com",
             PhoneNumber = "123-456-7890",
             Role = UserRole.Admin,
@@ -51,7 +51,7 @@ public class DatabaseInitializer(Database db)
             //Tickets...                        // List<Tickets>
         };
 
-        var sampleEvent = new Event
+        var sampleEvent1 = new Event
         {
             Name = "Chad Event",
             Description = "Chad event description.",
@@ -62,12 +62,27 @@ public class DatabaseInitializer(Database db)
             TicketsSold = 0,
             TicketsMax = 100,
             //HasSeat = false,                  // default
-            //ImagePath = ""                    // nullable
+            ImagePath = "images/raps.jpg"       // nullable
+        };
+
+        var sampleEvent2 = new Event
+        {
+            Name = "Dino Event",
+            Description = "Dino event description.",
+            City = "Dino City",
+            AccessType = AccessType.MemberOnly, 
+            StartTime = DateTime.UtcNow,
+            EndTime = DateTime.UtcNow.AddHours(3),
+            TicketsSold = 0,
+            TicketsMax = 100,
+            //HasSeat = false,                  // default
+            ImagePath = "https://ih1.redbubble.net/image.1833920974.3208/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
         };
 
         await _db.Users.AddAsync(user);
         await _db.Users.AddAsync(admin);
-        await _db.Events.AddAsync(sampleEvent);
+        await _db.Events.AddAsync(sampleEvent1);
+        await _db.Events.AddAsync(sampleEvent2);
         await _db.SaveChangesAsync();
 
         var ticket = new Ticket
