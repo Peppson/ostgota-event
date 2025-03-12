@@ -60,6 +60,21 @@ public class EventController(IDataService dataService) : Controller
         }
     }
 
+    //create event 
+    [HttpPost("create")]
+    public async Task<ActionResult<Event>> CreateEvent(Event newEvent)
+    {
+        try
+        {
+            await _dataService.AddEvent(newEvent);
+            return Ok(newEvent);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
 
 }
 

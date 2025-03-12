@@ -50,6 +50,12 @@ public class DataService(Database DbContext) : IDataService
     {
         return await _db.Events.ToListAsync();
     }
+    public async Task<Event> AddEvent(Event ev)
+    {
+        _db.Events.Add(ev);
+        await _db.SaveChangesAsync();
+        return ev;
+    }
 
     // TICKETS
 

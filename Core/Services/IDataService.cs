@@ -13,6 +13,7 @@ public interface IDataService
     Task<Event?> GetEventById(int id);
     Task<Event?> DoesEventExist(string name);
     Task<List<Event>> GetAllEvents();
+    Task<Event> AddEvent(Event ev);
 
     // Ticket
     Task<List<Ticket>> GetAllTickets();
