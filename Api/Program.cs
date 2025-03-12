@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 namespace Api;
 
 public class Program
@@ -11,13 +13,15 @@ public class Program
         builder.Services.AddScoped<IDataService, DataService>();
         builder.Services.AddScoped<DatabaseInitializer>();
         builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db");
+        builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.MapOpenApi();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
         app.UseHttpsRedirection();
         app.UseAuthorization();
@@ -30,7 +34,7 @@ public class Program
         }
 
         // Ensure SQLite DB is created and seeded on firstboot, bool for debugging
-        bool resetDatabaseToDefault = false;
+        bool resetDatabaseToDefault = true;
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
