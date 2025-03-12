@@ -1,4 +1,4 @@
-﻿namespace Data.Models;
+﻿namespace Core.Models;
 
 public class Event
 {
@@ -11,17 +11,40 @@ public class Event
     [Required]
     public required string City { get; set; }
     [Required]
+    public required string Adress { get; set; }
+    [Required]
     public AccessType AccessType { get; set; }
     [Required]
     public DateTime StartTime { get; set; }
     [Required]
     public DateTime EndTime { get; set; }
-    [Required]
-    public int TicketsSold { get; set; }
+    public bool HasSeat { get; set; } = false;
+    public string? ImagePath { get; set; }  // What to do if no path? Default background? < si senor, me parece bien
+
     [Required]
     public int TicketsMax { get; set; }
-    public bool HasSeat { get; set; } = false;
-    public string? ImagePath { get; set; }  // What to do if no path? Default background?
+
+    [Required]
+    private int _ticketsSold = 0;
+    public int TicketsSold => _ticketsSold;
+    public int RemainingTickets => TicketsMax - _ticketsSold;
+
+    public bool IsSoldOut => RemainingTickets == 0;
+
+    public void RegisterTicket(int count)
+    {
+        if (count <= 0)
+        {
+            throw new ArgumentException("Antalet biljetter måste vara minst 1.");
+        }
+        if (count > RemainingTickets)
+        {
+            throw new InvalidOperationException("Inte tillräckligt många biljetter tillgängliga");
+        }
+        _ticketsSold += count;
+    }
+
+
 }
 
 public enum AccessType
