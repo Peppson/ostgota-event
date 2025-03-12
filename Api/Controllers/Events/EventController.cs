@@ -1,4 +1,4 @@
-namespace Api.Controllers.Event;
+namespace Api.Controllers.Events;
 
 [Route("api/event")]
 [ApiController]
@@ -7,7 +7,7 @@ public class EventController(IDataService dataService) : Controller
     private readonly IDataService _dataService = dataService;
 
     [HttpGet("get")]
-    public async Task<ActionResult<List<Data.Models.Event>>> GetAllEvents()
+    public async Task<ActionResult<List<Event>>> GetAllEvents()
     {
         try
         {

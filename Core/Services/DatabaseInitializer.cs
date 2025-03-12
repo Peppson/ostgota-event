@@ -59,7 +59,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.Free, 
             StartTime = DateTime.UtcNow,
             EndTime = DateTime.UtcNow.AddHours(3),
-            TicketsSold = 0,
+            Adress = "Kungsberget 3",
             TicketsMax = 100,
             //HasSeat = false,                  // default
             ImagePath = "images/raps.jpg"       // nullable
@@ -73,7 +73,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.MemberOnly, 
             StartTime = DateTime.UtcNow,
             EndTime = DateTime.UtcNow.AddHours(3),
-            TicketsSold = 0,
+            Adress = "Prinskrönet 8",
             TicketsMax = 100,
             //HasSeat = false,                  // default
             ImagePath = "https://ih1.redbubble.net/image.1833920974.3208/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
