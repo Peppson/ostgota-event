@@ -13,13 +13,15 @@ public class Program
         builder.Services.AddScoped<IDataService, DataService>();
         builder.Services.AddScoped<DatabaseInitializer>();
         builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db");
+        builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.MapOpenApi();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
         app.UseHttpsRedirection();
         app.UseAuthorization();
