@@ -11,6 +11,10 @@ class Program
         // Add services to the container.
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
+        
+        builder.Services.AddScoped(sp => new HttpClient {
+            BaseAddress = new Uri(builder.Configuration["FrontendUrl"] ?? "https://localhost:7189")
+        });
 
         var app = builder.Build();
 
@@ -23,10 +27,7 @@ class Program
         }
 
         app.UseHttpsRedirection();
-
-
         app.UseAntiforgery();
-
         app.MapStaticAssets(); 
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode();
@@ -34,4 +35,3 @@ class Program
         app.Run();
     }
 }
- 
