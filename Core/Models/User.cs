@@ -29,7 +29,7 @@ public class User
         // Register new tickets
         for (int i = 0; i < quantity; i++)
         {
-            var ticket = new Ticket 
+            var ticket = new Ticket
             {
                 UserId = this.Id,
                 User = this,
@@ -44,6 +44,27 @@ public class User
 
         currentEvent.RegisterTicket(quantity);
     }
+
+    public void CancelTickets(Event currentEvent, int quantity)
+    {
+        if (quantity <= 0)
+            throw new ArgumentException("Antalet biljetter att avboka måste vara större än 0.");
+
+        // filter out the users tickets for the current event and take the quantity to cancel
+        var ticketsToRemove = _tickets
+            .Where(t => t.EventId == currentEvent.Id && t.UserId == this.Id)
+            .Take(quantity)
+            .ToList();
+
+        foreach (var ticket in ticketsToRemove)
+        {
+            _tickets.Remove(ticket);
+        }
+
+        // Update the ticket count
+        currentEvent.CancelTicket(quantity);
+    }
+
 
 }
 
