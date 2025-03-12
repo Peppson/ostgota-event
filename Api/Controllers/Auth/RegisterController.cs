@@ -1,5 +1,4 @@
 ﻿using Core.Services;
-using Data.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 

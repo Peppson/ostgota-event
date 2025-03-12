@@ -20,10 +20,10 @@ public class User
     public void BuyTickets(Event currentEvent, int quantity, decimal ticketPrice, string? seat = null)
     {
         if (quantity <= 0)
-            throw new ArgumentException("Köp måste vara mer än ett");
+            throw new ArgumentException("Kï¿½p mï¿½ste vara mer ï¿½n ett");
 
         if (currentEvent.RemainingTickets < quantity)
-            throw new InvalidOperationException("Inte tillräckligt många biljetter kvar!");
+            throw new InvalidOperationException("Inte tillrï¿½ckligt mï¿½nga biljetter kvar!");
 
 
         // Register new tickets
@@ -48,7 +48,7 @@ public class User
     public void CancelTickets(Event currentEvent, int quantity)
     {
         if (quantity <= 0)
-            throw new ArgumentException("Antalet biljetter att avboka måste vara större än 0.");
+            throw new ArgumentException("Antalet biljetter att avboka mï¿½ste vara stï¿½rre ï¿½n 0.");
 
         // filter out the users tickets for the current event and take the quantity to cancel
         var ticketsToRemove = _tickets
