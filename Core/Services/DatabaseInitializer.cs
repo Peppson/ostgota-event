@@ -62,7 +62,7 @@ public class DatabaseInitializer(Database db)
             Adress = "Kungsberget 3",
             TicketsMax = 100,
             //HasSeat = false,                  // default
-            ImagePath = "images/raps.jpg"       // nullable
+            ImagePath = "images/Knight.jpg"     // nullable
         };
 
         var sampleEvent2 = new Event

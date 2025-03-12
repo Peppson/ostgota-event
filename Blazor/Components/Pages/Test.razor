@@ -10,40 +10,30 @@
 }
 else
 {
-    <div class="event-details" style="background-image: url('@GetBackgroundImageUrl(eventDetails.ImagePath)');">
+    <div class="event-details" style="background-image: url('@Helper.GetBackgroundImageUrl(eventDetails.ImagePath)');
+                                background-size: cover; 
+                                background-position: center; 
+                                height: 500px;
+                                width: 500px;">
+
         <h1>@eventDetails.Name</h1>
         <p>@eventDetails.Description</p>
     </div>
 }
 
-
 @code {
-    private Event eventDetails { get; set; }
+    private Event? eventDetails { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             var events = await HttpClient.GetFromJsonAsync<List<Event>>($"api/event/get");
-            eventDetails = events?.FirstOrDefault()!;
+            eventDetails = events?.LastOrDefault()!;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching events: {ex.Message}");
         }
-    }
-
-    private string GetBackgroundImageUrl(string? imagePath)
-    {
-        // Return a default image if no ImagePath is null
-        if (string.IsNullOrWhiteSpace(imagePath))
-        {
-            return "/images/raps.jpg";
-        }
-
-        if (Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
-            return imagePath;
-        else
-            return Navigation.ToAbsoluteUri(imagePath).ToString();
     }
 }

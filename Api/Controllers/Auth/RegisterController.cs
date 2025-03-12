@@ -19,7 +19,7 @@ namespace Api.Controllers.Auth
                 return BadRequest("Username already exists");
             }
             var response = new Response(result.Username, result.Role);
-            return Ok(response);
+            return Created("User created", response);
         }
     }
 }
