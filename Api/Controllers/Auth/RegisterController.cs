@@ -4,18 +4,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Auth
 {
-    public class RegisterController : Controller
+    [Route("api/auth/register")]
+    [ApiController]
+    public class RegisterController(IAuthService authService) : Controller
     {
-        public static async Task<Results<Ok<Response>, BadRequest<string>>> Handle(Request request, IAuthService authService)
+        private readonly IAuthService _authService = authService;
+        [HttpPost]
+        public async Task<IActionResult> Handle([FromBody]Request request)
         {   
             // Sorry Viktor, var tvungen att greja lite här för att få skiten att kompilera :) - JeppaJogg
-            var result = await authService.Register(request.Username, request.Password, request.Email, null); // <<<<< denna null
+            var result = await _authService.Register(request.Username, request.Password, request.Email, request.PhoneNumber); // <<<<< denna null
             if (result == null)
             {
-                return TypedResults.BadRequest("Username already exists");
+                return BadRequest("Username already exists");
             }
             var response = new Response(result.Username, result.Role);
-            return TypedResults.Ok(response);
+            return Ok(response);
         }
     }
 }
