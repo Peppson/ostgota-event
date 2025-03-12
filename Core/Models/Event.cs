@@ -21,5 +21,12 @@ public class Event
     [Required]
     public int TicketsMax { get; set; }
     public bool HasSeat { get; set; } = false;
-    public string? ImagePath { get; set; } // What to do if no path? Default background?
+    public string? ImagePath { get; set; }  // What to do if no path? Default background?
+}
+
+public enum AccessType
+{
+    Free,
+    Paid,
+    MemberOnly
 }
