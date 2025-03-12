@@ -25,8 +25,22 @@ public class DataService(Database DbContext) : IDataService
         await _db.SaveChangesAsync();
     }
 
+    public async Task RemoveUser(User user)
+    {   
+        _db.Users.Remove(user);
+        await _db.SaveChangesAsync();
+    }
 
-    // Todo...
+    public async Task<Event?> GetEventByName(string name)
+    {
+        return await _db.Events.FirstOrDefaultAsync(u => u.Name == name);
+    }
+
+    public async Task<Event?> DoesEventExist(string name)
+    {
+        return await _db.Events.FirstOrDefaultAsync(u => u.Name == name);
+    }
+
     public async Task<List<Event>> GetAllEvents()
     {
         return await _db.Events.ToListAsync();
@@ -38,6 +52,12 @@ public class DataService(Database DbContext) : IDataService
         await _db.SaveChangesAsync();
     }
 
+    public async Task RemoveEvent(Event ev)
+    {
+        _db.Events.Remove(ev);
+        await _db.SaveChangesAsync();
+    }
+
     public async Task<List<Ticket>> GetAllTickets()
     {
         return await _db.Tickets.ToListAsync();
@@ -46,6 +66,12 @@ public class DataService(Database DbContext) : IDataService
     public async Task AddTicket(Ticket ticket)
     {
         _db.Tickets.Add(ticket);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task RemoveTicket(Ticket ticket)
+    {
+        _db.Tickets.Remove(ticket);
         await _db.SaveChangesAsync();
     }
 }
