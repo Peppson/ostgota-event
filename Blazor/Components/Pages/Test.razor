@@ -1,0 +1,37 @@
+@page "/test"
+@inject NavigationManager Navigation
+
+<PageTitle>Test</PageTitle>
+
+<div class="event-details" style="background-image: url('@GetBackgroundImageUrl(EventDetails.ImagePath)');">
+    <h1>@EventDetails.Name</h1>
+    <p>@EventDetails.Description</p>
+</div>
+
+
+@code {
+    public Event EventDetails { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate an asynchronous operation
+        await Task.Delay(1000);
+
+        
+    }
+
+
+    private string GetBackgroundImageUrl(string imagePath)
+    {
+        // Return a default image if no ImagePath is provided
+        if (string.IsNullOrWhiteSpace(imagePath))
+        {
+            return "/images/raps.jpg";
+        }
+
+        if (Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
+            return imagePath;
+        else
+            return Navigation.ToAbsoluteUri(imagePath).ToString();
+    }
+}
