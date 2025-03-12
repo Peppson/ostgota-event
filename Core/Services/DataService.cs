@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+
 namespace Core.Services;
 
 public class DataService(Database DbContext) : IDataService
@@ -26,17 +28,20 @@ public class DataService(Database DbContext) : IDataService
     }
 
     public async Task RemoveUser(User user)
-    {   
+    {
         _db.Users.Remove(user);
         await _db.SaveChangesAsync();
     }
 
-    public async Task<Event?> GetEventByName(string name)
+
+    // EVENTS
+
+    public async Task<Event?> GetEventById(int id)
     {
-        return await _db.Events.FirstOrDefaultAsync(u => u.Name == name);
+        return await _db.Events.FirstOrDefaultAsync(u => u.Id == id);
     }
 
-    public async Task<Event?> DoesEventExist(string name)
+    public async Task<Event?> GetEventByName(string name)
     {
         return await _db.Events.FirstOrDefaultAsync(u => u.Name == name);
     }
@@ -46,17 +51,46 @@ public class DataService(Database DbContext) : IDataService
         return await _db.Events.ToListAsync();
     }
 
-    public async Task AddEvent(Event ev)
+    public async Task<Event> AddEvent(Event ev)
     {
         _db.Events.Add(ev);
         await _db.SaveChangesAsync();
+        return ev;
     }
 
-    public async Task RemoveEvent(Event ev)
+    public async Task<Event?> RemoveEvent(int eventId)
     {
-        _db.Events.Remove(ev);
+        var existingEvent = await _db.Events.FindAsync(eventId);
+        if (existingEvent == null)
+            return null;
+
+        _db.Events.Remove(existingEvent);
         await _db.SaveChangesAsync();
+        return existingEvent;
     }
+
+    public async Task<Event?> UpdateEvent(int eventId, Event updatedEvent)
+    {
+        var existingEvent = await _db.Events.FindAsync(eventId);
+        if (existingEvent == null)
+            return null;
+
+        existingEvent.Name = updatedEvent.Name;
+        existingEvent.StartTime = updatedEvent.StartTime;
+        existingEvent.EndTime = updatedEvent.EndTime;
+        existingEvent.City = updatedEvent.City;
+        existingEvent.Description = updatedEvent.Description;
+        existingEvent.HasSeat = updatedEvent.HasSeat;
+        existingEvent.ImagePath = updatedEvent.ImagePath;
+        existingEvent.AccessType = updatedEvent.AccessType;
+        existingEvent.Adress = updatedEvent.Adress;
+        existingEvent.TicketsMax = updatedEvent.TicketsMax;
+
+        await _db.SaveChangesAsync();
+        return existingEvent;
+    }
+
+    // TICKETS
 
     public async Task<List<Ticket>> GetAllTickets()
     {
