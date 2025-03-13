@@ -1,40 +1,8 @@
-using Microsoft.Extensions.Logging;
+namespace Core.Services.Events;
 
-namespace Core.Services;
-
-public class DataService(Database DbContext) : IDataService
+public class EventService(Database DbContext) : IEventService
 {
     private readonly Database _db = DbContext;
-
-    public async Task<User?> GetUserByName(string username)
-    {
-        return await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
-    }
-
-    public async Task<bool> DoesUserExist(string username)
-    {
-        return await _db.Users.AnyAsync(u => u.Username == username);
-    }
-
-    public async Task<List<User>> GetAllUsers()
-    {
-        return await _db.Users.ToListAsync();
-    }
-
-    public async Task AddUser(User user)
-    {
-        _db.Users.Add(user);
-        await _db.SaveChangesAsync();
-    }
-
-    public async Task RemoveUser(User user)
-    {
-        _db.Users.Remove(user);
-        await _db.SaveChangesAsync();
-    }
-
-
-    // EVENTS
 
     public async Task<Event?> GetEventById(int id)
     {
@@ -88,24 +56,5 @@ public class DataService(Database DbContext) : IDataService
 
         await _db.SaveChangesAsync();
         return existingEvent;
-    }
-
-    // TICKETS
-
-    public async Task<List<Ticket>> GetAllTickets()
-    {
-        return await _db.Tickets.ToListAsync();
-    }
-
-    public async Task AddTicket(Ticket ticket)
-    {
-        _db.Tickets.Add(ticket);
-        await _db.SaveChangesAsync();
-    }
-
-    public async Task RemoveTicket(Ticket ticket)
-    {
-        _db.Tickets.Remove(ticket);
-        await _db.SaveChangesAsync();
     }
 }
