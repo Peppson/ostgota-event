@@ -16,7 +16,20 @@ public class Program
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowBlazor", policy =>
+            {
+                policy.WithOrigins("https://localhost:7059") // Blazor app URL
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+            });
+        });
+
+        
+
         var app = builder.Build();
+        app.UseCors("AllowBlazor");
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

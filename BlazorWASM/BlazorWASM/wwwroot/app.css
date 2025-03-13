@@ -1,0 +1,85 @@
+* {
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-image: url(images/Spa.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    height: 100svh;
+}
+
+.page {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Content */
+.content {
+    height: fit-content;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* header */
+
+header {
+    background: transparent;
+    display: flex;
+    padding: 20px;
+    font-size: 45px;
+}
+
+.nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-title {
+    text-decoration: none;
+    color: white;
+    padding: 10px 15px;
+}
+
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: inline-block;
+    transition: color 0.3s ease-in-out;
+}
+
+header .nav-link:hover,
+.nav .nav-link:hover {
+    color: gold;
+    transform: scale(1.05);
+}
+
+.nav-link:link,
+.nav-link:visited {
+    color: white;
+}
+
+
+.nav-link.active {
+    color: yellow;
+}
