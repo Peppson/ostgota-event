@@ -1,7 +1,7 @@
 ﻿@page "/login"
- @inject SessionStorageService SessionStorage
- @inject NavigationManager NavigationManager
- @inject HttpClient HttpClient
+@inject SessionStorageService SessionStorage
+@inject NavigationManager NavigationManager
+@inject HttpClient HttpClient
 
 <h3>Login</h3>
 <p>Hello! Please login here:</p>
@@ -15,29 +15,39 @@
 
     public record LoginRequest(string Username, string Password);
 
-    public async void LogInUser()
+    public async Task LogInUser()
     {
-        Console.WriteLine("entered functions");
-        var loggedInUser = new LoginRequest(username, password);
-        var result = await HttpClient.PostAsJsonAsync("/api/auth/login", loggedInUser);
-
-        if(result.IsSuccessStatusCode)
+        try
         {
-            Console.WriteLine("user logged in successfully");
+            Console.WriteLine("entered functions");
+            var loggedInUser = new LoginRequest(username, password);
+            var response = await HttpClient.PostAsJsonAsync("/api/auth/login", loggedInUser);
+
+            if(response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("user logged in successfully");
+                // Read the response content as LoginDto
+                var userData = await response.Content.ReadFromJsonAsync<LoginDto>();
+                
+                if (userData != null)
+                {
+                    Console.WriteLine($"User data: {System.Text.Json.JsonSerializer.Serialize(userData)}");
+                    await SessionStorage.SetItemAsync("user", userData);
+                    NavigationManager.NavigateTo("/");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to deserialize user data");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"error: {response.StatusCode}");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine($"error: {result.StatusCode}");
+            Console.WriteLine($"Exception during login: {ex.Message}");
         }
-
-        var user = result;
-        Console.WriteLine(user);
-
-        Console.WriteLine("user found");
-
-        await SessionStorage.SetItemAsync("user", user);
-        NavigationManager.NavigateTo("/");
-        Console.WriteLine("should be navigated");
     }
-
 }
