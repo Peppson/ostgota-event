@@ -11,12 +11,14 @@ public class Program
         var builder = WebAssemblyHostBuilder.CreateDefault(args);
         builder.RootComponents.Add<App>("#app");
         builder.RootComponents.Add<HeadOutlet>("head::after");
-        builder.Services.AddScoped<SessionStorageService>();
-        builder.Services.AddScoped(sp => new HttpClient {
-            BaseAddress = new Uri($"{builder.Configuration["FrontendUrl"]!}/")
+        
+        // Configure HttpClient with the correct API base address
+        builder.Services.AddScoped(sp => new HttpClient { 
+            BaseAddress = new Uri("https://localhost:7189/") // Update this to match your API URL
         });
 
-        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+        // Add other services
+        builder.Services.AddScoped<SessionStorageService>();
 
         await builder.Build().RunAsync();
     }
