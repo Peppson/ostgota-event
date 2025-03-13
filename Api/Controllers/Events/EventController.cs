@@ -2,9 +2,9 @@ namespace Api.Controllers.Events;
 
 [Route("api/event")]
 [ApiController]
-public class EventController(IDataService dataService) : Controller
+public class EventController(IEventService eventService) : Controller
 {
-    private readonly IDataService _dataService = dataService;
+    private readonly IEventService _eventService = eventService;
 
     // get all events
     [HttpGet("get")]
@@ -12,7 +12,7 @@ public class EventController(IDataService dataService) : Controller
     {
         try
         {
-            var events = await _dataService.GetAllEvents();
+            var events = await _eventService.GetAllEvents();
             return Ok(events);
         }
         catch (Exception ex)
@@ -27,7 +27,7 @@ public class EventController(IDataService dataService) : Controller
     {
         try
         {
-            var events = await _dataService.GetEventById(id);
+            var events = await _eventService.GetEventById(id);
             if (events == null)
             {
                 return NotFound($"Event with id: {id} was not found");
@@ -46,7 +46,7 @@ public class EventController(IDataService dataService) : Controller
     {
         try
         {
-            var events = await _dataService.GetEventByName(name);
+            var events = await _eventService.GetEventByName(name);
             if (events == null)
             {
                 return NotFound($"Event with name: {name} was not found");
@@ -65,7 +65,7 @@ public class EventController(IDataService dataService) : Controller
     {
         try
         {
-            await _dataService.AddEvent(newEvent);
+            await _eventService.AddEvent(newEvent);
             return Ok(newEvent);
         }
         catch (Exception ex)
@@ -80,7 +80,7 @@ public class EventController(IDataService dataService) : Controller
     {
         try
         {
-            var deletedEvent = await _dataService.RemoveEvent(id);
+            var deletedEvent = await _eventService.RemoveEvent(id);
             if (deletedEvent == null)
             {
                 return NotFound("Event not found.");
@@ -100,7 +100,7 @@ public class EventController(IDataService dataService) : Controller
     {
         try
         {
-            var updatedEvent = await _dataService.UpdateEvent(id, ev);
+            var updatedEvent = await _eventService.UpdateEvent(id, ev);
             if (updatedEvent == null)
             {
                 return NotFound("Event not found.");

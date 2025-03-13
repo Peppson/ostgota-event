@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
 namespace Api;
 
 public class Program
@@ -10,11 +8,12 @@ public class Program
 
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
-        builder.Services.AddScoped<IDataService, DataService>();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IEventService, EventService>();
+        builder.Services.AddScoped<ITicketService, TicketService>();
         builder.Services.AddScoped<DatabaseInitializer>();
-        builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db");
+        builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db"); // jw: todo singelton?
         builder.Services.AddScoped<IAuthService, AuthService>();
-        //builder.Services.AddScoped<HttpContext>();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
@@ -23,7 +22,10 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.DefaultModelsExpandDepth(-1);
+            });
         }
         app.UseHttpsRedirection();
         app.UseAuthorization();
