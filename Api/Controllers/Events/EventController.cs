@@ -1,3 +1,5 @@
+using Api.Controllers.EventValidation;
+
 namespace Api.Controllers.Events;
 
 [Route("api/event")]
@@ -5,7 +7,7 @@ namespace Api.Controllers.Events;
 public class EventController(IEventService eventService) : Controller
 {
     private readonly IEventService _eventService = eventService;
-    
+
 
     [HttpGet("get")]
     public async Task<ActionResult<List<Event>>> GetAllEvents()
@@ -60,10 +62,23 @@ public class EventController(IEventService eventService) : Controller
     [HttpPost("create")]
     public async Task<ActionResult<Event>> CreateEvent(Event newEvent)
     {
+
+        var validator = new EventValidator();
+        var result = validator.Validate(newEvent);
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors.Select(x => new
+            {
+                Field = x.PropertyName,
+                Message = x.ErrorMessage
+            }));
+        }
+
         try
         {
             await _eventService.AddEvent(newEvent);
             return Ok(newEvent);
+
         }
         catch (Exception ex)
         {
@@ -93,6 +108,17 @@ public class EventController(IEventService eventService) : Controller
     [HttpPut("update/{id}")]
     public async Task<ActionResult<Event>> UpdateEvent(int id, Event ev)
     {
+
+        var validator = new EventValidator();
+        var result = validator.Validate(ev);
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors.Select(x => new
+            {
+                Field = x.PropertyName,
+                Message = x.ErrorMessage
+            }));
+        }
         try
         {
             var updatedEvent = await _eventService.UpdateEvent(id, ev);
