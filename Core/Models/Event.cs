@@ -20,16 +20,14 @@ public class Event
     public DateTime EndTime { get; set; }
     public bool HasSeat { get; set; } = false;
     public string? ImagePath { get; set; }  // What to do if no path? Default background? < si senor, me parece bien
-
     [Required]
     public int TicketsMax { get; set; }
-
     [Required]
-    private int _ticketsSold = 0;
-    public int TicketsSold => _ticketsSold;
-    public int RemainingTickets => TicketsMax - _ticketsSold;
+    public int TicketsSold { get; set; } = 0;
+    public int RemainingTickets => TicketsMax - TicketsSold;
 
     public bool IsSoldOut => RemainingTickets == 0;
+
 
     public void RegisterTicket(int count)
     {
@@ -41,10 +39,8 @@ public class Event
         {
             throw new InvalidOperationException("Inte tillräckligt många biljetter tillgängliga");
         }
-        _ticketsSold += count;
+        TicketsSold += count;
     }
-
-
 
     public void CancelTicket(int count)
     {
@@ -52,13 +48,12 @@ public class Event
         {
             throw new ArgumentException("Antalet biljetter måste vara minst 1.");
         }
-        if (count > _ticketsSold)
+        if (count > TicketsSold)
         {
             throw new InvalidOperationException("Inte tillräckligt många biljetter att ta bort");
         }
-        _ticketsSold -= count;
+        TicketsSold -= count;
     }
-
 }
 
 public enum AccessType

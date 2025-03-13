@@ -61,6 +61,7 @@ public class DatabaseInitializer(Database db)
             EndTime = DateTime.UtcNow.AddHours(3),
             Adress = "Kungsberget 3",
             TicketsMax = 100,
+            TicketsSold = 0,
             //HasSeat = false,                  // default
             ImagePath = "images/Knight.jpg"     // nullable
         };
@@ -75,6 +76,7 @@ public class DatabaseInitializer(Database db)
             EndTime = DateTime.UtcNow.AddHours(3),
             Adress = "Prinskrönet 8",
             TicketsMax = 100,
+            TicketsSold = 10,
             //HasSeat = false,                  // default
             ImagePath = "https://ih1.redbubble.net/image.1833920974.3208/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
         };
@@ -95,6 +97,7 @@ public class DatabaseInitializer(Database db)
             //Seat = "A1",                      // nullable
         };
 
+        _db.Users.First().BuyTickets(sampleEvent1, 1, ticket);
         await _db.Tickets.AddAsync(ticket);
         await _db.SaveChangesAsync();
     }
