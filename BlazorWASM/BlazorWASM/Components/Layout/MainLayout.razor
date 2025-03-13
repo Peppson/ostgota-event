@@ -1,0 +1,26 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <header>
+
+        <a class="header-title" href="">Blazor</a>
+        <nav class="nav">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                Hem
+            </NavLink>
+            <NavLink class="nav-link" href="">
+                Event
+            </NavLink>
+        </nav>
+
+        @* TODO: Login should open a modal rather than a page *@
+        <NavLink class="nav-link" href="">
+            Login
+        </NavLink>
+
+    </header>
+
+    <main class="content"> 
+        @Body
+    </main>
+</div>

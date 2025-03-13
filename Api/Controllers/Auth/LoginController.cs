@@ -1,13 +1,13 @@
 ﻿namespace Api.Controllers.Auth;
 
-[Route("api/auth/login")]
+[Route("api/auth/")]
 [ApiController]
 public class LoginController(IAuthService authService /* HttpContext context*/) : Controller
 {
     private readonly IAuthService _authService = authService;
     //private readonly HttpContext _context = context;
 
-    [HttpPost]
+    [HttpPost("login")]
     public async Task<IActionResult> LogIn([FromBody]LoginRequest request)
     {
         var result = await _authService.Login(request.Username, request.Password); //authorizes the login from userinput by authentication service.
