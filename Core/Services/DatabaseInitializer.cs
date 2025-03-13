@@ -91,7 +91,7 @@ public class DatabaseInitializer(Database db)
             User = _db.Users.First(),
             EventId = _db.Events.First().Id,
             Event = _db.Events.First(),
-            Price = 29.99m,
+            Price = 0,
             //Seat = "A1",                      // nullable
         };
 
