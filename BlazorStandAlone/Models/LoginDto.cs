@@ -1,8 +1,13 @@
-﻿namespace BlazorStandAlone.Models
+﻿using System.Text.Json.Serialization;
+
+namespace BlazorStandAlone.Models
 {
     public class LoginDto
     {
-        public required string Username { get; set; }
+        [JsonPropertyName("username")]
+        public string Username { get; set; } = string.Empty;
+
+        [JsonPropertyName("role")]
         public UserRole Role { get; set; }
     }
 }

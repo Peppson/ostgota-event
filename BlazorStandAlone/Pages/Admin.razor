@@ -3,6 +3,7 @@
 @using Core.Services;
 @inject NavigationManager NavigationManager
 @inject SessionStorageService SessionStorage
+@inject HttpClient HttpClient
 
 @page "/admin"
 
@@ -53,6 +54,8 @@
 
     <div class="eventBox">
         <div class="amountSquare eventAmount">@eventNumber</div>
+        <input @bind="eventId" />
+        <button @onclick="GetEventById">Search Event By Id</button>
         <div class="foundEventBox">
             @if (foundEvent != null)
             {
@@ -66,6 +69,9 @@
                 <div class="eventsTicketsMax">Max tickets: @foundEvent.TicketsMax</div>
                 <div class="eventsHasSeats">Designated seats: @foundEvent.HasSeat</div>
             }
+            <button>Edit</button>
+            <button>Delete</button>
+            <button @onclick="ClearEvent">Clear</button>
         </div>
     </div>
 </div>
@@ -73,39 +79,102 @@
 @code {
     private LoginDto? user;
 
+    private bool development = true;
 
-    public static List<EventDto> events { get; set; } = new List<EventDto>();
-    public int eventNumber { get; } = events.Count();
-    public static List<UserDto> users { get; } = new List<UserDto>();
-    public int userNumber { get; } = users.Count();
-    public static List<EventDto> tickets { get; } = new List<EventDto>();
-    public int ticketNumber { get; } = tickets.Count();
+    public List<EventDto> events { get; set; } = new();
+    public int eventNumber { get; set; }
+    public int eventId { get; set; }
+
+    public List<UserDto> users { get; set; } = new();
+    public int userNumber { get; set; }
+
+    public List<TicketDto> tickets { get; set; } = new();
+    public int ticketNumber { get; set; }
+
 
     public UserDto? foundUser { get; set; } = null;
     public TicketDto? foundTicket { get; set; } = null;
     public EventDto? foundEvent { get; set; } = null;
 
 
-    public void Redirect()
-    {
-        NavigationManager.NavigateTo("/");
-    }
 
-    protected async Task OnIntializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        var user = await SessionStorage.GetItemAsync<LoginDto>("user");
+        if (development)
+        {
+            user = new LoginDto() { Username = "admin", Role = UserRole.Admin };
+        }
+        else
+        {
+            user = await SessionStorage.GetItemAsync<LoginDto>("user");
+        }
 
         if (user == null)
         {
             NavigationManager.NavigateTo("/login");
         }
-        else if(user.Role != UserRole.Admin)
+        else if (user.Role != UserRole.Admin)
         {
             NavigationManager.NavigateTo("/");
         }
 
-
+        await PopulateLists();
     }
 
+    private async Task GetEventsAsync()
+    {
+        try
+        {
+            var response = await HttpClient.GetAsync("api/event/get");
+            if (response.IsSuccessStatusCode)
+            {
+                events = await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new();
+                eventNumber = events.Count;
+                StateHasChanged();
+            }
+            else
+            {
+                Console.WriteLine($"Error fetching events: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception while fetching events: {ex.Message}");
+        }
+    }
 
+    private async Task GetUsersAsync()
+    {
+        // Implement user fetching
+        users = new List<UserDto>();
+        userNumber = users.Count;
+    }
+
+    private async Task GetTicketsAsync()
+    {
+        // Implement ticket fetching
+        tickets = new List<TicketDto>();
+        ticketNumber = tickets.Count;
+    }
+
+    private async Task PopulateLists()
+    {
+        await GetEventsAsync();
+        await GetUsersAsync();
+        await GetTicketsAsync();
+    }
+
+    private void GetEventById()
+    {
+        foundEvent = events.Where(e => e.Id == eventId).FirstOrDefault();
+        if (foundEvent == null)
+        {
+            Console.WriteLine("event was not found");
+        }
+    }
+
+    private void ClearEvent()
+    {
+        foundEvent = null;
+    }
 }
