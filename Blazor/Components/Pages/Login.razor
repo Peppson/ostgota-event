@@ -1,5 +1,5 @@
 ﻿@page "/login"
-@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using Blazor.Models
 @rendermode InteractiveServer
  @inject ProtectedSessionStorage SessionStorage
  @inject NavigationManager NavigationManager
@@ -21,12 +21,15 @@
     {
         Console.WriteLine("entered functions");
         var loggedInUser = new LoginRequest(username, password);
-        var user = await HttpClient.PostAsJsonAsync("/api/auth/login", loggedInUser);
+        var result = await HttpClient.PostAsJsonAsync("/api/auth/login", loggedInUser);
 
-        if(user == null)
+        if(result == null)
         {
             Console.WriteLine("user was null");
         }
+
+        var user = result;
+        Console.WriteLine(user);
 
         Console.WriteLine("user found");
 
