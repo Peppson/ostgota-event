@@ -8,66 +8,65 @@
 
 <PageTitle>Admin</PageTitle>
 
+<h1>Admin Dashboard</h1>
 
-<h1>Admin</h1>
-
-
-
-
-
-
-
-<div class="userBox">
-    <div class="amountSquare userAmount">@userNumber</div>
-    <div class="foundUserBox">
-        @if (foundUser != null)
-        {
-            <div class="usersId">User ID: @foundUser.Id</div>
-            <div class="usersuserName">Username: @foundUser.Username</div>
-            <div class="usersEmail">User Email: @foundUser.Email</div>
-            <div class="userPhoneNumber">User PhoneNumber: @foundUser.PhoneNumber</div>
-            <div class="usersRole">User Role: @foundUser.Role</div>
-            <div class="usersTickets">
-                Users Tickets: @foreach (var ticket in foundUser.Tickets)
-                {
-                    <div>@ticket.Id</div>
-                    <div>@ticket.Title</div>
-                }
-            </div>
-        }
+<div class="admin-container">
+    <div class="userBox">
+        <div class="amountSquare userAmount">@userNumber</div>
+        <div class="foundUserBox">
+            @if (foundUser != null)
+            {
+                <div class="usersId">User ID: @foundUser.Id</div>
+                <div class="usersuserName">Username: @foundUser.Username</div>
+                <div class="usersEmail">User Email: @foundUser.Email</div>
+                <div class="userPhoneNumber">User PhoneNumber: @foundUser.PhoneNumber</div>
+                <div class="usersRole">User Role: @foundUser.Role</div>
+                <div class="usersTickets">
+                    <h3>User's Tickets</h3>
+                    @foreach (var ticket in foundUser.Tickets)
+                    {
+                        <div>
+                            <strong>Ticket ID:</strong> @ticket.Id
+                            <br />
+                            <strong>Title:</strong> @ticket.Title
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </div>
-</div>
 
-<div class="ticketBox">
-    <div class="amountSquare ticketAmount">@ticketNumber</div>
-    <div class="foundTicketBox">
-        @if (foundTicket != null)
-        {
-            <div class="ticketsId">Ticket ID: @foundTicket.Id</div>
-            <div class="ticketsUserId">Ticket UserID: @foundTicket.UserId</div>
-            <div class="ticketsEventId">Ticket EventID: @foundTicket.EventId</div>
-            <div class="ticketsPrice">Ticket Price: @foundTicket.Price</div>
-            <div class="ticketsSeat">Seat: @foundTicket.Seat</div>
-            <div class="ticketsTitle">Title for event: @foundTicket.Title</div>
-        }
+    <div class="ticketBox">
+        <div class="amountSquare ticketAmount">@ticketNumber</div>
+        <div class="foundTicketBox">
+            @if (foundTicket != null)
+            {
+                <div class="ticketsId">Ticket ID: @foundTicket.Id</div>
+                <div class="ticketsUserId">Ticket UserID: @foundTicket.UserId</div>
+                <div class="ticketsEventId">Ticket EventID: @foundTicket.EventId</div>
+                <div class="ticketsPrice">Ticket Price: @foundTicket.Price</div>
+                <div class="ticketsSeat">Seat: @foundTicket.Seat</div>
+                <div class="ticketsTitle">Title for event: @foundTicket.Title</div>
+            }
+        </div>
     </div>
-</div>
 
-<div class="eventBox">
-    <div class="amountSquare eventAmount">@eventNumber</div>
-    <div class="foundEventBox">
-        @if (foundEvent != null)
-        {
-            <div class="eventsId">Event ID: @foundEvent.Id</div>
-            <div class="eventsName">Event name: @foundEvent.Name</div>
-            <div class="eventsCity">City: @foundEvent.City</div>
-            <div class="eventsAccessType">AccessType: @foundEvent.AccessType</div>
-            <div class="eventsStartTime">Start Time: @foundEvent.StartTime</div>
-            <div class="eventsEndTime">End Time: @foundEvent.EndTime</div>
-            <div class="eventsTicketSold">Tickets sold: @foundEvent.TicketsSold</div>
-            <div class="eventsTicketsMax">Max tickets: @foundEvent.TicketsMax</div>
-            <div class="eventsHasSeats">Designated seats: @foundEvent.HasSeat</div>
-        }
+    <div class="eventBox">
+        <div class="amountSquare eventAmount">@eventNumber</div>
+        <div class="foundEventBox">
+            @if (foundEvent != null)
+            {
+                <div class="eventsId">Event ID: @foundEvent.Id</div>
+                <div class="eventsName">Event name: @foundEvent.Name</div>
+                <div class="eventsCity">City: @foundEvent.City</div>
+                <div class="eventsAccessType">AccessType: @foundEvent.AccessType</div>
+                <div class="eventsStartTime">Start Time: @foundEvent.StartTime</div>
+                <div class="eventsEndTime">End Time: @foundEvent.EndTime</div>
+                <div class="eventsTicketSold">Tickets sold: @foundEvent.TicketsSold</div>
+                <div class="eventsTicketsMax">Max tickets: @foundEvent.TicketsMax</div>
+                <div class="eventsHasSeats">Designated seats: @foundEvent.HasSeat</div>
+            }
+        </div>
     </div>
 </div>
 
