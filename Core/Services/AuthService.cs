@@ -37,11 +37,3 @@ public class AuthService : IAuthService
         return user;
     }
 } 
-
-    /*public int Id { get; set; }
-    public required string Username { get; set; }
-    public required string PasswordHash { get; set; }
-    public UserRoles Role { get; set; } = UserRoles.User;
-    public required string Email { get; set; }
-    public string? PhoneNumber { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;*/

@@ -13,18 +13,18 @@ public class User
     public string? PhoneNumber { get; set; }
     public UserRole Role { get; set; } = UserRole.User;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    private List<Ticket> _tickets = new List<Ticket>();
-    public IReadOnlyCollection<Ticket> Tickets => _tickets.AsReadOnly();
-
+    public List<Ticket> Tickets { get; set; } = [];
 
     public void BuyTicket(Ticket ticket)
-    {
-        _tickets.Add(ticket);
+    {   
+        if (ticket.Event.RemainingTickets > 0)
+            Tickets.Add(ticket);
     }
 
     public void CancelTicket(Ticket ticket)
-    {
-        _tickets.Remove(ticket);
+    {   
+        if (Tickets.Count > 0)
+            Tickets.Remove(ticket);
     }
 }
 

@@ -22,11 +22,11 @@ public class UserController(IUserService userService) : Controller
     }
 
     [HttpGet("get/name/{name}")]
-    public async Task<ActionResult<User>> GetUserByName(string name)
+    public async Task<ActionResult<UserDTO>> GetUserByName(string name)
     {
         try
         {
-            var user = await _userService.GetUserByName(name);
+            var user = await _userService.GetUserDTOByName(name);
             if (user == null)
             {
                 return NotFound($"User with name: {name} was not found");
@@ -44,26 +44,12 @@ public class UserController(IUserService userService) : Controller
     {
         try
         {
-            var user = await _userService.GetUserById(userId);
+            var user = await _userService.GetUserDTOById(userId);
             if (user == null)
             {
                 return NotFound($"User with id: {userId} was not found");
             }
             return Ok(user);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
-
-    [HttpPost("create")]
-    public async Task<ActionResult<User>> CreateUser(User newUser)
-    {
-        try
-        {
-            await _userService.AddUser(newUser);
-            return Ok(newUser);
         }
         catch (Exception ex)
         {
