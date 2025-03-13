@@ -1,4 +1,3 @@
-
 namespace Core.Services;
 
 // TODO: Implement better auth
@@ -7,16 +6,16 @@ namespace Core.Services;
 /// </summary>
 public class AuthService : IAuthService
 {
-    private readonly IDataService _dataService;
+    private readonly IUserService _userService;
 
-    public AuthService(IDataService dataService)
+    public AuthService(IUserService dataService)
     {
-        _dataService = dataService;
+        _userService = dataService;
     }
  
     public async Task<User?> Login(string username, string password)
     {
-        var user = await _dataService.GetUserByName(username);
+        var user = await _userService.GetUserByName(username);
         if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
         {
             return null;
@@ -27,14 +26,14 @@ public class AuthService : IAuthService
 
     public async Task<User?> Register(string username, string password, string email, string? phonenumber)
     {   
-        if (await _dataService.DoesUserExist(username))
+        if (await _userService.DoesUserExist(username))
         {
             return null;
         }
 
         var user = new User(){ Username = username, PasswordHash = BCrypt.Net.BCrypt.HashPassword(password), Email = email, PhoneNumber = phonenumber }; 
 
-        await _dataService.AddUser(user);
+        await _userService.AddUser(user);
         return user;
     }
 } 
