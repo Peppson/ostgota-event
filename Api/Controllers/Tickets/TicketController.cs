@@ -6,6 +6,7 @@ public class TicketController(ITicketService ticketService) : Controller
 {
     private readonly ITicketService _ticketService = ticketService;
 
+
     [HttpGet("get")]
     public async Task<ActionResult<List<TicketDTO>>> GetAllTickets()
     {
@@ -34,17 +35,13 @@ public class TicketController(ITicketService ticketService) : Controller
         }
     }
 
-    //delete ticket
-    /* [HttpDelete("delete/{ticketId}")]
+    [HttpDelete("delete/{ticketId}")]
     public async Task<ActionResult<int>> DeleteTicket(int ticketId)
     {
         try
         {   
-            bool success = await _ticketService.RemoveTicket(ticketId);
-            if (!success)
-            {
+            if (!await _ticketService.RemoveTicket(ticketId))
                 return NotFound("Ticket not found.");
-            }
 
             return Ok(ticketId);
         }
@@ -52,5 +49,5 @@ public class TicketController(ITicketService ticketService) : Controller
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
-    } */
+    }
 }

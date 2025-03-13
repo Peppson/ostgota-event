@@ -5,8 +5,8 @@ namespace Api.Controllers.Events;
 public class EventController(IEventService eventService) : Controller
 {
     private readonly IEventService _eventService = eventService;
+    
 
-    // get all events
     [HttpGet("get")]
     public async Task<ActionResult<List<Event>>> GetAllEvents()
     {
@@ -21,7 +21,6 @@ public class EventController(IEventService eventService) : Controller
         }
     }
 
-    // Get event by id 
     [HttpGet("get/id/{id}")]
     public async Task<ActionResult<Event>> GetEventById(int id)
     {
@@ -40,7 +39,6 @@ public class EventController(IEventService eventService) : Controller
         }
     }
 
-    // Get event by name
     [HttpGet("get/name/{name}")]
     public async Task<ActionResult<Event>> GetEventByName(string name)
     {
@@ -59,7 +57,6 @@ public class EventController(IEventService eventService) : Controller
         }
     }
 
-    //create event 
     [HttpPost("create")]
     public async Task<ActionResult<Event>> CreateEvent(Event newEvent)
     {
@@ -74,7 +71,6 @@ public class EventController(IEventService eventService) : Controller
         }
     }
 
-    //delete event
     [HttpDelete("delete/{id}")]
     public async Task<ActionResult<Event>> DeleteEvent(int id)
     {
@@ -94,7 +90,6 @@ public class EventController(IEventService eventService) : Controller
         }
     }
 
-    // Update event
     [HttpPut("update/{id}")]
     public async Task<ActionResult<Event>> UpdateEvent(int id, Event ev)
     {
@@ -112,7 +107,4 @@ public class EventController(IEventService eventService) : Controller
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
-
 }
-
-

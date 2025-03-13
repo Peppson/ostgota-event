@@ -25,34 +25,23 @@ public class Event
     [Required]
     public int TicketsSold { get; set; } = 0;
     public int RemainingTickets => TicketsMax - TicketsSold;
-
     public bool IsSoldOut => RemainingTickets == 0;
 
 
-    public void RegisterTicket(int count)
+    public void RegisterTicket()
     {
-        if (count <= 0)
-        {
-            throw new ArgumentException("Antalet biljetter måste vara minst 1.");
-        }
-        if (count > RemainingTickets)
-        {
+        if (TicketsSold + 1 >= RemainingTickets)
             throw new InvalidOperationException("Inte tillräckligt många biljetter tillgängliga");
-        }
-        TicketsSold += count;
+
+        TicketsSold++;
     }
 
-    public void CancelTicket(int count)
+    public void CancelTicket()
     {
-        if (count <= 0)
-        {
-            throw new ArgumentException("Antalet biljetter måste vara minst 1.");
-        }
-        if (count > TicketsSold)
-        {
+        if (TicketsSold - 1 <= 0)
             throw new InvalidOperationException("Inte tillräckligt många biljetter att ta bort");
-        }
-        TicketsSold -= count;
+
+        TicketsSold--;
     }
 }
 

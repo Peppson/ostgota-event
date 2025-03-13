@@ -17,36 +17,17 @@ public class User
     public IReadOnlyCollection<Ticket> Tickets => _tickets.AsReadOnly();
 
 
-    public void BuyTickets(Event currentEvent, int quantity, Ticket ticket)
+    public void BuyTickets(Ticket ticket)
     {
-        if (quantity <= 0)
-            throw new ArgumentException("K�p m�ste vara mer �n ett");
-
-        if (currentEvent.RemainingTickets < quantity)
-            throw new InvalidOperationException("Inte tillr�ckligt m�nga biljetter kvar!");
-
         _tickets.Add(ticket);
-        currentEvent.RegisterTicket(quantity);
     }
 
-    public void CancelTickets(Event currentEvent, int quantity = 1)
+    public void CancelTickets(Ticket ticket, Event event1)
     {
-        if (quantity <= 0)
-            throw new ArgumentException("Antalet biljetter att avboka m�ste vara st�rre �n 0.");
-
-        // filter out the users tickets for the current event and take the quantity to cancel
-        var ticketsToRemove = _tickets
-            .Where(t => t.EventId == currentEvent.Id && t.UserId == this.Id)
-            .Take(quantity)
-            .ToList();
-
-        foreach (var ticket in ticketsToRemove)
-        {
-            _tickets.Remove(ticket);
-        }
-
+        _tickets.Remove(ticket);
+        
         // Update the ticket count
-        currentEvent.CancelTicket(quantity);
+        event1.CancelTicket();
     }
 }
 

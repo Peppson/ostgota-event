@@ -13,6 +13,7 @@ public class TicketService(Database DbContext) : ITicketService
 {
     private readonly Database _db = DbContext;
 
+
     public async Task<List<TicketDTO>> GetAllTickets()
     {   
         var tickets = await _db.Tickets.ToListAsync();
@@ -21,13 +22,10 @@ public class TicketService(Database DbContext) : ITicketService
 
     public async Task<TicketDTO> AddTicket(TicketDTO dto)
     {   
-        var user = await _db.Users.FirstOrDefaultAsync(e => e.Id == dto.UserId);
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == dto.UserId);
         var event1 = await _db.Events.FirstOrDefaultAsync(e => e.Id == dto.EventId);
 
-        if (user == null || event1 == null)
-        {
-            return null!;
-        }
+        if (user == null || event1 == null) return null!;
 
         var newTicket = new Ticket() 
         {
@@ -38,41 +36,28 @@ public class TicketService(Database DbContext) : ITicketService
             Price = dto.Price,
             Seat = dto.Seat
         };
-        
-        user.BuyTickets(event1, 1, newTicket);
+
+        user.BuyTickets(newTicket);
+        event1.RegisterTicket();
         await _db.SaveChangesAsync();
 
         return dto;
     }
 
-
-
     public async Task<bool> RemoveTicket(int ticketId)
     {   
-        /* Ticket ticket = await _db.Tickets.FirstOrDefaultAsync(
-            t => t.Id == ticketId
-        ); 
+        var ticket = await _db.Tickets
+            .Include(t => t.User)
+            .Include(t => t.Event)
+            .FirstOrDefaultAsync(t => t.Id == ticketId);
 
-        if (ticket == null) 
-            return false;
-
-
-
-        //_db.Tickets.Remove(ticket);
-
-
+        if (ticket == null) return false;
 
         var user = ticket.User;
-        Console.WriteLine(user);
-
-
         var event1 = ticket.Event;
-        Console.WriteLine(event1);
-
-
-        user.CancelTickets(event1);
+        user.CancelTickets(ticket, event1);
         await _db.SaveChangesAsync();
- */
+
         return true;
     }
 
