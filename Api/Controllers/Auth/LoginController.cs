@@ -8,7 +8,7 @@ public class LoginController(IAuthService authService /* HttpContext context*/) 
     //private readonly HttpContext _context = context;
 
     [HttpPost("login")]
-    public async Task<IActionResult> LogIn([FromBody]LoginRequest request)
+    public async Task<ActionResult> LogIn([FromBody]LoginRequest request)
     {
         var result = await _authService.Login(request.Username, request.Password); //authorizes the login from userinput by authentication service.
         if (result == null)
