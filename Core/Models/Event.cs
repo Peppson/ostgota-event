@@ -30,18 +30,14 @@ public class Event
 
     public void RegisterTicket()
     {
-        if (TicketsSold + 1 >= RemainingTickets)
-            throw new InvalidOperationException("Inte tillräckligt många biljetter tillgängliga");
-
-        TicketsSold++;
+        if (TicketsSold + 1 <= RemainingTickets)
+            TicketsSold++;
     }
 
     public void CancelTicket()
     {
-        if (TicketsSold - 1 <= 0)
-            throw new InvalidOperationException("Inte tillräckligt många biljetter att ta bort");
-
-        TicketsSold--;
+        if (TicketsSold >= 1)
+            TicketsSold--;
     }
 }
 
