@@ -2,6 +2,7 @@
 @using Core.Models;
 @using Core.Services;
 @inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage SessionStorage
 
 @page "/admin"
 
@@ -75,7 +76,8 @@
 </div>
 
 @code {
-
+    private UserDto? user;
+    
     public bool isAdmin = false;//user.Role == UserRole.Admin;
 
     public static List<EventDto> events { get; set; } = new List<EventDto>();
@@ -93,6 +95,20 @@
     public void Redirect()
     {
         NavigationManager.NavigateTo("/");
+    }
+
+    protected async Task OnIntializedAsync()
+    {
+        var result = await SessionStorage.GetAsync<UserDto>("user");
+
+        if (result.Success)
+        {
+            user = result.Value;
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/login");
+        }
     }
 
 }
