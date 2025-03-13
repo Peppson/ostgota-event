@@ -17,17 +17,14 @@ public class User
     public IReadOnlyCollection<Ticket> Tickets => _tickets.AsReadOnly();
 
 
-    public void BuyTickets(Ticket ticket)
+    public void BuyTicket(Ticket ticket)
     {
         _tickets.Add(ticket);
     }
 
-    public void CancelTickets(Ticket ticket, Event event1)
+    public void CancelTicket(Ticket ticket)
     {
         _tickets.Remove(ticket);
-        
-        // Update the ticket count
-        event1.CancelTicket();
     }
 }
 

@@ -2,9 +2,10 @@ namespace Core.Services.Users;
 
 public interface IUserService
 {
-    Task<User?> GetUserByName(string username);
-    Task<bool> DoesUserExist(string username);
     Task<List<User>> GetAllUsers();
+    Task<User?> GetUserByName(string username);
+    Task<User?> GetUserById(int userId);
+    Task<bool> DoesUserExist(string username);
     Task AddUser(User user);
-    Task RemoveUser(User user);
+    Task<bool> RemoveUserById(int userId);
 }

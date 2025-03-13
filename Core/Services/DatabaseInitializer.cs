@@ -97,7 +97,7 @@ public class DatabaseInitializer(Database db)
             //Seat = "A1",                      // nullable
         };
 
-        _db.Users.First().BuyTickets(ticket);
+        _db.Users.First().BuyTicket(ticket);
         await _db.Tickets.AddAsync(ticket);
         await _db.SaveChangesAsync();
     }

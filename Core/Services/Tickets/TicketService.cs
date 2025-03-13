@@ -37,7 +37,7 @@ public class TicketService(Database DbContext) : ITicketService
             Seat = dto.Seat
         };
 
-        user.BuyTickets(newTicket);
+        user.BuyTicket(newTicket);
         event1.RegisterTicket();
         await _db.SaveChangesAsync();
 
@@ -51,11 +51,14 @@ public class TicketService(Database DbContext) : ITicketService
             .Include(t => t.Event)
             .FirstOrDefaultAsync(t => t.Id == ticketId);
 
-        if (ticket == null) return false;
+        if (ticket == null) 
+            return false;
 
         var user = ticket.User;
         var event1 = ticket.Event;
-        user.CancelTickets(ticket, event1);
+
+        user.CancelTicket(ticket);
+        event1.CancelTicket();
         await _db.SaveChangesAsync();
 
         return true;
