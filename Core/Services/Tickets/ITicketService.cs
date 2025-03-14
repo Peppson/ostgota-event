@@ -3,8 +3,6 @@ namespace Core.Services.Tickets;
 public interface ITicketService
 {
     Task<List<Ticket>> GetAllTickets();
-    Task<TicketDTO> AddTicket(TicketDTO dto);
+    Task<Ticket?> AddTicket(int userId, int EventId, decimal Price, string? seat);
     Task<bool> RemoveTicket(int ticketId);
-    List<TicketDTO> GetTicketDTO(List<Ticket> tickets);
-    TicketDTO GetTicketDTO(Ticket ticket);
 }

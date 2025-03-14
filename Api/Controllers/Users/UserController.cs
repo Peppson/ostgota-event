@@ -8,12 +8,12 @@ public class UserController(IUserService userService) : Controller
     
 
     [HttpGet("get")]
-    public async Task<ActionResult<List<User>>> GetAllUsers()
+    public async Task<ActionResult<List<AllUsersDTO>>> GetAllUsers()
     {
         try
         {
             var users = await _userService.GetAllUsers();
-            return Ok(users);
+            return Ok( GetAllUsersDTO(users) );
         }
         catch (Exception ex)
         {
@@ -26,12 +26,22 @@ public class UserController(IUserService userService) : Controller
     {
         try
         {
-            var user = await _userService.GetUserDTOByName(name);
+            var user = await _userService.GetUserByName(name);
             if (user == null)
-            {
                 return NotFound($"User with name: {name} was not found");
-            }
-            return Ok(user);
+
+            var newUser = new UserDTO
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Role = user.Role,
+                CreatedAt = user.CreatedAt,
+                Tickets = GetTicketDTO(user.Tickets)
+            };
+            
+            return Ok(newUser);
         }
         catch (Exception ex)
         {
@@ -40,16 +50,26 @@ public class UserController(IUserService userService) : Controller
     }
 
     [HttpGet("get/id/{userId}")]
-    public async Task<ActionResult<User>> GetUserById(int userId)
+    public async Task<ActionResult<UserDTO>> GetUserById(int userId)
     {
         try
         {
-            var user = await _userService.GetUserDTOById(userId);
+            var user = await _userService.GetUserById(userId);
             if (user == null)
+                return NotFound($"User with name: {userId} was not found");
+
+            var newUser = new UserDTO
             {
-                return NotFound($"User with id: {userId} was not found");
-            }
-            return Ok(user);
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Role = user.Role,
+                CreatedAt = user.CreatedAt,
+                Tickets = GetTicketDTO(user.Tickets)
+            };
+            
+            return Ok(newUser);
         }
         catch (Exception ex)
         {
@@ -71,5 +91,30 @@ public class UserController(IUserService userService) : Controller
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
+    }
+
+    private static List<AllUsersDTO> GetAllUsersDTO(List<User> users)
+    {
+        return users.Select(t => new AllUsersDTO
+        {
+            Id = t.Id,
+            Username = t.Username,
+            Email = t.Email,
+            PhoneNumber = t.PhoneNumber,
+            Role = t.Role,
+            CreatedAt = t.CreatedAt
+        }).ToList();
+    }
+
+    private static List<UserTicketDTO> GetTicketDTO(List<Ticket> tickets)
+    {
+        return tickets.Select(t => new UserTicketDTO
+        {   
+            Id = t.Id,
+            UserId = t.UserId,
+            EventId = t.EventId,
+            Price = t.Price,
+            Seat = t.Seat
+        }).ToList();
     }
 }

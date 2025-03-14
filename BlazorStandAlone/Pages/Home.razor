@@ -3,22 +3,30 @@
 @inject SessionStorageService SessionStorage
 @inject NavigationManager NavigationManager
 
-<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<section class="landing-page">
+    <PageTitle>Home</PageTitle>
 
-Welcome to your new app.
+  
+</section>
 
-@code{
+<section id="event-section" class="event-section">
+    <div class="event-section-header">
+        <h2>Wakka Wakka</h2>
+    </div>
+</section>
+
+
+@code {
     private LoginDto? user;
 
-    protected  async Task OnIntializedAsync()
+    protected async Task OnIntializedAsync()
     {
         var result = await SessionStorage.GetItemAsync<User>("user");
 
-        if(result != null)
+        if (result != null)
         {
-            user = new LoginDto() {Username = result.Username, Role = result.Role};
+            user = new LoginDto() { Username = result.Username, Role = result.Role };
         }
         else
         {
@@ -26,3 +34,4 @@ Welcome to your new app.
         }
     }
 }
+
