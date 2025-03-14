@@ -30,7 +30,7 @@ public class Event
 
     public void RegisterTicket()
     {
-        if (TicketsSold + 1 <= RemainingTickets)
+        if (RemainingTickets > 0) 
             TicketsSold++;
     }
 
