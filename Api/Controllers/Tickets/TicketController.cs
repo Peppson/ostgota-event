@@ -29,6 +29,10 @@ public class TicketController(ITicketService ticketService) : Controller
             await _ticketService.AddTicket(ticketDto);
             return Ok(ticketDto);
         }
+        catch (InvalidOperationException ex)  
+        {
+            return BadRequest(new { ex.Message });
+        }
         catch (Exception ex)
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
