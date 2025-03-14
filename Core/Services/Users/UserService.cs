@@ -7,7 +7,7 @@ public class UserDTO
     public required string Email { get; set; }
     public string? PhoneNumber { get; set; }
     public UserRole Role { get; set; }
-    public List<TicketDTO> Tickets { get; set; } = []; 
+    public List<TicketTODO> Tickets { get; set; } = []; 
 }
 
 public class UserService(Database DbContext) : IUserService
@@ -104,9 +104,9 @@ public class UserService(Database DbContext) : IUserService
         return true;
     }
 
-    public TicketDTO GetTicketDTO(Ticket ticket)
+    public TicketTODO GetTicketDTO(Ticket ticket)
     {
-        return new TicketDTO
+        return new TicketTODO
         {
             Id = ticket.Id,
             UserId = ticket.UserId,

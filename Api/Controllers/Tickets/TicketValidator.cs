@@ -1,6 +1,6 @@
 namespace Api.Controllers.Tickets;
 
-public class TicketValidator : AbstractValidator<TicketDTO>
+public class TicketValidator : AbstractValidator<TicketCreateDTO>
 {
     public TicketValidator()
     {   

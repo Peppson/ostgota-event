@@ -23,7 +23,7 @@ public class Event
     public required string ImagePath { get; set; } = "images/Knight.jpg";
     public int? TicketsMax { get; set; }
     [Required]
-    public int TicketsSold { get; set; } = 0;
+    public required int TicketsSold { get; set; } = 0;
     public int RemainingTickets
     {
         get
