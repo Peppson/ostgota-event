@@ -1,36 +1,62 @@
 * {
-    margin: 0%;
-    padding: 0%;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 html,
 body {
+    scroll-behavior: smooth;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 body {
     display: flex;
     flex-direction: column;
-    background-image: url(/images/Spa.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100vh;
-    height: 100svh;
 }
 
 .page {
-    height: 100%;
     display: flex;
     justify-content: center;
     flex-direction: column;
 }
 
+.landing-page {
+    height: calc(100vh - 112px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+}
+
+.landing-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(/images/Spa.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+}
+
+.event-section {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e0c1c1;
+}
+
 /* Content */
 .content {
-    height: fit-content;
-    flex: 1;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,12 +70,17 @@ header {
     display: flex;
     padding: 20px;
     font-size: 45px;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .nav {
+    position: fixed;
+    font-size: 18px;
+    top: 15px;
+    right: 15px;
     flex: 1;
     display: flex;
-    justify-content: center;
     align-items: center;
 }
 
@@ -71,7 +102,7 @@ header {
 header .nav-link:hover,
 .nav .nav-link:hover {
     color: gold;
-    transform: scale(1.05);
+    transform: scale(1.05); 
 }
 
 .nav-link:link,
@@ -79,7 +110,6 @@ header .nav-link:hover,
     color: white;
 }
 
-
-.nav-link.active {
+/* .nav-link.active {
     color: yellow;
-}
+} */
