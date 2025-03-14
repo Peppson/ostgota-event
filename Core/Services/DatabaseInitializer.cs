@@ -69,7 +69,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.Free,
             StartTime = DateTime.UtcNow,
             EndTime = DateTime.UtcNow.AddHours(3),
-            Adress = "Kungsberget 3",
+            Address = "Kungsberget 3",
             TicketsMax = 2000,
             TicketsSold = 0,
             //HasSeat = false,                  // default
@@ -84,7 +84,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.MemberOnly,
             StartTime = DateTime.UtcNow,
             EndTime = DateTime.UtcNow.AddHours(3),
-            Adress = "Prinskrönet 8",
+            Address = "Prinskrönet 8",
             TicketsMax = 100,
             TicketsSold = 0,
             //HasSeat = false,                  // default
@@ -99,7 +99,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.MemberOnly,
             StartTime = new DateTime(2025, 5, 20, 14, 0, 0, DateTimeKind.Local),
             EndTime = new DateTime(2025, 5, 22, 14, 0, 0, DateTimeKind.Local),
-            Adress = "Gatan 2",
+            Address = "Gatan 2",
             TicketsMax = 500,
             TicketsSold = 0,
             //HasSeat = false,                  // default
@@ -113,7 +113,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.Free,
             StartTime = new DateTime(2025, 5, 20, 14, 0, 0, DateTimeKind.Local),
             EndTime = new DateTime(2025, 5, 23, 14, 0, 0, DateTimeKind.Local),
-            Adress = "Gatan 2",
+            Address = "Gatan 2",
             TicketsMax = null,
             TicketsSold = 0,
             //HasSeat = false,                  // default
@@ -127,7 +127,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.Free,
             StartTime = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Local),
             EndTime = new DateTime(2025, 6, 1, 16, 0, 0, DateTimeKind.Local),
-            Adress = "Stora Torget",
+            Address = "Stora Torget",
             TicketsMax = null, 
             TicketsSold = 0,
             ImagePath = "images/market.jpg"
@@ -141,7 +141,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.Paid,
             StartTime = new DateTime(2025, 7, 5, 15, 0, 0, DateTimeKind.Local),
             EndTime = new DateTime(2025, 7, 6, 2, 0, 0, DateTimeKind.Local),
-            Adress = "Vätterstranden",
+            Address = "Vätterstranden",
             TicketsMax = 3000,
             TicketsSold = 0,
             ImagePath = "images/Festival.webp"
@@ -155,7 +155,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.Free,
             StartTime = new DateTime(2025, 12, 10, 12, 0, 0, DateTimeKind.Local),
             EndTime = new DateTime(2025, 12, 10, 18, 0, 0, DateTimeKind.Local),
-            Adress = "Gamla Linköping",
+            Address = "Gamla Linköping",
             TicketsMax = null,
             TicketsSold = 0,
             ImagePath = "images/Market.jpg"
@@ -169,7 +169,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.Paid,
             StartTime = new DateTime(2025, 9, 14, 8, 0, 0, DateTimeKind.Local),
             EndTime = new DateTime(2025, 9, 14, 17, 0, 0, DateTimeKind.Local),
-            Adress = "Stadshuset",
+            Address = "Stadshuset",
             TicketsMax = 5000,
             TicketsSold = 0,
             ImagePath = "images/Knight.jpg"
@@ -183,7 +183,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.MemberOnly,
             StartTime = new DateTime(2025, 8, 10, 14, 0, 0, DateTimeKind.Local),
             EndTime = new DateTime(2025, 8, 12, 22, 0, 0, DateTimeKind.Local),
-            Adress = "Vadstena Slott",
+            Address = "Vadstena Slott",
             TicketsMax = 800,
             TicketsSold = 0,
             ImagePath = "images/Market.jpg"
@@ -197,7 +197,7 @@ public class DatabaseInitializer(Database db)
             AccessType = AccessType.Paid,
             StartTime = new DateTime(2025, 6, 15, 9, 0, 0, DateTimeKind.Local),
             EndTime = new DateTime(2025, 6, 15, 15, 0, 0, DateTimeKind.Local),
-            Adress = "Torget i Kisa",
+            Address = "Torget i Kisa",
             TicketsMax = 100,
             TicketsSold = 0,
             ImagePath = "images/MantorpRacing.jpg"
