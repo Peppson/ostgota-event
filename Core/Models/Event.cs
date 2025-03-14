@@ -20,17 +20,37 @@ public class Event
     public DateTime EndTime { get; set; }
     public bool HasSeat { get; set; } = false;
     public string? ImagePath { get; set; }  // What to do if no path? Default background? < si senor, me parece bien
-    [Required]
-    public int TicketsMax { get; set; }
+    public int? TicketsMax { get; set; }
     [Required]
     public int TicketsSold { get; set; } = 0;
-    public int RemainingTickets => TicketsMax - TicketsSold;
-    public bool IsSoldOut => RemainingTickets == 0;
+    public int RemainingTickets
+    {
+        get
+        {
+            if (TicketsMax.HasValue)
+            {
+                return TicketsMax.Value - TicketsSold;
+            }
+            return int.MaxValue; 
+        }
+    }
+
+    public bool IsSoldOut
+    {
+        get
+        {
+            if (TicketsMax.HasValue)
+            {
+                return RemainingTickets == 0;
+            }
+            return false; 
+        }
+    }
 
 
     public void RegisterTicket()
     {
-        if (RemainingTickets > 0) 
+        if (RemainingTickets > 0)
             TicketsSold++;
     }
 
