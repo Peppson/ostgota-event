@@ -12,8 +12,9 @@ public class Program
         builder.Services.AddScoped<IEventService, EventService>();
         builder.Services.AddScoped<ITicketService, TicketService>();
         builder.Services.AddScoped<DatabaseInitializer>();
-        builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db"); // jw: todo singelton?
+        builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db");
         builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddSingleton<Validator>();
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddCors(options =>

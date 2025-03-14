@@ -1,6 +1,7 @@
 namespace Core.Services.Tickets;
 
-public class TicketDTO
+
+public record TicketDTO
 {
     public int Id { get; set; }
     public int UserId { get; set; }
@@ -8,6 +9,7 @@ public class TicketDTO
     public decimal Price { get; set; }
     public string? Seat { get; set; } 
 }
+
 
 public class TicketService(Database DbContext) : ITicketService
 {
@@ -29,7 +31,6 @@ public class TicketService(Database DbContext) : ITicketService
 
         if (event1.IsSoldOut)
             throw new InvalidOperationException("Cannot purchase ticket. The event is sold out.");
-
 
         var newTicket = new Ticket() 
         {

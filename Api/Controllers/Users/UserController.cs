@@ -1,4 +1,4 @@
-namespace Api.Controllers.Events;
+namespace Api.Controllers.Users;
 
 [Route("api/user")]
 [ApiController]
