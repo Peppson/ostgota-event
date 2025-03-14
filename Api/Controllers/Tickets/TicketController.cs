@@ -9,12 +9,13 @@ public class TicketController(ITicketService ticketService, Validator validator)
 
 
     [HttpGet("get")]
-    public async Task<ActionResult<List<TicketDTO>>> GetAllTickets()
+    public async Task<ActionResult<List<TicketGetDTO>>> GetAllTickets()
     {
         try
         {
             var tickets = await _ticketService.GetAllTickets();
-            return Ok(tickets);
+            var dto = GetTicketGetDTO(tickets);
+            return Ok(dto);
         }
         catch (Exception ex)
         {
@@ -64,5 +65,29 @@ public class TicketController(ITicketService ticketService, Validator validator)
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
+    }
+
+    private List<TicketGetDTO> GetTicketGetDTO(List<Ticket> tickets)
+    {
+        return tickets.Select(t => new TicketGetDTO
+        {
+            Id = t.Id,
+            UserId = t.UserId,
+            EventId = t.EventId,
+            Price = t.Price,
+            Seat = t.Seat
+        }).ToList();
+    }
+
+    private TicketDTO GetTicketDTO(Ticket ticket)
+    {
+        return new TicketDTO
+        {
+            Id = ticket.Id,
+            UserId = ticket.UserId,
+            EventId = ticket.EventId,
+            Price = ticket.Price,
+            Seat = ticket.Seat
+        };
     }
 }

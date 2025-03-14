@@ -58,25 +58,6 @@ public class EventController(IEventService eventService, Validator validator) : 
         }
     }
 
-    [HttpPost("create")]
-    public async Task<ActionResult<Event>> CreateEvent(Event newEvent)
-    {
-        var validation = _validator.Validate(new EventValidator(), newEvent);
-        if (validation != null)
-            return validation;
-
-        try
-        {
-            await _eventService.AddEvent(newEvent);
-            return Ok(newEvent);
-
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
-
     [HttpDelete("delete/{id}")]
     public async Task<ActionResult<Event>> DeleteEvent(int id)
     {
@@ -96,16 +77,66 @@ public class EventController(IEventService eventService, Validator validator) : 
         }
     }
 
-    [HttpPut("update/{id}")]
-    public async Task<ActionResult<Event>> UpdateEvent(int id, Event ev)
+    [HttpPost("create")]
+    public async Task<ActionResult<Event>> CreateEvent(EventCreateDTO ev)
     {
-        var validation = _validator.Validate(new EventValidator(), ev);
+        var validation = _validator.Validate(new EventCreateValidator(), ev);
+        if (validation != null)
+            return validation;
+
+        var newEvent = new Event 
+        {
+            Name = ev.Name,
+            Description = ev.Description,
+            City = ev.City,
+            Address = ev.Address,
+            AccessType = ev.AccessType,
+            StartTime = ev.StartTime,
+            EndTime = ev.EndTime,
+            HasSeat = ev.HasSeat,
+            ImagePath = ev.ImagePath,
+            TicketsMax = ev.TicketsMax,
+            TicketsSold = 0
+        };
+
+        try
+        {
+            await _eventService.AddEvent(newEvent);
+            return Ok(newEvent);
+
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpPut("update/{id}")]
+    public async Task<ActionResult<Event>> UpdateEvent(int id, EventUpdateDTO ev)
+    {
+        var validation = _validator.Validate(new EventUpdateValidator(), ev);
         if (validation != null)
             return validation;
         
+        var newEvent = new Event 
+        {
+            Id = id,
+            Name = ev.Name,
+            Description = ev.Description,
+            City = ev.City,
+            Address = ev.Address,
+            AccessType = ev.AccessType,
+            StartTime = ev.StartTime,
+            EndTime = ev.EndTime,
+            HasSeat = ev.HasSeat,
+            ImagePath = ev.ImagePath,
+            TicketsMax = ev.TicketsMax,
+            TicketsSold = ev.TicketsSold
+        };
+
         try
         {
-            var updatedEvent = await _eventService.UpdateEvent(id, ev);
+            var updatedEvent = await _eventService.UpdateEvent(id, newEvent);
             if (updatedEvent == null)
             {
                 return NotFound("Event not found.");

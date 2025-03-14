@@ -14,10 +14,9 @@ public class TicketService(Database DbContext) : ITicketService
     private readonly Database _db = DbContext;
 
 
-    public async Task<List<TicketDTO>> GetAllTickets()
+    public async Task<List<Ticket>> GetAllTickets()
     {   
-        var tickets = await _db.Tickets.ToListAsync();
-        return GetTicketDTO(tickets);
+        return await _db.Tickets.ToListAsync();
     }
 
     public async Task<TicketDTO> AddTicket(TicketDTO dto)
