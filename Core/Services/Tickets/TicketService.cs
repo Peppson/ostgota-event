@@ -27,6 +27,10 @@ public class TicketService(Database DbContext) : ITicketService
 
         if (user == null || event1 == null) return null!;
 
+        if (event1.IsSoldOut)
+            throw new InvalidOperationException("Cannot purchase ticket. The event is sold out.");
+
+
         var newTicket = new Ticket() 
         {
             UserId = dto.UserId,
