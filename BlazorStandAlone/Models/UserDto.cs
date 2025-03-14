@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Blazor.Models
+namespace BlazorStandAlone.Models
 {
     public class UserDto
     {
