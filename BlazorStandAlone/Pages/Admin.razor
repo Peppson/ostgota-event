@@ -1,15 +1,14 @@
-﻿@using Blazor.Models;
-@using Core.Models;
-@using Core.Services;
-@inject NavigationManager NavigationManager
+﻿@inject NavigationManager NavigationManager
 @inject SessionStorageService SessionStorage
 @inject HttpClient HttpClient
-
+@using BlazorStandAlone.Components
 @page "/admin"
 
 <PageTitle>Admin</PageTitle>
 
 <h1>Admin Dashboard</h1>
+
+<Popup @ref="popupRef" Title="Success" Message="@PopupMessage"></Popup>
 
 <div class="admin-container">
     <div class="userBox">
@@ -56,6 +55,7 @@
         <div class="amountSquare eventAmount">@eventNumber</div>
         <input @bind="eventId" />
         <button @onclick="GetEventById">Search Event By Id</button>
+        <button @onclick="AddEvent">Add new event</button>
         <div class="foundEventBox">
             @if (foundEvent != null)
             {
@@ -68,22 +68,39 @@
                 <div class="eventsTicketSold">Tickets sold: @foundEvent.TicketsSold</div>
                 <div class="eventsTicketsMax">Max tickets: @foundEvent.TicketsMax</div>
                 <div class="eventsHasSeats">Designated seats: @foundEvent.HasSeat</div>
+                <button @onclick="EditEvent">Edit</button>
+                <button @onclick="DeleteEvent">Delete</button>
+                <button @onclick="ClearEvent">Clear</button>
             }
-            <button>Edit</button>
-            <button>Delete</button>
-            <button @onclick="ClearEvent">Clear</button>
+            @if(EditingEvent || AddingEvent)
+            {
+                <input class="eventsName" @bind="editedEvent.Name"/>
+                <input class="eventsCity" @bind="editedEvent.City"/>
+                <input class="eventsAccessType" @bind="editedEvent.AccessType"/>
+                <input class="eventsStartTime" @bind="editedEvent.StartTime"/>
+                <input class="eventsEndTime" @bind="editedEvent.EndTime"/>
+                <input class="eventsTicketSold" @bind="editedEvent.TicketsSold"/>
+                <input class="eventsTicketsMax" @bind="editedEvent.TicketsMax"/>
+                <input class="eventsHasSeats" @bind="editedEvent.HasSeat"/>
+                <button @onclick="AddOrEdit">Send</button>
+            }
         </div>
     </div>
 </div>
 
 @code {
     private LoginDto? user;
+    private Popup? popupRef;
+    private string PopupMessage = String.Empty;
 
     private bool development = true;
 
     public List<EventDto> events { get; set; } = new();
     public int eventNumber { get; set; }
     public int eventId { get; set; }
+    private bool EditingEvent { get; set; } = false;
+    private bool AddingEvent { get; set; } = false;
+    private EventDto editedEvent { get; set; }
 
     public List<UserDto> users { get; set; } = new();
     public int userNumber { get; set; }
@@ -95,7 +112,6 @@
     public UserDto? foundUser { get; set; } = null;
     public TicketDto? foundTicket { get; set; } = null;
     public EventDto? foundEvent { get; set; } = null;
-
 
 
     protected override async Task OnInitializedAsync()
@@ -170,6 +186,60 @@
         if (foundEvent == null)
         {
             Console.WriteLine("event was not found");
+        }
+    }
+
+    private void EditEvent()
+    {
+        EditingEvent = true;
+        editedEvent = foundEvent;
+    }
+
+    private void AddEvent()
+    {
+        AddingEvent = true;
+        editedEvent = new EventDto(){ Name = null, City = null, Description = null };
+    }
+
+    private void AddOrEdit()
+    {
+        if (AddingEvent)
+            CreateEvent();
+        else
+            UpdateEvent();
+
+        AddingEvent = false;
+        EditingEvent = false;
+    }
+
+    private async Task CreateEvent()
+    {
+
+    }
+
+    private async Task UpdateEvent()
+    {
+        
+    }
+
+    private async Task DeleteEvent()
+    {
+        if (foundEvent == null)
+        {
+            Console.WriteLine("No event selected, can not delete");
+            return;
+        } 
+        var response = await HttpClient.DeleteAsync($"api/event/delete/{foundEvent.Id}");
+        if (response.IsSuccessStatusCode)
+        {
+            PopupMessage = "Event deleted successfully";
+            popupRef?.Show();
+            await GetEventsAsync();
+            ClearEvent();
+        }
+        else
+        {
+            Console.WriteLine($"error: {response.StatusCode}");
         }
     }
 

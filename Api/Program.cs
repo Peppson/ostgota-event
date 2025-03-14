@@ -49,7 +49,7 @@ public class Program
         }
 
         // Ensure SQLite DB is created and seeded on firstboot, bool for debugging
-        bool resetDatabaseToDefault = false;
+        bool resetDatabaseToDefault = true;
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();

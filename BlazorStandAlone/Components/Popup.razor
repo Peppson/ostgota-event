@@ -1,0 +1,33 @@
+﻿@* Popup.razor *@
+
+<div class="popup-overlay" style="@(IsVisible ? "display : block;" : "display : none;")">
+    <div class="popup-content">
+        <h3>@Title</h3>
+        <p>@Message</p>
+        <button @onclick="ClosePopup">Ok</button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Message";
+    [Parameter] public string Message { get; set; } = "Hello!";
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    public bool IsVisible { get; private set; }
+
+    public void Show()
+    {
+        IsVisible = true;
+        InvokeAsync(StateHasChanged); //forces UI update.
+    }
+
+
+
+    private async Task ClosePopup()
+    {
+        IsVisible = false;
+        await InvokeAsync(StateHasChanged);
+        if (OnClose.HasDelegate) await OnClose.InvokeAsync();
+    }
+
+}
