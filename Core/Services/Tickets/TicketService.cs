@@ -31,7 +31,7 @@ public class TicketService(Database DbContext) : ITicketService
             EventId = eventId,
             Event = foundEvent,
             Seat = seat,
-            Price = price
+            Price = (foundEvent.AccessType == AccessType.Free) ? 0 : price
         };
 
         user.BuyTicket(newTicket);
