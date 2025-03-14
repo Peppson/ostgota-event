@@ -6,3 +6,4 @@ global using Core.Services;
 global using Core.Services.Users;
 global using Core.Services.Tickets;
 global using Core.Services.Events;
+global using System.Text.Json.Serialization;

@@ -9,13 +9,12 @@ public class TicketController(ITicketService ticketService, Validator validator)
 
 
     [HttpGet("get")]
-    public async Task<ActionResult<List<TicketGetDTO>>> GetAllTickets()
+    public async Task<ActionResult<List<TicketDTO>>> GetAllTickets()
     {
         try
         {
             var tickets = await _ticketService.GetAllTickets();
-            var dto = GetTicketGetDTO(tickets);
-            return Ok(dto);
+            return Ok( TicketGetDTO(tickets) );
         }
         catch (Exception ex)
         {
@@ -24,22 +23,16 @@ public class TicketController(ITicketService ticketService, Validator validator)
     }
 
     [HttpPost("create")]
-    public async Task<ActionResult<TicketDTO>> CreateTicket(TicketDTO ticketDto)
+    public async Task<ActionResult<TicketDTO>> CreateTicket(TicketCreateDTO dto)
     {   
-        var validation = _validator.Validate(new TicketValidator(), ticketDto);
+        var validation = _validator.Validate(new TicketValidator(), dto);
         if (validation != null)
             return validation;
 
-
-        // ticket price to a free event
-        // if event = free price = 0
-
-        // TODO mapping here 
-        
         try
         {
-            await _ticketService.AddTicket(ticketDto);
-            return Ok(ticketDto);
+            var ticket = await _ticketService.AddTicket(dto.UserId, dto.EventId, dto.Price, dto.Seat);
+            return Ok( GetTicketDTO(ticket!) );
         }
         catch (InvalidOperationException ex)  
         {
@@ -67,9 +60,9 @@ public class TicketController(ITicketService ticketService, Validator validator)
         }
     }
 
-    private List<TicketGetDTO> GetTicketGetDTO(List<Ticket> tickets)
+    private static List<TicketDTO> TicketGetDTO(List<Ticket> tickets)
     {
-        return tickets.Select(t => new TicketGetDTO
+        return tickets.Select(t => new TicketDTO
         {
             Id = t.Id,
             UserId = t.UserId,
@@ -79,7 +72,7 @@ public class TicketController(ITicketService ticketService, Validator validator)
         }).ToList();
     }
 
-    private TicketDTO GetTicketDTO(Ticket ticket)
+    private static TicketDTO GetTicketDTO(Ticket ticket)
     {
         return new TicketDTO
         {

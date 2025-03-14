@@ -28,6 +28,7 @@ public class User
     }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum UserRole
 {
     Admin,
