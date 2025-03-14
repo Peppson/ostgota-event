@@ -12,7 +12,7 @@ public class EventDto
     [Required]
     public required string City { get; set; }
     [Required]
-    public required string Adress { get; set; }
+    public required string Address { get; set; }
     public AccessType AccessType { get; set; }
     [Required]
     public DateTime StartTime { get; set; }
@@ -23,6 +23,6 @@ public class EventDto
     public int TicketsSold { get; set; }
     [Required]
     public bool HasSeat { get; set; }
-    public string? ImagePath { get; set; } 
+    public required string ImagePath { get; set; } 
 }
 
