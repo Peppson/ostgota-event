@@ -1,0 +1,93 @@
+﻿@* EventForm.razor *@
+
+<EditForm Model="EventModel" OnValidSubmit="HandleSubmit">
+    <h3>@(IsEditMode ? "Edit Event" : "Add Event")</h3>
+    <div>
+        <label>Title:</label>
+        <InputText @bind-Value="EventModel.Name" />
+        <ValidationMessage For="@(() => EventModel.Name)" />
+    </div>
+
+    <div>
+        <label>Description:</label>
+        <InputText @bind-Value="EventModel.Description" />
+        <ValidationMessage For="@(() => EventModel.Description)" />
+    </div>
+
+    <div>
+        <label>City:</label>
+        <InputText @bind-Value="EventModel.City" />
+        <ValidationMessage For="@(() => EventModel.City)" />
+    </div>
+
+    <div>
+        <label>Adress:</label>
+        <InputText @bind-Value="EventModel.Adress" />
+        <ValidationMessage For="@(() => EventModel.Adress)" />
+    </div>
+
+    <div>
+        <label>AccessType:</label>
+        <InputSelect @bind-Value="EventModel.AccessType">
+            @foreach(var type in Enum.GetValues<AccessType>())
+            {
+                <option value="@type">@type</option>
+            }
+        </InputSelect> >
+        <ValidationMessage For="@(() => EventModel.AccessType)" />
+    </div>
+
+    <div>
+        <label>StartTime:</label>
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="EventModel.StartTime" />
+        <ValidationMessage For="@(() => EventModel.StartTime)" />
+    </div>
+
+    <div>
+        <label>EndTime:</label>
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="EventModel.EndTime" />
+        <ValidationMessage For="@(() => EventModel.EndTime)" />
+    </div>
+
+    <div>
+        <label>Max Tickets:</label>
+        <InputNumber @bind-Value="EventModel.TicketsMax" />
+        <ValidationMessage For="@(() => EventModel.TicketsMax)" />
+    </div>
+
+    <div>
+        <label>Has Seats:</label>
+        <InputCheckbox @bind-Value="EventModel.HasSeat" />
+        <ValidationMessage For="@(() => EventModel.HasSeat)" />
+    </div>
+
+    <div>
+        <label>Image Path:</label>
+        <InputText @bind-Value="EventModel.ImagePath" />
+        <ValidationMessage For="@(() => EventModel.ImagePath)" />
+    </div>
+
+    <button type="submit">Save</button>
+    <button type="button" @onclick="Cancel">Cancel</button>
+</EditForm>
+
+@code {
+    [Parameter] public EventDto EventModel { get; set; }
+    [Parameter] public EventCallback <EventDto> OnSave { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    [Parameter] public bool IsEditMode { get; set; } = false;
+
+    private async Task HandleSubmit()
+    {
+        await OnSave.InvokeAsync(EventModel);
+    }
+
+    private async Task Cancel()
+    {
+        await OnCancel.InvokeAsync();
+    }
+
+
+
+}

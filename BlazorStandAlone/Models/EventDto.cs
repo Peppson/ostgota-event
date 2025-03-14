@@ -12,16 +12,17 @@ public class EventDto
     [Required]
     public required string City { get; set; }
     [Required]
+    public required string Adress { get; set; }
     public AccessType AccessType { get; set; }
     [Required]
     public DateTime StartTime { get; set; }
     [Required]
     public DateTime EndTime { get; set; }
     [Required]
+    public int? TicketsMax { get; set; }
     public int TicketsSold { get; set; }
     [Required]
-    public int? TicketsMax { get; set; }
-    public bool HasSeat { get; set; } = false;
-    public string? ImagePath { get; set; }  // What to do if no path? Default background?
+    public bool HasSeat { get; set; }
+    public string? ImagePath { get; set; } 
 }
 
