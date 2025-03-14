@@ -61,6 +61,7 @@ public class Event
     }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum AccessType
 {
     Free,

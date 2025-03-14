@@ -14,8 +14,7 @@ public class TicketController(ITicketService ticketService, Validator validator)
         try
         {
             var tickets = await _ticketService.GetAllTickets();
-            var dto = TicketGetDTO(tickets);
-            return Ok(dto);
+            return Ok( TicketGetDTO(tickets) );
         }
         catch (Exception ex)
         {
@@ -32,9 +31,8 @@ public class TicketController(ITicketService ticketService, Validator validator)
 
         try
         {
-            var result = await _ticketService.AddTicket(dto.UserId, dto.EventId, dto.Price, dto.Seat);
-            var ticket = GetTicketDTO(result!);
-            return Ok(ticket);
+            var ticket = await _ticketService.AddTicket(dto.UserId, dto.EventId, dto.Price, dto.Seat);
+            return Ok( GetTicketDTO(ticket!) );
         }
         catch (InvalidOperationException ex)  
         {

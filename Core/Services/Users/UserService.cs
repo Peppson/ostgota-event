@@ -1,15 +1,5 @@
 namespace Core.Services.Users;
 
-public class UserDTO
-{
-    public int Id { get; set; }
-    public required string Username { get; set; }
-    public required string Email { get; set; }
-    public string? PhoneNumber { get; set; }
-    public UserRole Role { get; set; }
-    public List<TicketTODO> Tickets { get; set; } = []; 
-}
-
 public class UserService(Database DbContext) : IUserService
 {
     private readonly Database _db = DbContext;
@@ -26,16 +16,6 @@ public class UserService(Database DbContext) : IUserService
     }
 
     public async Task<User?> GetUserByName(string username)
-    {
-        return await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
-    }
-
-    public async Task<User?> GetUserById(int userId)
-    {
-        return await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
-    }
-
-    public async Task<UserDTO?> GetUserDTOByName(string username)
     {   
         var user = await _db.Users
             .Include(u => u.Tickets)
@@ -44,18 +24,10 @@ public class UserService(Database DbContext) : IUserService
         if (user == null)
             return null;
 
-        return new UserDTO
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
-            Role = user.Role,
-            Tickets = user.Tickets.Select(t => GetTicketDTO(t)).ToList()
-        };
+        return user;
     }
 
-    public async Task<UserDTO?> GetUserDTOById(int userId)
+    public async Task<User?> GetUserById(int userId)
     {
         var user = await _db.Users
             .Include(u => u.Tickets)
@@ -64,15 +36,7 @@ public class UserService(Database DbContext) : IUserService
         if (user == null)
             return null;
 
-        return new UserDTO
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
-            Role = user.Role,
-            Tickets = user.Tickets.Select(t => GetTicketDTO(t)).ToList()
-        };
+        return user;
     }
 
     public async Task AddUser(User user)
@@ -102,17 +66,5 @@ public class UserService(Database DbContext) : IUserService
         await _db.SaveChangesAsync();
 
         return true;
-    }
-
-    public TicketTODO GetTicketDTO(Ticket ticket)
-    {
-        return new TicketTODO
-        {
-            Id = ticket.Id,
-            UserId = ticket.UserId,
-            EventId = ticket.EventId,
-            Price = ticket.Price,
-            Seat = ticket.Seat
-        };
     }
 }
