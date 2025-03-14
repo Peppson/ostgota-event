@@ -1,0 +1,51 @@
+﻿@* UserForm.razor*@
+
+<EditForm Model="UserModel" OnValidSubmit="HandleSubmit">
+    <h3>@(IsUserEditMode ? "Edit User" : "Add User")</h3>
+    <div>
+        <label>Username:</label>
+        <InputText @bind-Value="UserModel.Username" />
+        <ValidationMessage For="@(() => UserModel.Username)" />
+    </div>
+
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value="UserModel.Email" />
+        <ValidationMessage For="@(() => UserModel.Email)" />
+    </div>
+
+    <div>
+        <label>Phone:</label>
+        <InputText @bind-Value="UserModel.PhoneNumber" />
+        <ValidationMessage For="@(() => UserModel.PhoneNumber)" />
+    </div>
+
+    <div>
+        <label>User Role:</label>
+        <InputSelect @bind-Value="UserModel.Role">
+            @foreach (var role in Enum.GetValues<UserRole>())
+            {
+                <option value="@role">@role</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => UserModel.Role)" />
+    </div>
+
+</EditForm>
+@code {
+    [Parameter] public UserDto UserModel { get; set; }
+    [Parameter] public EventCallback<UserDto> OnSave { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    [Parameter] public bool IsUserEditMode { get; set; } = false;
+
+    private async Task HandleSubmit()
+    {
+        await OnSave.InvokeAsync(UserModel);
+    }
+
+    private async Task Cancel()
+    {
+        await OnCancel.InvokeAsync();
+    }
+}

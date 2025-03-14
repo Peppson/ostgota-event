@@ -1,7 +1,7 @@
 ﻿@* EventForm.razor *@
 
 <EditForm Model="EventModel" OnValidSubmit="HandleSubmit">
-    <h3>@(IsEditMode ? "Edit Event" : "Add Event")</h3>
+    <h3>@(IsEventEditMode ? "Edit Event" : "Add Event")</h3>
     <div>
         <label>Title:</label>
         <InputText @bind-Value="EventModel.Name" />
@@ -22,8 +22,8 @@
 
     <div>
         <label>Adress:</label>
-        <InputText @bind-Value="EventModel.Adress" />
-        <ValidationMessage For="@(() => EventModel.Adress)" />
+        <InputText @bind-Value="EventModel.Address" />
+        <ValidationMessage For="@(() => EventModel.Address)" />
     </div>
 
     <div>
@@ -76,7 +76,7 @@
     [Parameter] public EventCallback <EventDto> OnSave { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
 
-    [Parameter] public bool IsEditMode { get; set; } = false;
+    [Parameter] public bool IsEventEditMode { get; set; } = false;
 
     private async Task HandleSubmit()
     {
