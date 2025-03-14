@@ -46,6 +46,7 @@ public class UserService(Database DbContext) : IUserService
 
         return new UserDTO
         {
+            Id = user.Id,
             Username = user.Username,
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
@@ -65,6 +66,7 @@ public class UserService(Database DbContext) : IUserService
 
         return new UserDTO
         {
+            Id = user.Id,
             Username = user.Username,
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,

@@ -45,17 +45,19 @@ public class EventService(Database DbContext) : IEventService
             return null;
 
         existingEvent.Name = updatedEvent.Name;
+        existingEvent.Description = updatedEvent.Description;
+        existingEvent.City = updatedEvent.City;
+        existingEvent.Address = updatedEvent.Address;
+        existingEvent.AccessType = updatedEvent.AccessType;
         existingEvent.StartTime = updatedEvent.StartTime;
         existingEvent.EndTime = updatedEvent.EndTime;
-        existingEvent.City = updatedEvent.City;
-        existingEvent.Description = updatedEvent.Description;
         existingEvent.HasSeat = updatedEvent.HasSeat;
         existingEvent.ImagePath = updatedEvent.ImagePath;
-        existingEvent.AccessType = updatedEvent.AccessType;
-        existingEvent.Adress = updatedEvent.Adress;
         existingEvent.TicketsMax = updatedEvent.TicketsMax;
+        existingEvent.TicketsSold = updatedEvent.TicketsSold;
 
         await _db.SaveChangesAsync();
+
         return existingEvent;
     }
 }

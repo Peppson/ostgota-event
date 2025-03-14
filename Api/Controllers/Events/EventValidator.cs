@@ -1,25 +1,39 @@
 ﻿namespace Api.Controllers.Events;
 
-public class EventValidator : AbstractValidator<Event>
+public class EventCreateValidator : AbstractValidator<EventCreateDTO>
 {
-    public EventValidator()
+    public EventCreateValidator()
     {
         RuleFor(x => x.Name).NotEmpty();
         RuleFor(x => x.Description).NotEmpty();
         RuleFor(x => x.City).NotEmpty();
-        RuleFor(x => x.Adress).NotEmpty();
+        RuleFor(x => x.Address).NotEmpty();
         RuleFor(x => x.StartTime).NotEmpty();
         RuleFor(x => x.EndTime).GreaterThan(x => x.StartTime);
-
+        RuleFor(x => x.AccessType).IsInEnum();
+        RuleFor(x => x.ImagePath).NotEmpty();
         RuleFor(x => x.TicketsMax)
           .GreaterThan(0)
           .When(x => x.AccessType != AccessType.Free || x.HasSeat);
+    }
+}
 
-        RuleFor(x => x.TicketsSold)
-            .LessThanOrEqualTo(x => x.TicketsMax ?? int.MaxValue);
-
-        RuleFor(x => x.RemainingTickets).GreaterThanOrEqualTo(0);
-        RuleFor(x => x.IsSoldOut).Equal(x => x.RemainingTickets == 0);
+public class EventUpdateValidator : AbstractValidator<EventUpdateDTO>
+{
+    public EventUpdateValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty();
+        RuleFor(x => x.Description).NotEmpty();
+        RuleFor(x => x.City).NotEmpty();
+        RuleFor(x => x.Address).NotEmpty();
+        RuleFor(x => x.StartTime).NotEmpty();
+        RuleFor(x => x.EndTime).GreaterThan(x => x.StartTime);
         RuleFor(x => x.AccessType).IsInEnum();
+        RuleFor(x => x.ImagePath).NotEmpty();
+        RuleFor(x => x.TicketsMax)
+          .GreaterThan(0)
+          .When(x => x.AccessType != AccessType.Free || x.HasSeat);
+        RuleFor(x => x.TicketsSold).GreaterThanOrEqualTo(0);
+        RuleFor(x => x.TicketsSold).LessThan(x => x.TicketsMax);
     }
 }

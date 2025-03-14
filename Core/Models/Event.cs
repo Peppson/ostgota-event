@@ -11,7 +11,7 @@ public class Event
     [Required]
     public required string City { get; set; }
     [Required]
-    public required string Adress { get; set; }
+    public required string Address { get; set; }
     [Required]
     public AccessType AccessType { get; set; }
     [Required]
@@ -19,7 +19,8 @@ public class Event
     [Required]
     public DateTime EndTime { get; set; }
     public bool HasSeat { get; set; } = false;
-    public string? ImagePath { get; set; }  // What to do if no path? Default background? < si senor, me parece bien
+    [Required]
+    public required string ImagePath { get; set; } = "images/Knight.jpg";
     public int? TicketsMax { get; set; }
     [Required]
     public int TicketsSold { get; set; } = 0;
@@ -46,7 +47,6 @@ public class Event
             return false; 
         }
     }
-
 
     public void RegisterTicket()
     {
