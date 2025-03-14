@@ -1,5 +1,4 @@
-﻿
-namespace Api.Controllers.EventValidation;
+﻿namespace Api.Controllers.Events;
 
 public class EventValidator : AbstractValidator<Event>
 {
@@ -17,5 +16,4 @@ public class EventValidator : AbstractValidator<Event>
         RuleFor(x => x.IsSoldOut).Equal(x => x.RemainingTickets == 0);
         RuleFor(x => x.AccessType).IsInEnum();
     }
-
 }

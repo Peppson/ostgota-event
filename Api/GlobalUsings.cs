@@ -7,3 +7,5 @@ global using Core.Services.Users;
 global using Core.Services.Events;
 global using Core.Services.Tickets;
 global using FluentValidation;
+global using Api.Controllers.Events;
+global using Api.Controllers.Validators;
