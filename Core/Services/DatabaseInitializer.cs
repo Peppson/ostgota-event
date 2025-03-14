@@ -17,7 +17,7 @@ public class DatabaseInitializer(Database db)
     {
         try // ¯\_(ツ)_/¯ 
         {
-            _db.Database.EnsureDeleted(); 
+            _db.Database.EnsureDeleted();
             _db.Database.EnsureCreated();
             await SeedDatabase();
         }
@@ -32,6 +32,16 @@ public class DatabaseInitializer(Database db)
         var user = new User
         {
             Username = "user",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("password"),
+            Email = "user@example.com",
+            PhoneNumber = "123-456-7890",
+            //Role = UserRoles.User,            // default
+            //CreatedAt = DateTime.UtcNow,      // default
+            //Tickets...                        // List<Tickets>
+        };
+        var user1 = new User
+        {
+            Username = "Dino",
             PasswordHash = BCrypt.Net.BCrypt.HashPassword("password"),
             Email = "user@example.com",
             PhoneNumber = "123-456-7890",
@@ -56,11 +66,11 @@ public class DatabaseInitializer(Database db)
             Name = "Chad Event",
             Description = "Chad event description.",
             City = "Chad City",
-            AccessType = AccessType.Free, 
+            AccessType = AccessType.Free,
             StartTime = DateTime.UtcNow,
             EndTime = DateTime.UtcNow.AddHours(3),
             Adress = "Kungsberget 3",
-            TicketsMax = 100,
+            TicketsMax = 2000,
             TicketsSold = 0,
             //HasSeat = false,                  // default
             ImagePath = "images/Knight.jpg"     // nullable
@@ -71,7 +81,7 @@ public class DatabaseInitializer(Database db)
             Name = "Dino Event",
             Description = "Dino event description.",
             City = "Dino City",
-            AccessType = AccessType.MemberOnly, 
+            AccessType = AccessType.MemberOnly,
             StartTime = DateTime.UtcNow,
             EndTime = DateTime.UtcNow.AddHours(3),
             Adress = "Prinskrönet 8",
@@ -81,25 +91,202 @@ public class DatabaseInitializer(Database db)
             ImagePath = "https://ih1.redbubble.net/image.1833920974.3208/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
         };
 
+        var sampleEvent3 = new Event
+        {
+            Name = "Waifu Convention",
+            Description = "En härlig frodig plats där femboys och incels kan mingla uwu.",
+            City = "Finspång",
+            AccessType = AccessType.MemberOnly,
+            StartTime = new DateTime(2025, 5, 20, 14, 0, 0, DateTimeKind.Local),
+            EndTime = new DateTime(2025, 5, 22, 14, 0, 0, DateTimeKind.Local),
+            Adress = "Gatan 2",
+            TicketsMax = 500,
+            TicketsSold = 0,
+            //HasSeat = false,                  // default
+            ImagePath = "https://ih1.redbubble.net/image.1833920974.3208/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
+        };
+        var sampleEvent4 = new Event
+        {
+            Name = "Medeltidsvecka i Söderköping",
+            Description = "Kom och sup in atmosfären av medeltiden i fantastiska Söderköping",
+            City = "Söderköping",
+            AccessType = AccessType.Free,
+            StartTime = new DateTime(2025, 5, 20, 14, 0, 0, DateTimeKind.Local),
+            EndTime = new DateTime(2025, 5, 23, 14, 0, 0, DateTimeKind.Local),
+            Adress = "Gatan 2",
+            TicketsMax = null,
+            TicketsSold = 0,
+            //HasSeat = false,                  // default
+            ImagePath = "https://ih1.redbubble.net/image.1833920974.3208/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
+        };
+        var sampleEvent5 = new Event
+        {
+            Name = "Bondens Marknad",
+            Description = "Upplev en härlig marknad med lokala råvaror direkt från gårdarna i Östergötland.",
+            City = "Linköping",
+            AccessType = AccessType.Free,
+            StartTime = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Local),
+            EndTime = new DateTime(2025, 6, 1, 16, 0, 0, DateTimeKind.Local),
+            Adress = "Stora Torget",
+            TicketsMax = null, 
+            TicketsSold = 0,
+            ImagePath = "images/market.jpg"
+        };
+
+        var sampleEvent6 = new Event
+        {
+            Name = "Östgöta Raggae Fest",
+            Description = "En skön sommarfestival med reggae, food trucks och avslappnad stämning vid Vätterns strand.",
+            City = "Motala",
+            AccessType = AccessType.Paid,
+            StartTime = new DateTime(2025, 7, 5, 15, 0, 0, DateTimeKind.Local),
+            EndTime = new DateTime(2025, 7, 6, 2, 0, 0, DateTimeKind.Local),
+            Adress = "Vätterstranden",
+            TicketsMax = 3000,
+            TicketsSold = 0,
+            ImagePath = "images/Festival.webp"
+        };
+
+        var sampleEvent7 = new Event
+        {
+            Name = "Gamla Linköpings Julmarknad",
+            Description = "Upplev julstämningen i Gamla Linköping med hantverk, glögg och julmusik.",
+            City = "Linköping",
+            AccessType = AccessType.Free,
+            StartTime = new DateTime(2025, 12, 10, 12, 0, 0, DateTimeKind.Local),
+            EndTime = new DateTime(2025, 12, 10, 18, 0, 0, DateTimeKind.Local),
+            Adress = "Gamla Linköping",
+            TicketsMax = null,
+            TicketsSold = 0,
+            ImagePath = "images/Market.jpg"
+        };
+
+        var sampleEvent8 = new Event
+        {
+            Name = "Löparfesten i Norrköping",
+            Description = "Ett lopp för alla åldrar och nivåer – från barnlopp till halvmarathon genom Norrköping.",
+            City = "Norrköping",
+            AccessType = AccessType.Paid,
+            StartTime = new DateTime(2025, 9, 14, 8, 0, 0, DateTimeKind.Local),
+            EndTime = new DateTime(2025, 9, 14, 17, 0, 0, DateTimeKind.Local),
+            Adress = "Stadshuset",
+            TicketsMax = 5000,
+            TicketsSold = 0,
+            ImagePath = "images/Knight.jpg"
+        };
+
+        var sampleEvent9 = new Event
+        {
+            Name = "Kulturfestival i Vadstena",
+            Description = "Musik, konst och teater i hjärtat av den historiska staden Vadstena.",
+            City = "Vadstena",
+            AccessType = AccessType.MemberOnly,
+            StartTime = new DateTime(2025, 8, 10, 14, 0, 0, DateTimeKind.Local),
+            EndTime = new DateTime(2025, 8, 12, 22, 0, 0, DateTimeKind.Local),
+            Adress = "Vadstena Slott",
+            TicketsMax = 800,
+            TicketsSold = 0,
+            ImagePath = "images/Market.jpg"
+        };
+
+        var sampleEvent10 = new Event
+        {
+            Name = "Mopedrallyt i Kisa",
+            Description = "Ett nostalgiskt mopedrally genom de vackra skogarna i södra Östergötland.",
+            City = "Kisa",
+            AccessType = AccessType.Paid,
+            StartTime = new DateTime(2025, 6, 15, 9, 0, 0, DateTimeKind.Local),
+            EndTime = new DateTime(2025, 6, 15, 15, 0, 0, DateTimeKind.Local),
+            Adress = "Torget i Kisa",
+            TicketsMax = 100,
+            TicketsSold = 0,
+            ImagePath = "images/MantorpRacing.jpg"
+        };
+
+
         await _db.Users.AddAsync(user);
+        await _db.Users.AddAsync(user1);
         await _db.Users.AddAsync(admin);
         await _db.Events.AddAsync(sampleEvent1);
         await _db.Events.AddAsync(sampleEvent2);
-        await _db.SaveChangesAsync();
+        await _db.Events.AddAsync(sampleEvent3);
+        await _db.Events.AddAsync(sampleEvent4);
+        await _db.Events.AddAsync(sampleEvent5);
+        await _db.Events.AddAsync(sampleEvent6);
+        await _db.Events.AddAsync(sampleEvent7);
+        await _db.Events.AddAsync(sampleEvent8);
+        await _db.Events.AddAsync(sampleEvent9);
+        await _db.Events.AddAsync(sampleEvent10);
 
+        await _db.SaveChangesAsync();
+        var secondUser = _db.Users.FirstOrDefault(u => u.Id == 2);
+        var secondEvent = _db.Events.FirstOrDefault(e => e.Id == 2);
         var ticket = new Ticket
         {
             UserId = _db.Users.First().Id,
             User = _db.Users.First(),
             EventId = _db.Events.First().Id,
             Event = _db.Events.First(),
-            Price = 0,
-            Seat = "A1",                        // nullable
+            Price = _db.Events.First().AccessType == AccessType.Paid ? 100 : 0,
+            Seat = "A1",
+        };
+
+        var ticket1 = new Ticket
+        {
+            UserId = secondUser.Id,
+            User = secondUser,
+            EventId = _db.Events.First().Id,
+            Event = _db.Events.First(),
+            Price = _db.Events.First().AccessType == AccessType.Paid ? 100 : 0,
+            Seat = "A2",  
+        };
+
+        var ticket2 = new Ticket
+        {
+            UserId = secondUser.Id,
+            User = secondUser,
+            EventId = _db.Events.First().Id,
+            Event = _db.Events.First(),
+            Price = _db.Events.First().AccessType == AccessType.Paid ? 100 : 0,
+            Seat = "A3",  
+        };
+
+        var ticket3 = new Ticket
+        {
+            UserId = _db.Users.First().Id,
+            User = _db.Users.First(),
+            EventId = secondEvent.Id,
+            Event = secondEvent,
+            Price = secondEvent.AccessType == AccessType.Paid ? 150 : 0,
+            Seat = "B1",
+        };
+
+        var ticket4 = new Ticket
+        {
+            UserId = _db.Users.First().Id,
+            User = _db.Users.First(),
+            EventId = secondEvent.Id,
+            Event = secondEvent,
+            Price = secondEvent.AccessType == AccessType.Paid ? 150 : 0,
+            Seat = "B2",
         };
 
         user.BuyTicket(ticket);
         sampleEvent1.RegisterTicket();
+        secondUser.BuyTicket(ticket1);
+        sampleEvent1.RegisterTicket();
+        secondUser.BuyTicket(ticket2);
+        sampleEvent1.RegisterTicket();
+        user.BuyTicket(ticket3);
+        secondEvent.RegisterTicket();
+        user.BuyTicket(ticket4);
+        secondEvent.RegisterTicket();
+
         await _db.Tickets.AddAsync(ticket);
+        await _db.Tickets.AddAsync(ticket1);
+        await _db.Tickets.AddAsync(ticket2);
+        await _db.Tickets.AddAsync(ticket3);
+        await _db.Tickets.AddAsync(ticket4);
         await _db.SaveChangesAsync();
     }
 }
