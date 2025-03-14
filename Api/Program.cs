@@ -11,17 +11,18 @@ public class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IEventService, EventService>();
         builder.Services.AddScoped<ITicketService, TicketService>();
-        builder.Services.AddScoped<DatabaseInitializer>();
-        builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db");
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddSingleton<Validator>();
+        builder.Services.AddScoped<DatabaseInitializer>();
+        builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db");
         builder.Services.AddSwaggerGen();
 
+        // Add cors for Blazor wasm
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowBlazor", policy =>
             {
-                policy.WithOrigins("https://localhost:7059") // Blazor app URL
+                policy.WithOrigins(builder.Configuration["blazorUrl"]!)
                       .AllowAnyMethod()
                       .AllowAnyHeader();
             });

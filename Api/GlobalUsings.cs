@@ -6,6 +6,7 @@ global using Microsoft.AspNetCore.Http.HttpResults;
 global using Core.Services.Users;
 global using Core.Services.Events;
 global using Core.Services.Tickets;
+global using Core.Services.Auth;
 global using FluentValidation;
 global using Api.Controllers.Events;
 global using Api.Controllers.Validators;
