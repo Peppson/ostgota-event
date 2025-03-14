@@ -56,64 +56,71 @@
         <input @bind="eventId" />
         <button @onclick="GetEventById">Search Event By Id</button>
         <button @onclick="AddEvent">Add new event</button>
-        <div class="foundEventBox">
-            @if (foundEvent != null)
+        <div class="CurrentEventBox">
+            @if (SearchEvent && CurrentEvent != null)
             {
-                <div class="eventsId">Event ID: @foundEvent.Id</div>
-                <div class="eventsName">Event name: @foundEvent.Name</div>
-                <div class="eventsCity">City: @foundEvent.City</div>
-                <div class="eventsAccessType">AccessType: @foundEvent.AccessType</div>
-                <div class="eventsStartTime">Start Time: @foundEvent.StartTime</div>
-                <div class="eventsEndTime">End Time: @foundEvent.EndTime</div>
-                <div class="eventsTicketSold">Tickets sold: @foundEvent.TicketsSold</div>
-                <div class="eventsTicketsMax">Max tickets: @foundEvent.TicketsMax</div>
-                <div class="eventsHasSeats">Designated seats: @foundEvent.HasSeat</div>
-                <button @onclick="EditEvent">Edit</button>
+                <div class="eventsId">Event ID: @CurrentEvent.Id</div>
+                <div class="eventsName">Event name: @CurrentEvent.Name</div>
+                <div class="eventsCity">City: @CurrentEvent.City</div>
+                <div class="eventsAddress">Address = @CurrentEvent.Adress</div>
+                <div class="eventsAccessType">AccessType: @CurrentEvent.AccessType</div>
+                <div class="eventsStartTime">Start Time: @CurrentEvent.StartTime</div>
+                <div class="eventsEndTime">End Time: @CurrentEvent.EndTime</div>
+                <div class="eventsHasSeats">Designated seats: @CurrentEvent.HasSeat</div>
+                <div class="eventsImagePath">Image path: @CurrentEvent.ImagePath</div>
+                <div class="eventsTicketsMax">Max tickets: @CurrentEvent.TicketsMax</div>
+                <div class="eventsTicketSold">Tickets sold: @CurrentEvent.TicketsSold</div>
+                <button @onclick="() => EditEvent(CurrentEvent)">Edit</button>
+
                 <button @onclick="DeleteEvent">Delete</button>
                 <button @onclick="ClearEvent">Clear</button>
             }
-            @if(EditingEvent || AddingEvent)
+            @if(EventFormVisible)
             {
-                <input class="eventsName" @bind="editedEvent.Name"/>
-                <input class="eventsCity" @bind="editedEvent.City"/>
-                <input class="eventsAccessType" @bind="editedEvent.AccessType"/>
-                <input class="eventsStartTime" @bind="editedEvent.StartTime"/>
-                <input class="eventsEndTime" @bind="editedEvent.EndTime"/>
-                <input class="eventsTicketSold" @bind="editedEvent.TicketsSold"/>
-                <input class="eventsTicketsMax" @bind="editedEvent.TicketsMax"/>
-                <input class="eventsHasSeats" @bind="editedEvent.HasSeat"/>
-                <button @onclick="AddOrEdit">Send</button>
+                <EventForm EventModel="CurrentEvent"
+                IsEditMode="@IsEventEditMode"
+                OnSave="SaveEvent"
+                OnCancel="HideForm"/>
             }
         </div>
     </div>
 </div>
 
 @code {
+    //pagewide
     private LoginDto? user;
     private Popup? popupRef;
     private string PopupMessage = String.Empty;
-
     private bool development = true;
+
+    //events
 
     public List<EventDto> events { get; set; } = new();
     public int eventNumber { get; set; }
     public int eventId { get; set; }
-    private bool EditingEvent { get; set; } = false;
-    private bool AddingEvent { get; set; } = false;
-    private EventDto editedEvent { get; set; }
+    private bool EventFormVisible = false;
+    private bool IsEventEditMode = false;
+    private string EventChangeButton = String.Empty;
+    private bool SearchEvent = false;
+    public EventDto? CurrentEvent { get; set; } = null;
+
+
+    //users
 
     public List<UserDto> users { get; set; } = new();
     public int userNumber { get; set; }
+    public UserDto? foundUser { get; set; } = null;
+
+
+    //tickets
 
     public List<TicketDto> tickets { get; set; } = new();
     public int ticketNumber { get; set; }
-
-
-    public UserDto? foundUser { get; set; } = null;
     public TicketDto? foundTicket { get; set; } = null;
-    public EventDto? foundEvent { get; set; } = null;
 
 
+
+    //pagewide
     protected override async Task OnInitializedAsync()
     {
         if (development)
@@ -137,6 +144,17 @@
         await PopulateLists();
     }
 
+    private async Task PopulateLists()
+    {
+        await GetEventsAsync();
+        await GetUsersAsync();
+        await GetTicketsAsync();
+    }
+
+
+
+    //events
+
     private async Task GetEventsAsync()
     {
         try
@@ -159,77 +177,107 @@
         }
     }
 
-    private async Task GetUsersAsync()
-    {
-        // Implement user fetching
-        users = new List<UserDto>();
-        userNumber = users.Count;
-    }
-
-    private async Task GetTicketsAsync()
-    {
-        // Implement ticket fetching
-        tickets = new List<TicketDto>();
-        ticketNumber = tickets.Count;
-    }
-
-    private async Task PopulateLists()
-    {
-        await GetEventsAsync();
-        await GetUsersAsync();
-        await GetTicketsAsync();
-    }
 
     private void GetEventById()
     {
-        foundEvent = events.Where(e => e.Id == eventId).FirstOrDefault();
-        if (foundEvent == null)
+        CurrentEvent = events.Where(e => e.Id == eventId).FirstOrDefault();
+        if (CurrentEvent == null)
         {
             Console.WriteLine("event was not found");
         }
+        else
+        {
+            SearchEvent = true;
+        }
+
     }
 
-    private void EditEvent()
+    private void EditEvent(EventDto ev)
     {
-        EditingEvent = true;
-        editedEvent = foundEvent;
+        CurrentEvent = new EventDto
+            {
+                Id = ev.Id,
+                Name = ev.Name,
+                Description = ev.Description,
+                City = ev.City,
+                Adress = ev.Adress,
+                AccessType = ev.AccessType,
+                StartTime = ev.StartTime,
+                EndTime = ev.EndTime,
+                HasSeat = ev.HasSeat,
+                ImagePath = ev.ImagePath,
+                TicketsMax = ev.TicketsMax,
+                TicketsSold = ev.TicketsSold
+            };
+        IsEventEditMode = true;
+        EventFormVisible = true;
+        SearchEvent = false;
+    }
+
+    private void HideForm() => EventFormVisible = false;
+
+    private async void SaveEvent(EventDto ev)
+    {
+        if(IsEventEditMode)
+        {
+            await UpdateEvent(ev);
+        }
+        else
+        {
+            await CreateEvent(ev);
+        }
+        HideForm();
     }
 
     private void AddEvent()
     {
-        AddingEvent = true;
-        editedEvent = new EventDto(){ Name = null, City = null, Description = null };
+        CurrentEvent = new EventDto(){ Name = null, City = null, Description = null, Adress = null, StartTime = DateTime.Now, EndTime = DateTime.Now.AddHours(1) };
+        IsEventEditMode = false;
+        EventFormVisible = true;
     }
 
-    private void AddOrEdit()
+
+
+    private async Task CreateEvent(EventDto ev)
     {
-        if (AddingEvent)
-            CreateEvent();
+        var response = await HttpClient.PostAsJsonAsync("api/event/create", ev);
+        if(response.IsSuccessStatusCode)
+        {
+            PopupMessage = "Event created successfully.";
+            popupRef?.Show();
+            await GetEventsAsync();
+            ClearEvent();
+        }
         else
-            UpdateEvent();
-
-        AddingEvent = false;
-        EditingEvent = false;
+        {
+            Console.WriteLine($"error: {response.ReasonPhrase}");
+        }
     }
 
-    private async Task CreateEvent()
+    private async Task UpdateEvent(EventDto ev)
     {
-
-    }
-
-    private async Task UpdateEvent()
-    {
-        
+        var response = await HttpClient.PutAsJsonAsync($"api/event/update/{ev.Id}", ev);
+        if(response.IsSuccessStatusCode)
+        {
+            PopupMessage = "Event updated succesfully!";
+            popupRef?.Show();
+            await GetEventsAsync();
+            ClearEvent();
+        }
+        else
+        {
+            Console.WriteLine($"error: {response.StatusCode}");
+        }
     }
 
     private async Task DeleteEvent()
     {
-        if (foundEvent == null)
+        if (CurrentEvent == null)
         {
             Console.WriteLine("No event selected, can not delete");
             return;
         } 
-        var response = await HttpClient.DeleteAsync($"api/event/delete/{foundEvent.Id}");
+        var response = await HttpClient.DeleteAsync($"api/event/delete/{CurrentEvent.Id}");
         if (response.IsSuccessStatusCode)
         {
             PopupMessage = "Event deleted successfully";
@@ -245,6 +293,26 @@
 
     private void ClearEvent()
     {
-        foundEvent = null;
+        CurrentEvent = null;
+        SearchEvent = false;
+    }
+
+    //users
+
+    private async Task GetUsersAsync()
+    {
+        // Implement user fetching
+        users = new List<UserDto>();
+        userNumber = users.Count;
+    }
+
+
+    //tickets
+
+    private async Task GetTicketsAsync()
+    {
+        // Implement ticket fetching
+        tickets = new List<TicketDto>();
+        ticketNumber = tickets.Count;
     }
 }
