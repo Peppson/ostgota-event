@@ -17,11 +17,12 @@ public class Program
         builder.Services.AddSingleton<Validator>();
         builder.Services.AddSwaggerGen();
 
+        // Add cors for Blazor wasm
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowBlazor", policy =>
             {
-                policy.WithOrigins("https://localhost:7059") // Blazor app URL
+                policy.WithOrigins(builder.Configuration["blazorUrl"]!)
                       .AllowAnyMethod()
                       .AllowAnyHeader();
             });

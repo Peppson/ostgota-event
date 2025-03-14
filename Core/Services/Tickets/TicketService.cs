@@ -1,6 +1,5 @@
 namespace Core.Services.Tickets;
 
-
 public record TicketDTO
 {
     public int Id { get; set; }
@@ -9,7 +8,6 @@ public record TicketDTO
     public decimal Price { get; set; }
     public string? Seat { get; set; } 
 }
-
 
 public class TicketService(Database DbContext) : ITicketService
 {

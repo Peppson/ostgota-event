@@ -1,18 +1,13 @@
-namespace Core.Services;
+namespace Core.Services.Auth;
 
 // TODO: Implement better auth
 /// <summary>
 /// Simple auth service to enable registering and login in, should be replaced before release
 /// </summary>
-public class AuthService : IAuthService
+public class AuthService(IUserService dataService) : IAuthService
 {
-    private readonly IUserService _userService;
+    private readonly IUserService _userService = dataService;
 
-    public AuthService(IUserService dataService)
-    {
-        _userService = dataService;
-    }
- 
     public async Task<User?> Login(string username, string password)
     {
         var user = await _userService.GetUserByName(username);

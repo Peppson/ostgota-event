@@ -4,6 +4,7 @@ public class EventService(Database DbContext) : IEventService
 {
     private readonly Database _db = DbContext;
 
+
     public async Task<Event?> GetEventById(int id)
     {
         return await _db.Events.FirstOrDefaultAsync(u => u.Id == id);
