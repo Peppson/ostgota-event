@@ -29,7 +29,12 @@ public class TicketController(ITicketService ticketService, Validator validator)
         if (validation != null)
             return validation;
 
+
+        // ticket price to a free event
+        // if event = free price = 0
+
         // TODO mapping here 
+        
         try
         {
             await _ticketService.AddTicket(ticketDto);
