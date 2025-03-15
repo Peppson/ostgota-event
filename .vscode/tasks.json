@@ -2,20 +2,39 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Dotnet run",
-            "type": "shell",
-            "command": "dotnet run",
+            "label": "Run API",
+            "command": "dotnet",
+            "args": ["run", "--project", "Api"],
             "group": "build",
+            "problemMatcher": [],
+            "isBackground": true,
             "presentation": {
-                "panel": "shared", 
                 "reveal": "always",
-                "focus": true,
-                "clear": true,
-                "showReuseMessage": false
-            },
-            "options": {
-                "cwd": "${fileDirname}"
+                "panel": "shared",
+                "group": "myTerminals"
             }
-        }
+          },
+          {
+            "label": "Run Blazor",
+            "command": "dotnet",
+            "args": ["run", "--project", "BlazorStandAlone"],
+            "group": "build",
+            "problemMatcher": [],
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "group": "myTerminals"
+            }
+          },
+          {
+            "label": "kör",
+            "dependsOn": ["Run API", "Run Blazor"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "myTerminals"
+            }
+          }
     ]
 }
