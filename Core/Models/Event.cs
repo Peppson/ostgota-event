@@ -24,7 +24,7 @@ public class Event
     public int? TicketsMax { get; set; }
     [Required]
     public required int TicketsSold { get; set; } = 0;
-    public int RemainingTickets
+    public int? RemainingTickets
     {
         get
         {
@@ -32,7 +32,7 @@ public class Event
             {
                 return TicketsMax.Value - TicketsSold;
             }
-            return int.MaxValue; 
+            return null; 
         }
     }
 
