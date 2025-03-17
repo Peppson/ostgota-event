@@ -3,33 +3,28 @@
 <EditForm Model="TicketModel" OnValidSubmit="HandleSubmit">
     <h3>Add Ticket</h3>
     <div>
-        <label>Ticketname:</label>
+        <label>User Id:</label>
         <InputNumber @bind-Value="TicketModel.UserId" />
         <ValidationMessage For="@(() => TicketModel.UserId)" />
     </div>
 
     <div>
-        <label>Email:</label>
+        <label>Event Id:</label>
         <InputNumber @bind-Value="TicketModel.EventId" />
         <ValidationMessage For="@(() => TicketModel.EventId)" />
     </div>
 
     <div>
-        <label>Phone:</label>
+        <label>Seat:</label>
         <InputText @bind-Value="TicketModel.Seat" />
         <ValidationMessage For="@(() => TicketModel.Seat)" />
     </div>
 
     <div>
-        <label>Ticket Role:</label>
-        <InputNumber @bind-Value="TicketModel.Price"/>
+        <label>Price:</label>
+        <InputNumber  @bind-Value="TicketModel.Price" @bind-Value:format="0.00"/>
         <ValidationMessage For="@(() => TicketModel.Price)" />
 
-        <div>
-            <label>Phone:</label>
-            <InputText @bind-Value="TicketModel.Title" />
-            <ValidationMessage For="@(() => TicketModel.Title)" />
-        </div>
     </div>
 
     <button type="submit">Save</button>

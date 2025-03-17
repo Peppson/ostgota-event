@@ -1,3 +1,5 @@
+using Api.Controllers.Auth;
+
 namespace Api.Controllers.Users;
 
 [Route("api/user")]
@@ -6,7 +8,7 @@ public class UserController(IUserService userService, Validator validator) : Con
 {
     private readonly IUserService _userService = userService;
     private readonly Validator _validator = validator;
-    
+
 
     [HttpGet("get")]
     public async Task<ActionResult<List<UserDTO>>> GetAllUsers()
@@ -14,7 +16,7 @@ public class UserController(IUserService userService, Validator validator) : Con
         try
         {
             var users = await _userService.GetAllUsers();
-            return Ok( GetUserDTO(users) );
+            return Ok(GetUserDTO(users));
         }
         catch (Exception ex)
         {
@@ -41,7 +43,7 @@ public class UserController(IUserService userService, Validator validator) : Con
                 CreatedAt = user.CreatedAt,
                 Tickets = GetTicketDTO(user.Tickets)
             };
-            
+
             return Ok(newUser);
         }
         catch (Exception ex)
@@ -69,7 +71,7 @@ public class UserController(IUserService userService, Validator validator) : Con
                 CreatedAt = user.CreatedAt,
                 Tickets = GetTicketDTO(user.Tickets)
             };
-            
+
             return Ok(newUser);
         }
         catch (Exception ex)
@@ -82,7 +84,7 @@ public class UserController(IUserService userService, Validator validator) : Con
     public async Task<ActionResult<User>> DeleteUserById(int id)
     {
         try
-        {   
+        {
             if (!await _userService.RemoveUserById(id))
                 return NotFound("User not found.");
 
@@ -96,7 +98,7 @@ public class UserController(IUserService userService, Validator validator) : Con
 
     [HttpPut("update/{id}")]
     public async Task<ActionResult<User>> UpdateUser(int id, [FromBody] UserCreateDTO user)
-    {   
+    {
         var validation = _validator.Validate(new UserValidator(), user);
         if (validation != null)
             return validation;
@@ -105,7 +107,7 @@ public class UserController(IUserService userService, Validator validator) : Con
         {
             Id = id,
             Username = user.Username,
-            PasswordHash = user.Password,
+            PasswordHash = "temppass",
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
             Role = user.Role,
@@ -128,6 +130,35 @@ public class UserController(IUserService userService, Validator validator) : Con
         }
     }
 
+    [HttpPost("create")]
+    public async Task<ActionResult<User>> CreateUser([FromBody] UserCreateDTO user)
+    {
+
+        var validation = _validator.Validate(new UserValidator(), user);
+        if (validation != null)
+            return validation;
+
+        var newUser = new User
+        {
+            Username = user.Username,
+            PasswordHash = "password",
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Role = user.Role,
+            CreatedAt = DateTime.Now,
+            Tickets = null!
+        };
+        bool userExists = await _userService.DoesUserExist(user.Username);
+        if (userExists == true)
+        {
+            return BadRequest("Username already exists");
+        }
+
+
+        await _userService.AddUser(newUser);
+        return Created("user created successfully", new Response(newUser.Username, newUser.Role));
+    }
+
     private static List<UserDTO> GetUserDTO(List<User> users)
     {
         return users.Select(t => new UserDTO
@@ -145,7 +176,7 @@ public class UserController(IUserService userService, Validator validator) : Con
     private static List<TicketDTO> GetTicketDTO(List<Ticket> tickets)
     {
         return tickets.Select(t => new TicketDTO
-        {   
+        {
             Id = t.Id,
             UserId = t.UserId,
             EventId = t.EventId,
