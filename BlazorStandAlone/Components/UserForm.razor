@@ -31,6 +31,9 @@
         <ValidationMessage For="@(() => UserModel.Role)" />
     </div>
 
+    <button type="submit">Save</button>
+    <button type="button" @onclick="Cancel">Cancel</button>
+
 </EditForm>
 @code {
     [Parameter] public UserDto UserModel { get; set; }
