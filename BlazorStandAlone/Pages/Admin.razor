@@ -12,7 +12,7 @@
 
 <div class="admin-container">
     <div class="userBox">
-        <div class="amountSquare userAmount">@userNumber</div>
+        <div class="amountSquare userAmount">Amount of Users: @userNumber</div>
         <input @bind="userId" />
         <button @onclick="GetUserById">Search User By Id</button>
         <button @onclick="AddUser">Add new user</button>
@@ -31,7 +31,7 @@
                         <div>
                             <strong>Ticket ID:</strong> @ticket.Id
                             <br />
-                            <strong>Title:</strong> @ticket.Title
+                            <!--<strong>Title:</strong> @ticket.Title-->
                         </div>
                     }
                 </div>
@@ -42,15 +42,15 @@
             @if (UserFormVisible)
             {
                 <UserForm UserModel="CurrentUser"
-                          IsUserEditMode="@IsUserEditMode"
-                          OnSave="SaveUser"
-                          OnCancel="HideUserForm" />
+                IsUserEditMode="@IsUserEditMode"
+                OnSave="SaveUser"
+                OnCancel="HideUserForm" />
             }
         </div>
     </div>
 
     <div class="ticketBox">
-        <div class="amountSquare ticketAmount">@ticketNumber</div>
+        <div class="amountSquare ticketAmount">Amount of Tickets: @ticketNumber</div>
         <input @bind="ticketId" />
         <button @onclick="GetTicketById">Search Ticket By Id</button>
         <button @onclick="AddTicket">Add new ticket</button>
@@ -62,7 +62,7 @@
                 <div class="ticketsEventId">Ticket EventID: @CurrentTicket.EventId</div>
                 <div class="ticketsPrice">Ticket Price: @CurrentTicket.Price</div>
                 <div class="ticketsSeat">Seat: @CurrentTicket.Seat</div>
-                <div class="ticketsTitle">Title for event: @CurrentTicket.Title</div>
+                <!--<div class="ticketsTitle">Title for event: @CurrentTicket.Title</div>-->
                 <button @onclick="DeleteTicket">Delete</button>
                 <button @onclick="ClearTicket">Clear</button>
             }
@@ -70,7 +70,7 @@
     </div>
 
     <div class="eventBox">
-        <div class="amountSquare eventAmount">@eventNumber</div>
+        <div class="amountSquare eventAmount">Amount of Events: @eventNumber</div>
         <input @bind="eventId" />
         <button @onclick="GetEventById">Search Event By Id</button>
         <button @onclick="AddEvent">Add new event</button>
@@ -95,9 +95,9 @@
             @if (EventFormVisible)
             {
                 <EventForm EventModel="CurrentEvent"
-                           IsEventEditMode="@IsEventEditMode"
-                           OnSave="SaveEvent"
-                           OnCancel="HideEventForm" />
+                IsEventEditMode="@IsEventEditMode"
+                OnSave="SaveEvent"
+                OnCancel="HideEventForm" />
             }
         </div>
     </div>
@@ -162,8 +162,8 @@
     private async Task PopulateLists()
     {
         await GetEventsAsync();
-        await GetUsersAsync();
         await GetTicketsAsync();
+        await GetUsersAsync();
     }
 
     //events
@@ -315,6 +315,10 @@
             {
                 users = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new();
                 userNumber = users.Count;
+                foreach(var user in users)
+                {
+                    user.Tickets = GetUserTickets(user.Id);
+                }
                 StateHasChanged();
             }
             else
@@ -326,6 +330,14 @@
         {
             Console.WriteLine($"Exception while fetching users: {ex.Message}");
         }
+    }
+
+    private List<TicketDto> GetUserTickets(int userId)
+    {
+
+        List<TicketDto> list = tickets.Where(t => t.UserId == userId).ToList();
+        Console.WriteLine(list.Count);
+        return list;
     }
 
     private void GetUserById()
@@ -485,7 +497,7 @@
 
     private void AddTicket()
     {
-        CurrentTicket = new TicketDto() { UserId = 0, User = null, EventId = 0, Event = null, Price = 0, Seat = null };
+        CurrentTicket = new TicketDto() { UserId = 0, EventId = 0, Price = 0, Seat = null };
         TicketFormVisible = true;
     }
 
