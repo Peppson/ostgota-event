@@ -1,6 +1,3 @@
-/* Reset and base styles */
-
-
 :root {
     --primary-color: #0d6efd;
     --primary-hover: #0b5ed7;
@@ -11,44 +8,6 @@
     --success-color: #198754;
     --warning-color: #ffc107;
     --info-color: #0dcaf0;
-}
-
-/* Loading progress */
-.loading-progress {
-    position: relative;
-    width: 80px;
-    height: 80px;
-    display: block;
-    margin: 20vh auto;
-}
-
-.loading-progress circle {
-    fill: none;
-    stroke-width: 0.6rem;
-    stroke-linecap: round;
-    transform: rotate(-90deg);
-    transform-origin: center;
-}
-
-.loading-progress circle:first-child {
-    stroke: var(--primary-color);
-    stroke-dasharray: 1, 150;
-    stroke-dashoffset: 0;
-}
-
-.loading-progress circle:last-child {
-    stroke: #e9ecef;
-    stroke-dasharray: 90, 150;
-    stroke-dashoffset: -124;
-}
-
-.loading-progress-text {
-    position: relative;
-    text-align: center;
-    font-weight: bold;
-    inset-inline-start: 0;
-    inset-inline-end: 0;
-    margin-top: 1rem;
 }
 
 /* Blazor error UI */
@@ -69,6 +28,28 @@
     position: absolute;
     right: 0.75rem;
     top: 0.5rem;
+}
+
+
+/* WASM loading page */
+
+#app-loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+#app-loading img {
+    width: 200px;
+    height: auto;
+}
+
+#app-loading p {
+    margin-top: 30px;
+    font-size: 1.4rem;
+    color: #000000;
 }
 
 /* Form styles */

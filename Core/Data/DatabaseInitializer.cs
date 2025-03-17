@@ -88,7 +88,7 @@ public class DatabaseInitializer(Database db)
             TicketsMax = 100,
             TicketsSold = 0,
             //HasSeat = false,                  // default
-            ImagePath = "https://ih1.redbubble.net/image.1833920974.3208/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
+            ImagePath = "images/Food.jpg"
         };
 
         var sampleEvent3 = new Event
@@ -103,7 +103,7 @@ public class DatabaseInitializer(Database db)
             TicketsMax = 500,
             TicketsSold = 0,
             //HasSeat = false,                  // default
-            ImagePath = "https://ih1.redbubble.net/image.1833920974.3208/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
+            ImagePath = "images/Talk.jpg"
         };
         var sampleEvent4 = new Event
         {
@@ -117,7 +117,7 @@ public class DatabaseInitializer(Database db)
             TicketsMax = null,
             TicketsSold = 0,
             //HasSeat = false,                  // default
-            ImagePath = "https://ih1.redbubble.net/image.1833920974.3208/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
+            ImagePath = "images/Art.jpg"
         };
         var sampleEvent5 = new Event
         {
@@ -130,7 +130,7 @@ public class DatabaseInitializer(Database db)
             Address = "Stora Torget",
             TicketsMax = null, 
             TicketsSold = 0,
-            ImagePath = "images/market.jpg"
+            ImagePath = "images/Market.jpg"
         };
 
         var sampleEvent6 = new Event
@@ -144,7 +144,7 @@ public class DatabaseInitializer(Database db)
             Address = "Vätterstranden",
             TicketsMax = 3000,
             TicketsSold = 0,
-            ImagePath = "images/Festival.webp"
+            ImagePath = "images/Festival.jpg"
         };
 
         var sampleEvent7 = new Event
@@ -158,7 +158,7 @@ public class DatabaseInitializer(Database db)
             Address = "Gamla Linköping",
             TicketsMax = null,
             TicketsSold = 0,
-            ImagePath = "images/Market.jpg"
+            ImagePath = "images/Run.jpg"
         };
 
         var sampleEvent8 = new Event
@@ -172,7 +172,7 @@ public class DatabaseInitializer(Database db)
             Address = "Stadshuset",
             TicketsMax = 5000,
             TicketsSold = 0,
-            ImagePath = "images/Knight.jpg"
+            ImagePath = "images/Spa.jpg"
         };
 
         var sampleEvent9 = new Event
@@ -186,7 +186,7 @@ public class DatabaseInitializer(Database db)
             Address = "Vadstena Slott",
             TicketsMax = 800,
             TicketsSold = 0,
-            ImagePath = "images/Market.jpg"
+            ImagePath = "images/Whiskey.jpg"
         };
 
         var sampleEvent10 = new Event
