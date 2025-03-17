@@ -23,6 +23,7 @@ body {
 
 
 /* Content */
+
 .content {
     display: flex;
     justify-content: center;
@@ -36,35 +37,33 @@ body {
 header {
     background: transparent;
     display: flex;
-    padding: 20px;
-    font-size: 45px;
+    padding: 10px;
     width: 100%;
     justify-content: space-between;
 }
 
+.logo-wrapper {
+    padding: 10px;
+}
+
+.header-logo {
+    width: 110px;  
+    height: auto; 
+    position: absolute;
+}
+
 .nav {
-    position: fixed;
-    font-size: 18px;
-    top: 15px;
-    right: 15px;
-    flex: 1;
     display: flex;
-    align-items: center;
+    margin-left: auto;
 }
-
-.header-title {
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0);
-    padding: 10px 15px;
-}
-
 
 .nav-link {
+    font-size: 22px;
+    padding: 8px 12px;
     color: white;
     text-decoration: none;
-    padding: 10px 15px;
     display: inline-block;
-    transition: color 0.3s ease-in-out;
+    transition: color 0.5s ease-in-out;
 }
 
 header .nav-link:hover,
@@ -78,6 +77,6 @@ header .nav-link:hover,
     color: white;
 }
 
-/* .nav-link.active {
-    color: yellow;
-} */
+.shadow {
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+}
