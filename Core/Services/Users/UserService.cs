@@ -82,7 +82,6 @@ public class UserService(IDatabase DbContext) : IUserService
             return null;
 
         existingUser.Username = updatedUser.Username;
-        existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(updatedUser.PasswordHash);
         existingUser.Email = updatedUser.Email;
         existingUser.PhoneNumber = updatedUser.PhoneNumber;
         existingUser.Role = updatedUser.Role;

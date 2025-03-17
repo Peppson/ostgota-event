@@ -24,6 +24,7 @@
                 <div class="usersEmail">User Email: @CurrentUser.Email</div>
                 <div class="userPhoneNumber">User PhoneNumber: @CurrentUser.PhoneNumber</div>
                 <div class="usersRole">User Role: @CurrentUser.Role</div>
+                <div class="userCreatedAt">Created at: @CurrentUser.CreatedAt</div>
                 <div class="usersTickets">
                     <h3>User's Tickets</h3>
                     @foreach (var ticket in CurrentUser.Tickets)
@@ -31,7 +32,7 @@
                         <div>
                             <strong>Ticket ID:</strong> @ticket.Id
                             <br />
-                            <!--<strong>Title:</strong> @ticket.Title-->
+                            <strong>Title:</strong> @ticket.Title
                         </div>
                     }
                 </div>
@@ -65,6 +66,12 @@
                 <!--<div class="ticketsTitle">Title for event: @CurrentTicket.Title</div>-->
                 <button @onclick="DeleteTicket">Delete</button>
                 <button @onclick="ClearTicket">Clear</button>
+            }
+            @if(TicketFormVisible)
+            {
+                <TicketForm TicketModel="CurrentTicket"
+                OnSave="SaveTicket"
+                OnCancel="HideTicketForm"/>
             }
         </div>
     </div>
@@ -191,6 +198,7 @@
 
     private void GetEventById()
     {
+        HideEventForm();
         CurrentEvent = events.Where(e => e.Id == eventId).FirstOrDefault();
         if (CurrentEvent == null)
         {
@@ -241,6 +249,7 @@
 
     private void AddEvent()
     {
+        ClearEvent();
         CurrentEvent = new EventDto() { Name = null, City = null, Description = null, Address = null, StartTime = DateTime.Now, EndTime = DateTime.Now.AddHours(1), ImagePath = "hehe" };
         IsEventEditMode = false;
         EventFormVisible = true;
@@ -301,8 +310,8 @@
 
     private void ClearEvent()
     {
-        CurrentEvent = null;
         SearchEvent = false;
+        CurrentEvent = null;
     }
 
     //users
@@ -342,6 +351,7 @@
 
     private void GetUserById()
     {
+        HideUserForm();
         CurrentUser = users.Where(u => u.Id == userId).FirstOrDefault();
         if (CurrentUser == null)
         {
@@ -386,20 +396,26 @@
 
     private void AddUser()
     {
-        CurrentUser = new UserDto() { Username = null, Email = null, PhoneNumber = null, Role = UserRole.User };
+        ClearUser();
+        CurrentUser = new UserDto() { Username = null, Email = null, PhoneNumber = null, Role = UserRole.User, CreatedAt = DateTime.Now };
         IsUserEditMode = false;
         UserFormVisible = true;
+
     }
 
     private async Task CreateUser(UserDto user)
     {
-        var response = await HttpClient.PostAsJsonAsync("api/user/create", user);
+        var newUser = new RegisterUserDto(user.Username, user.Email, user.PhoneNumber, user.Role);
+
+        var response = await HttpClient.PostAsJsonAsync("api/user/create", newUser);
         if (response.IsSuccessStatusCode)
         {
             PopupMessage = "User created successfully.";
             popupRef?.Show();
+            UserFormVisible = false;
             await GetUsersAsync();
             ClearUser();
+
         }
         else
         {
@@ -409,6 +425,8 @@
 
     private async Task UpdateUser(UserDto user)
     {
+        var newUser = new RegisterUserDto(user.Username, user.Email, user.PhoneNumber, user.Role);
+
         var response = await HttpClient.PutAsJsonAsync($"api/user/update/{user.Id}", user);
         if (response.IsSuccessStatusCode)
         {
@@ -446,8 +464,8 @@
 
     private void ClearUser()
     {
-        CurrentUser = null;
         SearchUser = false;
+        CurrentUser = null;
     }
 
     //tickets
@@ -475,6 +493,7 @@
 
     private void GetTicketById()
     {
+        HideTicketForm();
         CurrentTicket = tickets.Where(t => t.Id == ticketId).FirstOrDefault();
         if (CurrentTicket == null)
         {
@@ -497,6 +516,7 @@
 
     private void AddTicket()
     {
+        ClearTicket();
         CurrentTicket = new TicketDto() { UserId = 0, EventId = 0, Price = 0, Seat = null };
         TicketFormVisible = true;
     }
@@ -540,7 +560,7 @@
 
     private void ClearTicket()
     {
-        CurrentTicket = null;
         SearchTicket = false;
+        CurrentTicket = null;
     }
 }

@@ -54,7 +54,7 @@ public class Program
             app.UseHsts();
 
         // Ensure SQLite DB is created and seeded on firstboot
-        bool resetDatabaseToDefault = false; // config file?
+        bool resetDatabaseToDefault = true; // config file?
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
