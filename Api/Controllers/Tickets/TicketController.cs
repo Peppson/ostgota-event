@@ -23,7 +23,7 @@ public class TicketController(ITicketService ticketService, Validator validator)
     }
 
     [HttpPost("create")]
-    public async Task<ActionResult<TicketDTO>> CreateTicket(TicketCreateDTO dto)
+    public async Task<ActionResult<TicketDTO>> CreateTicket([FromBody] TicketCreateDTO dto)
     {   
         var validation = _validator.Validate(new TicketValidator(), dto);
         if (validation != null)

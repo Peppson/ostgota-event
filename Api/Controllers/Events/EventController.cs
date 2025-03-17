@@ -78,7 +78,7 @@ public class EventController(IEventService eventService, Validator validator) : 
     }
 
     [HttpPost("create")]
-    public async Task<ActionResult<Event>> CreateEvent(EventCreateDTO ev)
+    public async Task<ActionResult<Event>> CreateEvent([FromBody] EventCreateDTO ev)
     {
         var validation = _validator.Validate(new EventCreateValidator(), ev);
         if (validation != null)
@@ -112,13 +112,13 @@ public class EventController(IEventService eventService, Validator validator) : 
     }
 
     [HttpPut("update/{id}")]
-    public async Task<ActionResult<Event>> UpdateEvent(int id, EventUpdateDTO ev)
+    public async Task<ActionResult<Event>> UpdateEvent(int id, [FromBody] EventUpdateDTO ev)
     {
         var validation = _validator.Validate(new EventUpdateValidator(), ev);
         if (validation != null)
             return validation;
         
-        var newEvent = new Event 
+        var newEvent = new Event
         {
             Id = id,
             Name = ev.Name,
