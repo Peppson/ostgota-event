@@ -1,6 +1,6 @@
 ﻿@* Popup.razor *@
 
-<div class="popup-overlay" style="@(IsVisible ? "display : block;" : "display : none;")">
+<div class="popup-overlay" style="@(IsVisible ? "display: flex;" : "display: none;")">
     <div class="popup-content">
         <h3>@Title</h3>
         <p>@Message</p>
@@ -21,13 +21,10 @@
         InvokeAsync(StateHasChanged); //forces UI update.
     }
 
-
-
     private async Task ClosePopup()
     {
         IsVisible = false;
         await InvokeAsync(StateHasChanged);
         if (OnClose.HasDelegate) await OnClose.InvokeAsync();
     }
-
 }

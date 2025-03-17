@@ -1,27 +1,27 @@
 ﻿@* UserForm.razor*@
 
-<EditForm Model="UserModel" OnValidSubmit="HandleSubmit">
+<EditForm Model="UserModel" OnValidSubmit="HandleSubmit" class="edit-form">
     <h3>@(IsUserEditMode ? "Edit User" : "Add User")</h3>
-    <div>
-        <label>Username:</label>
+    <div class="form-group">
+        <label><strong>Username:</strong></label>
         <InputText @bind-Value="UserModel.Username" />
         <ValidationMessage For="@(() => UserModel.Username)" />
     </div>
 
-    <div>
-        <label>Email:</label>
+    <div class="form-group">
+        <label><strong>Email:</strong></label>
         <InputText @bind-Value="UserModel.Email" />
         <ValidationMessage For="@(() => UserModel.Email)" />
     </div>
 
-    <div>
-        <label>Phone:</label>
+    <div class="form-group">
+        <label><strong>Phone:</strong></label>
         <InputText @bind-Value="UserModel.PhoneNumber" />
         <ValidationMessage For="@(() => UserModel.PhoneNumber)" />
     </div>
 
-    <div>
-        <label>User Role:</label>
+    <div class="form-group">
+        <label><strong>User Role:</strong></label>
         <InputSelect @bind-Value="UserModel.Role">
             @foreach (var role in Enum.GetValues<UserRole>())
             {
@@ -31,10 +31,12 @@
         <ValidationMessage For="@(() => UserModel.Role)" />
     </div>
 
-    <button type="submit">Save</button>
-    <button type="button" @onclick="Cancel">Cancel</button>
-
+    <div class="button-container">
+        <button type="submit">Save</button>
+        <button type="button" @onclick="Cancel">Cancel</button>
+    </div>
 </EditForm>
+
 @code {
     [Parameter] public UserDto UserModel { get; set; }
     [Parameter] public EventCallback<UserDto> OnSave { get; set; }
