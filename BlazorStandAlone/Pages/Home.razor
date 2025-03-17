@@ -3,6 +3,7 @@
 @inject SessionStorageService SessionStorage
 @inject NavigationManager NavigationManager
 @inject HttpClient HttpClient
+@inject IJSRuntime JS
 
 
 <section class="landing-page">
@@ -18,18 +19,17 @@
         <h2>Kommande Event</h2>
         <div class="event-input-box">
             <input type="text" id="event-search">
-                <button class="dropbtn">Dropdown</button>
+                <button class="dropbtn">sortera</button>
 @*                 <div class="dropdown-content">
                     <a href="#">Link 1</a>
                     <a href="#">Link 2</a>
                     <a href="#">Link 3</a>
                 </div> *@
-        </div>
-    </header>
+        </div> 
+    </header> 
 
     <div class="event-container">
-
-        @foreach(var ev in events){
+        @foreach(var ev in EventPages){
             <div class="event-card">
   
                 <img class="event-img" src="@ev.ImagePath">  
@@ -42,27 +42,63 @@
                     <p>@ev.Address, @ev.City
                     <a href="#" class="map-icon"><i class="fas fa-location-dot"></i></a>
                     </p>      
-                </div>
+                </div> 
 
-                <div class="event-card-buttons">
-                    
+                <div class="event-card-buttons">                
                 <p class="event-time">@ev.StartTime.ToString("MMM dd", new System.Globalization.CultureInfo("en-US"))</p>
-
                     <div class="event-card-button-container">
                         <button>Visa mer info</button>
                         <button>Boka</button>
                     </div>
                 </div>
             </div>
-
         }
 
-
+        <div class="pagination-buttons">
+            <button @onclick="PreviousPage" disabled="@IsPreviousDisabled">Föregående</button>
+            <span>Sida @CurrentPage av @TotalPages</span>
+            <button  @onclick="NextPage" disabled="@IsNextDisabled">Nästa</button>  
+        </div>
     </div>    
-    
 </section>
 
+@* JS to the rescue *@
+<script> 
+    function scrollToEventSection() {
+        document.getElementById('event-section').scrollIntoView();
+    }
+</script> 
+
 @code {
+
+    //PAGINATION
+    public int CurrentPage { get; set; } = 1;
+    public int PageSize { get; set; } = 5;
+    public int TotalPages => (events.Count + PageSize - 1) / PageSize;
+    public List<EventDto> EventPages => events.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList(); 
+    
+    // bools for the onclick 
+    public bool IsNextDisabled => CurrentPage == TotalPages;
+    public bool IsPreviousDisabled => CurrentPage == 1;
+
+     public async Task NextPage()
+    {
+        if (CurrentPage < TotalPages)
+        {
+            CurrentPage++;
+            await JS.InvokeVoidAsync("scrollToEventSection");
+        }
+    }
+
+    public async Task PreviousPage()
+    {
+        if (CurrentPage > 1)
+        {
+            CurrentPage--;
+            await JS.InvokeVoidAsync("scrollToEventSection");
+        }
+    }
+
 
     public List<EventDto> events { get; set; } = new();
 
