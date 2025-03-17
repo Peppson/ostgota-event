@@ -11,21 +11,23 @@
 <Popup @ref="popupRef" Title="Success" Message="@PopupMessage"></Popup>
 
 <div class="admin-container">
-    <div class="userBox">
-        <div class="amountSquare userAmount">Amount of Users: @userNumber</div>
-        <input @bind="userId" />
-        <button @onclick="GetUserById">Search User By Id</button>
-        <button @onclick="AddUser">Add new user</button>
-        <div class="CurrentUserBox">
+    <div class="box">
+        <div class="box-header">Amount of Users: @userNumber</div>
+        <div class="search-section">
+            <input @bind="userId" placeholder="Enter User ID" />
+            <button @onclick="GetUserById">Search</button>
+            <button @onclick="AddUser">Add User</button>
+        </div>
+        <div class="box-content">
             @if (SearchUser && CurrentUser != null)
             {
-                <div class="usersId">User ID: @CurrentUser.Id</div>
-                <div class="usersuserName">Username: @CurrentUser.Username</div>
-                <div class="usersEmail">User Email: @CurrentUser.Email</div>
-                <div class="userPhoneNumber">User PhoneNumber: @CurrentUser.PhoneNumber</div>
-                <div class="usersRole">User Role: @CurrentUser.Role</div>
-                <div class="userCreatedAt">Created at: @CurrentUser.CreatedAt</div>
-                <div class="usersTickets">
+                <div class="info-box"><strong>User ID:</strong> @CurrentUser.Id</div>
+                <div class="info-box"><strong>Username:</strong> @CurrentUser.Username</div>
+                <div class="info-box"><strong>User Email:</strong> @CurrentUser.Email</div>
+                <div class="info-box"><strong>User PhoneNumber:</strong> @CurrentUser.PhoneNumber</div>
+                <div class="info-box"><strong>User Role:</strong> @CurrentUser.Role</div>
+                <div class="info-box"><strong>Created at:</strong> @CurrentUser.CreatedAt</div>
+                <div class="user-tickets">
                     <h3>User's Tickets</h3>
                     @foreach (var ticket in CurrentUser.Tickets!)
                     {
@@ -53,20 +55,21 @@
         </div>
     </div>
 
-    <div class="ticketBox">
-        <div class="amountSquare ticketAmount">Amount of Tickets: @ticketNumber</div>
-        <input @bind="ticketId" />
-        <button @onclick="GetTicketById">Search Ticket By Id</button>
-        <button @onclick="AddTicket">Add new ticket</button>
-        <div class="CurrentTicketBox">
+    <div class="box">
+        <div class="box-header">Amount of Tickets: @ticketNumber</div>
+        <div class="search-section">
+            <input @bind="ticketId" placeholder="Enter Ticket ID" />
+            <button @onclick="GetTicketById">Search</button>
+            <button @onclick="AddTicket">Add Ticket</button>
+        </div>
+        <div class="box-content">
             @if (SearchTicket && CurrentTicket != null)
             {
-                <div class="ticketsId">Ticket ID: @CurrentTicket.Id</div>
-                <div class="ticketsUserId">Ticket UserID: @CurrentTicket.UserId</div>
-                <div class="ticketsEventId">Ticket EventID: @CurrentTicket.EventId</div>
-                <div class="ticketsPrice">Ticket Price: @CurrentTicket.Price</div>
-                <div class="ticketsSeat">Seat: @CurrentTicket.Seat</div>
-                <!--<div class="ticketsTitle">Title for event: @CurrentTicket.Title</div>-->
+                <div class="info-box"><strong>Ticket ID:</strong> @CurrentTicket.Id</div>
+                <div class="info-box"><strong>Ticket UserID:</strong> @CurrentTicket.UserId</div>
+                <div class="info-box"><strong>Ticket EventID:</strong> @CurrentTicket.EventId</div>
+                <div class="info-box"><strong>Ticket Price:</strong> @CurrentTicket.Price</div>
+                <div class="info-box"><strong>Seat:</strong> @CurrentTicket.Seat</div>
                 <button @onclick="() => DeleteTicket(CurrentTicket.Id)">Delete</button>
                 <button @onclick="ClearTicket">Clear</button>
             }
@@ -79,25 +82,27 @@
         </div>
     </div>
 
-    <div class="eventBox">
-        <div class="amountSquare eventAmount">Amount of Events: @eventNumber</div>
-        <input @bind="eventId" />
-        <button @onclick="GetEventById">Search Event By Id</button>
-        <button @onclick="AddEvent">Add new event</button>
-        <div class="CurrentEventBox">
+    <div class="box">
+        <div class="box-header">Amount of Events: @eventNumber</div>
+        <div class="search-section">
+            <input @bind="eventId" placeholder="Enter Event ID" />
+            <button @onclick="GetEventById">Search</button>
+            <button @onclick="AddEvent">Add Event</button>
+        </div>
+        <div class="box-content">
             @if (SearchEvent && CurrentEvent != null)
             {
-                <div class="eventsId">Event ID: @CurrentEvent.Id</div>
-                <div class="eventsName">Event name: @CurrentEvent.Name</div>
-                <div class="eventsCity">City: @CurrentEvent.City</div>
-                <div class="eventsAddress">Address = @CurrentEvent.Address</div>
-                <div class="eventsAccessType">AccessType: @CurrentEvent.AccessType</div>
-                <div class="eventsStartTime">Start Time: @CurrentEvent.StartTime</div>
-                <div class="eventsEndTime">End Time: @CurrentEvent.EndTime</div>
-                <div class="eventsHasSeats">Designated seats: @CurrentEvent.HasSeat</div>
-                <div class="eventsImagePath">Image path: @CurrentEvent.ImagePath</div>
-                <div class="eventsTicketsMax">Max tickets: @CurrentEvent.TicketsMax</div>
-                <div class="eventsTicketSold">Tickets sold: @CurrentEvent.TicketsSold</div>
+                <div class="info-box"><strong>Event ID:</strong> @CurrentEvent.Id</div>
+                <div class="info-box"><strong>Event name:</strong> @CurrentEvent.Name</div>
+                <div class="info-box"><strong>City:</strong> @CurrentEvent.City</div>
+                <div class="info-box"><strong>Address:</strong> @CurrentEvent.Address</div>
+                <div class="info-box"><strong>AccessType:</strong> @CurrentEvent.AccessType</div>
+                <div class="info-box"><strong>Start Time:</strong> @CurrentEvent.StartTime</div>
+                <div class="info-box"><strong>End Time:</strong> @CurrentEvent.EndTime</div>
+                <div class="info-box"><strong>Designated seats:</strong> @CurrentEvent.HasSeat</div>
+                <div class="info-box"><strong>Image path:</strong> @CurrentEvent.ImagePath</div>
+                <div class="info-box"><strong>Max tickets:</strong> @CurrentEvent.TicketsMax</div>
+                <div class="info-box"><strong>Tickets sold:</strong> @CurrentEvent.TicketsSold</div>
                 <button @onclick="() => EditEvent(CurrentEvent)">Edit</button>
                 <button @onclick="DeleteEvent">Delete</button>
                 <button @onclick="ClearEvent">Clear</button>
@@ -575,3 +580,4 @@
         CurrentTicket = null;
     }
 }
+
