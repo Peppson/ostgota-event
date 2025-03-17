@@ -1,36 +1,37 @@
 ﻿@* TicketForm.razor*@
 
-<EditForm Model="TicketModel" OnValidSubmit="HandleSubmit">
+<EditForm Model="TicketModel" OnValidSubmit="HandleSubmit" class="edit-form">
     <h3>Add Ticket</h3>
-    <div>
-        <label>User Id:</label>
+    <div class="form-group">
+        <label><strong>User Id:</strong></label>
         <InputNumber @bind-Value="TicketModel.UserId" />
         <ValidationMessage For="@(() => TicketModel.UserId)" />
     </div>
 
-    <div>
-        <label>Event Id:</label>
+    <div class="form-group">
+        <label><strong>Event Id:</strong></label>
         <InputNumber @bind-Value="TicketModel.EventId" />
         <ValidationMessage For="@(() => TicketModel.EventId)" />
     </div>
 
-    <div>
-        <label>Seat:</label>
+    <div class="form-group">
+        <label><strong>Seat:</strong></label>
         <InputText @bind-Value="TicketModel.Seat" />
         <ValidationMessage For="@(() => TicketModel.Seat)" />
     </div>
 
-    <div>
-        <label>Price:</label>
-        <InputNumber  @bind-Value="TicketModel.Price" @bind-Value:format="0.00"/>
+    <div class="form-group">
+        <label><strong>Price:</strong></label>
+        <InputNumber @bind-Value="TicketModel.Price" @bind-Value:format="0.00"/>
         <ValidationMessage For="@(() => TicketModel.Price)" />
-
     </div>
 
-    <button type="submit">Save</button>
-    <button type="button" @onclick="Cancel">Cancel</button>
-
+    <div class="button-container">
+        <button type="submit">Save</button>
+        <button type="button" @onclick="Cancel">Cancel</button>
+    </div>
 </EditForm>
+
 @code {
     [Parameter] public TicketDto TicketModel { get; set; }
     [Parameter] public EventCallback<TicketDto> OnSave { get; set; }

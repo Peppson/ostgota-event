@@ -1,0 +1,200 @@
+/* Form Components */
+.form-container {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e0e0;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.form-select {
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background-color: #ffffff;
+}
+
+.form-select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.button-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.form-button {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.form-button-submit {
+    background: #3498db;
+    color: white;
+    border: none;
+}
+
+.form-button-submit:hover {
+    background: #2980b9;
+    transform: translateY(-1px);
+}
+
+.form-button-cancel {
+    background: #e0e0e0;
+    color: #2c3e50;
+    border: 1px solid #bdc3c7;
+}
+
+.form-button-cancel:hover {
+    background: #bdc3c7;
+    transform: translateY(-1px);
+}
+
+.validation-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Form styling */
+.edit-form {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e0e0;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.edit-form h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+/* Form input styling */
+.edit-form input, .edit-form select {
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.edit-form input:focus, .edit-form select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Form label styling */
+.edit-form label {
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Form button container */
+.edit-form .button-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Form button styling */
+.edit-form button {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.edit-form button[type="submit"] {
+    background: #3498db;
+    color: white;
+    border: none;
+}
+
+.edit-form button[type="button"] {
+    background: #e0e0e0;
+    color: #2c3e50;
+    border: 1px solid #bdc3c7;
+}
+
+.edit-form button:hover {
+    transform: translateY(-1px);
+}
+
+.edit-form button[type="submit"]:hover {
+    background: #2980b9;
+}
+
+.edit-form button[type="button"]:hover {
+    background: #bdc3c7;
+}
+
+/* Form validation styling */
+.edit-form .validation-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Form group styling */
+.edit-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+} 
