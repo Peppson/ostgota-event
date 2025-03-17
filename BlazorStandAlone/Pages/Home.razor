@@ -2,24 +2,98 @@
 @using BlazorStandAlone.Models
 @inject SessionStorageService SessionStorage
 @inject NavigationManager NavigationManager
+@inject HttpClient HttpClient
 
 
 <section class="landing-page">
-        <video autoplay muted loop playsinline class="background-video">
-            <source src="images/ostgotaevent.mp4" type="video/mp4">
-        </video>
+    <video autoplay muted loop playsinline class="background-video">
+        <source src="images/ostgotaevent-final.mp4" type="video/mp4">
+    </video>
 
-        <PageTitle>Home</PageTitle>
+    <PageTitle>Home</PageTitle>
 </section>
 
 <section id="event-section" class="event-section">
-    <div class="event-section-header">  
-        <h2>Wakka  Wakka</h2>   
-    </div>
+    <header class="event-section-header">
+        <h2>Kommande Event</h2>
+        <div class="event-input-box">
+            <input type="text" id="event-search">
+                <button class="dropbtn">Dropdown</button>
+@*                 <div class="dropdown-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div> *@
+        </div>
+    </header>
+
+    <div class="event-container">
+
+        @foreach(var ev in events){
+            <div class="event-card">
+  
+                <img class="event-img" src="@ev.ImagePath">  
+                 
+                <div class="event-card-info">
+                    <h3>@ev.Name</h3>
+                    <p class="event-description">@ev.Description</p>
+                    <p>@ev.TicketsSold</p>
+                    <p>@ev.StartTime - @ev.EndTime</p>      
+                    <p>@ev.Address, @ev.City
+                    <a href="#" class="map-icon"><i class="fas fa-location-dot"></i></a>
+                    </p>      
+                </div>
+
+                <div class="event-card-buttons">
+                    
+                <p class="event-time">@ev.StartTime.ToString("MMM dd", new System.Globalization.CultureInfo("en-US"))</p>
+
+                    <div class="event-card-button-container">
+                        <button>Visa mer info</button>
+                        <button>Boka</button>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+
+    </div>    
+    
 </section>
 
-
 @code {
+
+    public List<EventDto> events { get; set; } = new();
+
+
+        protected override async Task OnInitializedAsync(){
+            await GetEventsAsync();
+        }
+
+    private async Task GetEventsAsync()
+    {
+
+        try
+        {
+            var response = await HttpClient.GetAsync("api/event/get");
+            if (response.IsSuccessStatusCode)
+            {
+                events = await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new();
+                StateHasChanged();
+            }
+            else
+            { 
+                Console.WriteLine($"Error fetching events: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception while fetching events: {ex.Message}");
+        }
+    }
+
+
     private LoginDto? user;
 
     protected async Task OnIntializedAsync()
@@ -36,4 +110,3 @@
         }
     }
 }
-
