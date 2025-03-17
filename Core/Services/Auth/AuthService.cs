@@ -1,20 +1,14 @@
 namespace Core.Services.Auth;
 
-// TODO: Implement better auth
-/// <summary>
-/// Simple auth service to enable registering and login in, should be replaced before release
-/// </summary>
-public class AuthService(IUserService dataService) : IAuthService
+public class AuthService(IUserService userService) : IAuthService
 {
-    private readonly IUserService _userService = dataService;
+    private readonly IUserService _userService = userService;
 
     public async Task<User?> Login(string username, string password)
     {
         var user = await _userService.GetUserByName(username);
         if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-        {
             return null;
-        }
 
         return user;   
     }
@@ -22,11 +16,15 @@ public class AuthService(IUserService dataService) : IAuthService
     public async Task<User?> Register(string username, string password, string email, string? phonenumber)
     {   
         if (await _userService.DoesUserExist(username))
-        {
             return null;
-        }
 
-        var user = new User(){ Username = username, PasswordHash = BCrypt.Net.BCrypt.HashPassword(password), Email = email, PhoneNumber = phonenumber }; 
+        var user = new User()
+        { 
+            Username = username, 
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password), 
+            Email = email, 
+            PhoneNumber = phonenumber 
+        }; 
 
         await _userService.AddUser(user);
         return user;

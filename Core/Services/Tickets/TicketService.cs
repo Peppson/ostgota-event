@@ -1,13 +1,15 @@
 namespace Core.Services.Tickets;
 
-public class TicketService(Database DbContext) : ITicketService
+public class TicketService(IDatabase DbContext) : ITicketService
 {
-    private readonly Database _db = DbContext;
+    private readonly IDatabase _db = DbContext;
 
 
     public async Task<List<Ticket>> GetAllTickets()
     {   
-        return await _db.Tickets.ToListAsync();
+        return await _db.Tickets
+            .Include(e => e.Event)
+            .ToListAsync();
     }
 
     public async Task<Ticket?> AddTicket(int userId, int eventId, decimal price, string? seat)

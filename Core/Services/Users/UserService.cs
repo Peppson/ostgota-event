@@ -1,13 +1,18 @@
 namespace Core.Services.Users;
 
-public class UserService(Database DbContext) : IUserService
+public class UserService(IDatabase DbContext) : IUserService
 {
-    private readonly Database _db = DbContext;
+    private readonly IDatabase _db = DbContext;
 
 
     public async Task<List<User>> GetAllUsers()
-    {
-        return await _db.Users.ToListAsync();
+    {   
+        var users = await _db.Users
+            .Include(t => t.Tickets)
+            .ThenInclude(e => e.Event)
+            .ToListAsync();
+
+        return users;
     }
 
     public async Task<bool> DoesUserExist(string username)
@@ -19,6 +24,7 @@ public class UserService(Database DbContext) : IUserService
     {   
         var user = await _db.Users
             .Include(u => u.Tickets)
+            .ThenInclude(e => e.Event)
             .FirstOrDefaultAsync(u => u.Username == username);
 
         if (user == null)
@@ -31,6 +37,7 @@ public class UserService(Database DbContext) : IUserService
     {
         var user = await _db.Users
             .Include(u => u.Tickets)
+            .ThenInclude(e => e.Event)
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user == null)

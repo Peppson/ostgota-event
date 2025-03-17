@@ -10,3 +10,4 @@ global using Core.Services.Auth;
 global using FluentValidation;
 global using Api.Controllers.Events;
 global using Api.Controllers.Validators;
+global using Api.Controllers.Tickets;

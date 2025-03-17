@@ -5,6 +5,7 @@ public record TicketDTO
     public int Id { get; set; }
     public int UserId { get; set; }
     public int EventId { get; set; }
+    public required string Title { get; set; }
     public string? Seat { get; set; } 
     public decimal Price { get; set; }
 }
