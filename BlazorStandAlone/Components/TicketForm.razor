@@ -1,0 +1,55 @@
+﻿@* TicketForm.razor*@
+
+<EditForm Model="TicketModel" OnValidSubmit="HandleSubmit">
+    <h3>Add Ticket</h3>
+    <div>
+        <label>Ticketname:</label>
+        <InputNumber @bind-Value="TicketModel.UserId" />
+        <ValidationMessage For="@(() => TicketModel.UserId)" />
+    </div>
+
+    <div>
+        <label>Email:</label>
+        <InputNumber @bind-Value="TicketModel.EventId" />
+        <ValidationMessage For="@(() => TicketModel.EventId)" />
+    </div>
+
+    <div>
+        <label>Phone:</label>
+        <InputText @bind-Value="TicketModel.Seat" />
+        <ValidationMessage For="@(() => TicketModel.Seat)" />
+    </div>
+
+    <div>
+        <label>Ticket Role:</label>
+        <InputNumber @bind-Value="TicketModel.Price"/>
+        <ValidationMessage For="@(() => TicketModel.Price)" />
+
+        <div>
+            <label>Phone:</label>
+            <InputText @bind-Value="TicketModel.Title" />
+            <ValidationMessage For="@(() => TicketModel.Title)" />
+        </div>
+    </div>
+
+    <button type="submit">Save</button>
+    <button type="button" @onclick="Cancel">Cancel</button>
+
+</EditForm>
+@code {
+    [Parameter] public TicketDto TicketModel { get; set; }
+    [Parameter] public EventCallback<TicketDto> OnSave { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    [Parameter] public bool IsTicketEditMode { get; set; } = false;
+
+    private async Task HandleSubmit()
+    {
+        await OnSave.InvokeAsync(TicketModel);
+    }
+
+    private async Task Cancel()
+    {
+        await OnCancel.InvokeAsync();
+    }
+}

@@ -10,6 +10,8 @@ namespace BlazorStandAlone.Models
 
         public int EventId { get; set; }
 
+        public string Title { get; set; }
+
         public decimal Price { get; set; }
         public string? Seat { get; set; }
     }
