@@ -15,6 +15,7 @@ public class Program
         builder.Services.AddScoped<IEventService, EventService>();
         builder.Services.AddScoped<ITicketService, TicketService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<IDatabase, Database>();
         builder.Services.AddSingleton<Validator>();
         builder.Services.AddScoped<DatabaseInitializer>();
         builder.Services.AddSqlite<Database>("Data Source=../Core/Data/EventDB.db");

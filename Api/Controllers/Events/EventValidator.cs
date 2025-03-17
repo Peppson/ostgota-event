@@ -4,10 +4,18 @@ public class EventCreateValidator : AbstractValidator<EventCreateDTO>
 {
     public EventCreateValidator()
     {
-        RuleFor(x => x.Name).NotEmpty();
-        RuleFor(x => x.Description).NotEmpty();
-        RuleFor(x => x.City).NotEmpty();
-        RuleFor(x => x.Address).NotEmpty();
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .MaximumLength(30);
+        RuleFor(x => x.Description)
+            .NotEmpty()
+            .MaximumLength(100);
+        RuleFor(x => x.City)
+            .NotEmpty()
+            .MaximumLength(40);
+        RuleFor(x => x.Address)
+            .NotEmpty()
+            .MaximumLength(40);
         RuleFor(x => x.StartTime).NotEmpty();
         RuleFor(x => x.EndTime).GreaterThan(x => x.StartTime);
         RuleFor(x => x.AccessType).IsInEnum();
@@ -22,10 +30,18 @@ public class EventUpdateValidator : AbstractValidator<EventUpdateDTO>
 {
     public EventUpdateValidator()
     {
-        RuleFor(x => x.Name).NotEmpty();
-        RuleFor(x => x.Description).NotEmpty();
-        RuleFor(x => x.City).NotEmpty();
-        RuleFor(x => x.Address).NotEmpty();
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .MaximumLength(30);
+        RuleFor(x => x.Description)
+            .NotEmpty()
+            .MaximumLength(100);
+        RuleFor(x => x.City)
+            .NotEmpty()
+            .MaximumLength(40);
+        RuleFor(x => x.Address)
+            .NotEmpty()
+            .MaximumLength(40);
         RuleFor(x => x.StartTime).NotEmpty();
         RuleFor(x => x.EndTime).GreaterThan(x => x.StartTime);
         RuleFor(x => x.AccessType).IsInEnum();

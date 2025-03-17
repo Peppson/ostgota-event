@@ -14,7 +14,7 @@ public class TicketController(ITicketService ticketService, Validator validator)
         try
         {
             var tickets = await _ticketService.GetAllTickets();
-            return Ok( TicketGetDTO(tickets) );
+            return Ok( GetTicketDTO(tickets) );
         }
         catch (Exception ex)
         {
@@ -60,13 +60,14 @@ public class TicketController(ITicketService ticketService, Validator validator)
         }
     }
 
-    private static List<TicketDTO> TicketGetDTO(List<Ticket> tickets)
+    private static List<TicketDTO> GetTicketDTO(List<Ticket> tickets)
     {
         return tickets.Select(t => new TicketDTO
         {
             Id = t.Id,
             UserId = t.UserId,
             EventId = t.EventId,
+            Title = t.Title,
             Price = t.Price,
             Seat = t.Seat
         }).ToList();
@@ -79,6 +80,7 @@ public class TicketController(ITicketService ticketService, Validator validator)
             Id = ticket.Id,
             UserId = ticket.UserId,
             EventId = ticket.EventId,
+            Title = ticket.Title,
             Price = ticket.Price,
             Seat = ticket.Seat
         };

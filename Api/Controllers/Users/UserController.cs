@@ -8,12 +8,12 @@ public class UserController(IUserService userService) : Controller
     
 
     [HttpGet("get")]
-    public async Task<ActionResult<List<AllUsersDTO>>> GetAllUsers()
+    public async Task<ActionResult<List<UserDTO>>> GetAllUsers()
     {
         try
         {
             var users = await _userService.GetAllUsers();
-            return Ok( GetAllUsersDTO(users) );
+            return Ok( GetUserDTO(users) );
         }
         catch (Exception ex)
         {
@@ -93,28 +93,30 @@ public class UserController(IUserService userService) : Controller
         }
     }
 
-    private static List<AllUsersDTO> GetAllUsersDTO(List<User> users)
+    private static List<UserDTO> GetUserDTO(List<User> users)
     {
-        return users.Select(t => new AllUsersDTO
+        return users.Select(t => new UserDTO
         {
             Id = t.Id,
             Username = t.Username,
             Email = t.Email,
             PhoneNumber = t.PhoneNumber,
             Role = t.Role,
-            CreatedAt = t.CreatedAt
+            CreatedAt = t.CreatedAt,
+            Tickets = GetTicketDTO(t.Tickets)
         }).ToList();
     }
 
-    private static List<UserTicketDTO> GetTicketDTO(List<Ticket> tickets)
+    private static List<TicketDTO> GetTicketDTO(List<Ticket> tickets)
     {
-        return tickets.Select(t => new UserTicketDTO
+        return tickets.Select(t => new TicketDTO
         {   
             Id = t.Id,
             UserId = t.UserId,
             EventId = t.EventId,
-            Price = t.Price,
-            Seat = t.Seat
+            Title = t.Title,
+            Seat = t.Seat,
+            Price = t.Price
         }).ToList();
     }
 }

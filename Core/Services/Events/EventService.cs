@@ -1,8 +1,8 @@
 namespace Core.Services.Events;
 
-public class EventService(Database DbContext) : IEventService
+public class EventService(IDatabase DbContext) : IEventService
 {
-    private readonly Database _db = DbContext;
+    private readonly IDatabase _db = DbContext;
 
 
     public async Task<Event?> GetEventById(int id)
