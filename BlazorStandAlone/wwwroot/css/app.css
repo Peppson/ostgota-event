@@ -77,6 +77,15 @@ header .nav-link:hover,
     color: white;
 }
 
-.shadow {
-    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+.admin-TODO {
+    font-size: 20px;
+    padding: 8px 12px;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    display: inline-block;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
 }

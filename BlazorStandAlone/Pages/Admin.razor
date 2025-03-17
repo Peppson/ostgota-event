@@ -2,12 +2,13 @@
 @inject SessionStorageService SessionStorage
 @inject HttpClient HttpClient
 @using BlazorStandAlone.Components
+@layout NoHeaderLayout
 @page "/admin"
 
 <PageTitle>Admin</PageTitle>
 
-<h1>Admin Dashboard</h1>
-
+<div class="admin-background"></div>
+<h1 class="admin-title">Admin Dashboard</h1>
 <Popup @ref="popupRef" Title="Success" Message="@PopupMessage"></Popup>
 
 <div class="admin-container">
