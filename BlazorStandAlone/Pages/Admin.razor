@@ -27,12 +27,15 @@
                 <div class="userCreatedAt">Created at: @CurrentUser.CreatedAt</div>
                 <div class="usersTickets">
                     <h3>User's Tickets</h3>
-                    @foreach (var ticket in CurrentUser.Tickets)
+                    @foreach (var ticket in CurrentUser.Tickets!)
                     {
                         <div>
-                            <strong>Ticket ID:</strong> @ticket.Id
-                            <br />
-                            <strong>Title:</strong> @ticket.Title
+                            <div>
+                                <strong>Ticket ID:</strong> @ticket.Id
+                                <br />
+                                <strong>Title:</strong> @ticket.Title
+                            </div>
+                            <div><button @onclick="() => DeleteTicket(ticket.Id)">Delete</button></div>
                         </div>
                     }
                 </div>
@@ -64,14 +67,14 @@
                 <div class="ticketsPrice">Ticket Price: @CurrentTicket.Price</div>
                 <div class="ticketsSeat">Seat: @CurrentTicket.Seat</div>
                 <!--<div class="ticketsTitle">Title for event: @CurrentTicket.Title</div>-->
-                <button @onclick="DeleteTicket">Delete</button>
+                <button @onclick="() => DeleteTicket(CurrentTicket.Id)">Delete</button>
                 <button @onclick="ClearTicket">Clear</button>
             }
-            @if(TicketFormVisible)
+            @if (TicketFormVisible)
             {
                 <TicketForm TicketModel="CurrentTicket"
                 OnSave="SaveTicket"
-                OnCancel="HideTicketForm"/>
+                OnCancel="HideTicketForm" />
             }
         </div>
     </div>
@@ -173,6 +176,7 @@
         await GetUsersAsync();
     }
 
+
     //events
     private async Task GetEventsAsync()
     {
@@ -245,12 +249,13 @@
             await CreateEvent(ev);
         }
         HideEventForm();
+        StateHasChanged();
     }
 
     private void AddEvent()
     {
         ClearEvent();
-        CurrentEvent = new EventDto() { Name = null, City = null, Description = null, Address = null, StartTime = DateTime.Now, EndTime = DateTime.Now.AddHours(1), ImagePath = "hehe" };
+        CurrentEvent = new EventDto() { Name = null!, City = null!, Description = null!, Address = null!, StartTime = DateTime.Now, EndTime = DateTime.Now.AddHours(1), ImagePath = "hehe" };
         IsEventEditMode = false;
         EventFormVisible = true;
     }
@@ -260,10 +265,10 @@
         var response = await HttpClient.PostAsJsonAsync("api/event/create", ev);
         if (response.IsSuccessStatusCode)
         {
-            PopupMessage = "Event created successfully.";
-            popupRef?.Show();
             await GetEventsAsync();
             ClearEvent();
+            PopupMessage = "Event created successfully.";
+            popupRef?.Show();
         }
         else
         {
@@ -276,10 +281,10 @@
         var response = await HttpClient.PutAsJsonAsync($"api/event/update/{ev.Id}", ev);
         if (response.IsSuccessStatusCode)
         {
-            PopupMessage = "Event updated succesfully!";
-            popupRef?.Show();
             await GetEventsAsync();
             ClearEvent();
+            PopupMessage = "Event updated succesfully!";
+            popupRef?.Show();
         }
         else
         {
@@ -297,10 +302,10 @@
         var response = await HttpClient.DeleteAsync($"api/event/delete/{CurrentEvent.Id}");
         if (response.IsSuccessStatusCode)
         {
-            PopupMessage = "Event deleted successfully";
-            popupRef?.Show();
             await GetEventsAsync();
             ClearEvent();
+            PopupMessage = "Event deleted successfully";
+            popupRef?.Show();
         }
         else
         {
@@ -324,7 +329,7 @@
             {
                 users = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new();
                 userNumber = users.Count;
-                foreach(var user in users)
+                foreach (var user in users)
                 {
                     user.Tickets = GetUserTickets(user.Id);
                 }
@@ -392,12 +397,13 @@
             await CreateUser(user);
         }
         HideUserForm();
+        StateHasChanged();
     }
 
     private void AddUser()
     {
         ClearUser();
-        CurrentUser = new UserDto() { Username = null, Email = null, PhoneNumber = null, Role = UserRole.User, CreatedAt = DateTime.Now };
+        CurrentUser = new UserDto() { Username = null!, Email = null!, PhoneNumber = null, Role = UserRole.User, CreatedAt = DateTime.Now };
         IsUserEditMode = false;
         UserFormVisible = true;
 
@@ -410,11 +416,11 @@
         var response = await HttpClient.PostAsJsonAsync("api/user/create", newUser);
         if (response.IsSuccessStatusCode)
         {
-            PopupMessage = "User created successfully.";
-            popupRef?.Show();
             UserFormVisible = false;
             await GetUsersAsync();
             ClearUser();
+            PopupMessage = "User created successfully.";
+            popupRef?.Show();
 
         }
         else
@@ -430,10 +436,10 @@
         var response = await HttpClient.PutAsJsonAsync($"api/user/update/{user.Id}", user);
         if (response.IsSuccessStatusCode)
         {
-            PopupMessage = "User updated successfully!";
-            popupRef?.Show();
             await GetUsersAsync();
             ClearUser();
+            PopupMessage = "User updated successfully!";
+            popupRef?.Show();
         }
         else
         {
@@ -451,10 +457,10 @@
         var response = await HttpClient.DeleteAsync($"api/user/delete/{CurrentUser.Id}");
         if (response.IsSuccessStatusCode)
         {
-            PopupMessage = "User deleted successfully";
-            popupRef?.Show();
             await GetUsersAsync();
             ClearUser();
+            PopupMessage = "User deleted successfully";
+            popupRef?.Show();
         }
         else
         {
@@ -526,10 +532,10 @@
         var response = await HttpClient.PostAsJsonAsync("api/ticket/create", ticket);
         if (response.IsSuccessStatusCode)
         {
-            PopupMessage = "Ticket created successfully.";
-            popupRef?.Show();
             await GetTicketsAsync();
             ClearTicket();
+            PopupMessage = "Ticket created successfully.";
+            popupRef?.Show();
         }
         else
         {
@@ -537,20 +543,25 @@
         }
     }
 
-    private async Task DeleteTicket()
+    private async Task DeleteTicket(int ticketId)
     {
-        if (CurrentTicket == null)
-        {
-            Console.WriteLine("No ticket selected, can not delete");
-            return;
-        }
-        var response = await HttpClient.DeleteAsync($"api/ticket/delete/{CurrentTicket.Id}");
+        var response = await HttpClient.DeleteAsync($"api/ticket/delete/{ticketId}");
         if (response.IsSuccessStatusCode)
         {
-            PopupMessage = "Ticket deleted successfully";
-            popupRef?.Show();
             await GetTicketsAsync();
             ClearTicket();
+            PopupMessage = "Ticket deleted successfully";
+            popupRef?.Show();
+
+            if (CurrentUser != null)
+            {
+                await GetUsersAsync();
+                CurrentUser = users.FirstOrDefault(u => u.Id == CurrentUser.Id);
+                if (CurrentUser != null)
+                {
+                    CurrentUser.Tickets = GetUserTickets(CurrentUser.Id);
+                }
+            }
         }
         else
         {
