@@ -2,9 +2,10 @@ namespace Api.Controllers.Users;
 
 [Route("api/user")]
 [ApiController]
-public class UserController(IUserService userService) : Controller
+public class UserController(IUserService userService, Validator validator) : Controller
 {
     private readonly IUserService _userService = userService;
+    private readonly Validator _validator = validator;
     
 
     [HttpGet("get")]
@@ -86,6 +87,40 @@ public class UserController(IUserService userService) : Controller
                 return NotFound("User not found.");
 
             return Ok(id);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpPut("update/{id}")]
+    public async Task<ActionResult<User>> UpdateUser(int id, [FromBody] UserCreateDTO user)
+    {   
+        var validation = _validator.Validate(new UserValidator(), user);
+        if (validation != null)
+            return validation;
+
+        var newUser = new User
+        {
+            Id = id,
+            Username = user.Username,
+            PasswordHash = user.Password,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Role = user.Role,
+            CreatedAt = DateTime.Now,
+            Tickets = null!
+        };
+
+        try
+        {
+            var updatedUser = await _userService.UpdateUser(id, newUser);
+            if (updatedUser == null)
+            {
+                return NotFound($"User with id: {id} not found.");
+            }
+            return Ok(updatedUser);
         }
         catch (Exception ex)
         {

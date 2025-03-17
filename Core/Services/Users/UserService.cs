@@ -74,4 +74,21 @@ public class UserService(IDatabase DbContext) : IUserService
 
         return true;
     }
+
+    public async Task<User?> UpdateUser(int userId, User updatedUser)
+    {
+        var existingUser = await _db.Users.FindAsync(userId);
+        if (existingUser == null)
+            return null;
+
+        existingUser.Username = updatedUser.Username;
+        existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(updatedUser.PasswordHash);
+        existingUser.Email = updatedUser.Email;
+        existingUser.PhoneNumber = updatedUser.PhoneNumber;
+        existingUser.Role = updatedUser.Role;
+        
+        await _db.SaveChangesAsync();
+
+        return existingUser;
+    }
 }
