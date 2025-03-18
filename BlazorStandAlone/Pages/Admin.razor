@@ -1,6 +1,7 @@
 ﻿@inject NavigationManager NavigationManager
 @inject SessionStorageService SessionStorage
 @inject HttpClient HttpClient
+@inject IUserService UserService
 @using BlazorStandAlone.Components
 @layout NoHeaderLayout
 @page "/admin"
@@ -9,49 +10,52 @@
 
 <div class="admin-background"></div>
 <h1 class="admin-title">Admin Dashboard</h1>
-<Popup @ref="popupRef" Title="Success" Message="@PopupMessage"></Popup>
+<Popup @ref="popupRef" Title="@PopupTitle" Message="@PopupMessage"></Popup>
 
 <div class="admin-container">
     <div class="box">
-        <div class="box-header">Amount of Users: @userNumber</div>
+        <div class="box-header">Amount of Users: @UserService.UserCount</div>
         <div class="search-section">
-            <input @bind="userId" placeholder="Enter User ID" />
+            <input @bind="_userId" placeholder="Enter User ID" />
             <button @onclick="GetUserById">Search</button>
             <button @onclick="AddUser">Add User</button>
         </div>
         <div class="box-content">
-            @if (SearchUser && CurrentUser != null)
+            @if (_searchUser && _currentUser != null)
             {
-                <div class="info-box"><strong>User ID:</strong> @CurrentUser.Id</div>
-                <div class="info-box"><strong>Username:</strong> @CurrentUser.Username</div>
-                <div class="info-box"><strong>User Email:</strong> @CurrentUser.Email</div>
-                <div class="info-box"><strong>User PhoneNumber:</strong> @CurrentUser.PhoneNumber</div>
-                <div class="info-box"><strong>User Role:</strong> @CurrentUser.Role</div>
-                <div class="info-box"><strong>Created at:</strong> @CurrentUser.CreatedAt</div>
+                <div class="info-box"><strong>User ID:</strong> @_currentUser.Id</div>
+                <div class="info-box"><strong>Username:</strong> @_currentUser.Username</div>
+                <div class="info-box"><strong>User Email:</strong> @_currentUser.Email</div>
+                <div class="info-box"><strong>User PhoneNumber:</strong> @_currentUser.PhoneNumber</div>
+                <div class="info-box"><strong>User Role:</strong> @_currentUser.Role</div>
+                <div class="info-box"><strong>Created at:</strong> @_currentUser.CreatedAt</div>
                 <div class="user-tickets">
                     <h3>User's Tickets</h3>
-                    @foreach (var ticket in CurrentUser.Tickets!)
+                    @if (_currentUser.Tickets != null)
                     {
-                        <div>
+                        @foreach (var ticket in _currentUser.Tickets)
+                        {
                             <div>
-                                <strong>Ticket ID:</strong> @ticket.Id
-                                <br />
-                                <strong>Title:</strong> @ticket.Title
+                                <div>
+                                    <strong>Ticket ID:</strong> @ticket.Id
+                                    <br />
+                                    <strong>Title:</strong> @ticket.Title
+                                </div>
+                                <div><button @onclick="() => DeleteTicket(ticket.Id)">Delete</button></div>
                             </div>
-                            <div><button @onclick="() => DeleteTicket(ticket.Id)">Delete</button></div>
-                        </div>
+                        }
                     }
                 </div>
-                <button @onclick="() => EditUser(CurrentUser)">Edit</button>
-                <button @onclick="DeleteUser">Delete</button>
+                <button @onclick="() => EditUser(_currentUser)">Edit</button>
+                <button @onclick="() => DeleteUser(_currentUser.Id)">Delete</button>
                 <button @onclick="ClearUser">Clear</button>
             }
-            @if (UserFormVisible)
+            @if (_userFormVisible)
             {
-                <UserForm UserModel="CurrentUser"
-                IsUserEditMode="@IsUserEditMode"
-                OnSave="SaveUser"
-                OnCancel="HideUserForm" />
+                <UserForm UserModel="@_currentUser"
+                         IsUserEditMode="@_isUserEditMode"
+                         OnSave="SaveUser"
+                         OnCancel="HideUserForm" />
             }
         </div>
     </div>
@@ -120,11 +124,19 @@
 </div>
 
 @code {
-    //pagewide
+    // Page-wide
     private LoginDto? user;
     private Popup? popupRef;
-    private string PopupMessage = String.Empty;
+    private string PopupMessage = string.Empty;
+    private string PopupTitle = "Notification";
     private bool development = true;
+
+    // User-related state
+    private bool _userFormVisible;
+    private bool _isUserEditMode;
+    private bool _searchUser;
+    private UserDto? _currentUser;
+    private int _userId;
 
     //events
     public List<EventDto> events { get; set; } = new();
@@ -134,15 +146,6 @@
     private bool IsEventEditMode = false;
     private bool SearchEvent = false;
     public EventDto? CurrentEvent { get; set; } = null;
-
-    //users
-    public List<UserDto> users { get; set; } = new();
-    public int userNumber { get; set; }
-    public int userId { get; set; }
-    private bool UserFormVisible = false;
-    private bool IsUserEditMode = false;
-    private bool SearchUser = false;
-    public UserDto? CurrentUser { get; set; } = null;
 
     //tickets
     public List<TicketDto> tickets { get; set; } = new();
@@ -166,10 +169,13 @@
         if (user == null)
         {
             NavigationManager.NavigateTo("/login");
+            return;
         }
-        else if (user.Role != UserRole.Admin)
+        
+        if (user.Role != UserRole.Admin)
         {
             NavigationManager.NavigateTo("/");
+            return;
         }
 
         await PopulateLists();
@@ -177,11 +183,128 @@
 
     private async Task PopulateLists()
     {
-        await GetEventsAsync();
-        await GetTicketsAsync();
-        await GetUsersAsync();
+        await HandleUserOperation(async () =>
+        {
+            await GetEventsAsync();
+            await GetTicketsAsync();
+            await UserService.GetAllUsers();
+        }, "Lists populated successfully");
     }
 
+    private async Task GetUserById()
+    {
+        HideUserForm();
+        var user = await UserService.GetUserById(_userId);
+        if (user == null)
+        {
+            ShowPopup("Error", "User not found");
+        }
+        else
+        {
+            _currentUser = user;
+            _searchUser = true;
+        }
+    }
+
+    private void EditUser(UserDto user)
+    {
+        _currentUser = new UserDto
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Role = user.Role,
+            Tickets = user.Tickets,
+            CreatedAt = user.CreatedAt
+        };
+        _isUserEditMode = true;
+        _userFormVisible = true;
+        _searchUser = false;
+    }
+
+    private void HideUserForm() => _userFormVisible = false;
+
+    private async Task SaveUser(UserDto user)
+    {
+        await HandleUserOperation(async () =>
+        {
+            if (_isUserEditMode)
+            {
+                await UserService.UpdateUser(user);
+                ShowPopup("Success", "User updated successfully");
+            }
+            else
+            {
+                await UserService.CreateUser(user);
+                ShowPopup("Success", "User created successfully");
+            }
+            HideUserForm();
+            StateHasChanged();
+        }, null);
+    }
+
+    private void AddUser()
+    {
+        ClearUser();
+        _currentUser = new UserDto() 
+        { 
+            Username = null!, 
+            Email = null!, 
+            PhoneNumber = null, 
+            Role = UserRole.User, 
+            CreatedAt = DateTime.Now 
+        };
+        _isUserEditMode = false;
+        _userFormVisible = true;
+    }
+
+    private async Task DeleteUser(int id)
+    {
+        await HandleUserOperation(async () =>
+        {
+            if (await UserService.DeleteUser(id))
+            {
+                ClearUser();
+                ShowPopup("Success", "User deleted successfully");
+            }
+        }, null);
+    }
+
+    private void ClearUser()
+    {
+        _searchUser = false;
+        _currentUser = null;
+        _userFormVisible = false;
+    }
+
+    private async Task HandleUserOperation(Func<Task> operation, string? successMessage)
+    {
+        try
+        {
+            await operation();
+            if (!string.IsNullOrEmpty(successMessage))
+            {
+                ShowPopup("Success", successMessage);
+            }
+        }
+        catch (UserServiceException ex)
+        {
+            ShowPopup("Error", ex.Message);
+        }
+        catch (Exception ex)
+        {
+            ShowPopup("Error", "An unexpected error occurred");
+            Console.WriteLine($"Unexpected error: {ex}");
+        }
+    }
+
+    private void ShowPopup(string title, string message)
+    {
+        PopupTitle = title;
+        PopupMessage = message;
+        popupRef?.Show();
+    }
 
     //events
     private async Task GetEventsAsync()
@@ -325,161 +448,6 @@
         CurrentEvent = null;
     }
 
-    //users
-    private async Task GetUsersAsync()
-    {
-        try
-        {
-            var response = await HttpClient.GetAsync("api/user/get");
-            if (response.IsSuccessStatusCode)
-            {
-                users = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new();
-                userNumber = users.Count;
-                foreach (var user in users)
-                {
-                    user.Tickets = GetUserTickets(user.Id);
-                }
-                StateHasChanged();
-            }
-            else
-            {
-                Console.WriteLine($"Error fetching users: {response.StatusCode}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception while fetching users: {ex.Message}");
-        }
-    }
-
-    private List<TicketDto> GetUserTickets(int userId)
-    {
-
-        List<TicketDto> list = tickets.Where(t => t.UserId == userId).ToList();
-        Console.WriteLine(list.Count);
-        return list;
-    }
-
-    private void GetUserById()
-    {
-        HideUserForm();
-        CurrentUser = users.Where(u => u.Id == userId).FirstOrDefault();
-        if (CurrentUser == null)
-        {
-            Console.WriteLine("user was not found");
-        }
-        else
-        {
-            SearchUser = true;
-        }
-    }
-
-    private void EditUser(UserDto user)
-    {
-        CurrentUser = new UserDto
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                Role = user.Role,
-                Tickets = user.Tickets
-            };
-        IsUserEditMode = true;
-        UserFormVisible = true;
-        SearchUser = false;
-    }
-
-    private void HideUserForm() => UserFormVisible = false;
-
-    private async void SaveUser(UserDto user)
-    {
-        if (IsUserEditMode)
-        {
-            await UpdateUser(user);
-        }
-        else
-        {
-            await CreateUser(user);
-        }
-        HideUserForm();
-        StateHasChanged();
-    }
-
-    private void AddUser()
-    {
-        ClearUser();
-        CurrentUser = new UserDto() { Username = null!, Email = null!, PhoneNumber = null, Role = UserRole.User, CreatedAt = DateTime.Now };
-        IsUserEditMode = false;
-        UserFormVisible = true;
-
-    }
-
-    private async Task CreateUser(UserDto user)
-    {
-        var newUser = new RegisterUserDto(user.Username, user.Email, user.PhoneNumber, user.Role);
-
-        var response = await HttpClient.PostAsJsonAsync("api/user/create", newUser);
-        if (response.IsSuccessStatusCode)
-        {
-            UserFormVisible = false;
-            await GetUsersAsync();
-            ClearUser();
-            PopupMessage = "User created successfully.";
-            popupRef?.Show();
-
-        }
-        else
-        {
-            Console.WriteLine($"error: {response.ReasonPhrase}");
-        }
-    }
-
-    private async Task UpdateUser(UserDto user)
-    {
-        var newUser = new RegisterUserDto(user.Username, user.Email, user.PhoneNumber, user.Role);
-
-        var response = await HttpClient.PutAsJsonAsync($"api/user/update/{user.Id}", user);
-        if (response.IsSuccessStatusCode)
-        {
-            await GetUsersAsync();
-            ClearUser();
-            PopupMessage = "User updated successfully!";
-            popupRef?.Show();
-        }
-        else
-        {
-            Console.WriteLine($"error: {response.StatusCode}");
-        }
-    }
-
-    private async Task DeleteUser()
-    {
-        if (CurrentUser == null)
-        {
-            Console.WriteLine("No user selected, can not delete");
-            return;
-        }
-        var response = await HttpClient.DeleteAsync($"api/user/delete/{CurrentUser.Id}");
-        if (response.IsSuccessStatusCode)
-        {
-            await GetUsersAsync();
-            ClearUser();
-            PopupMessage = "User deleted successfully";
-            popupRef?.Show();
-        }
-        else
-        {
-            Console.WriteLine($"error: {response.StatusCode}");
-        }
-    }
-
-    private void ClearUser()
-    {
-        SearchUser = false;
-        CurrentUser = null;
-    }
-
     //tickets
     private async Task GetTicketsAsync()
     {
@@ -559,13 +527,13 @@
             PopupMessage = "Ticket deleted successfully";
             popupRef?.Show();
 
-            if (CurrentUser != null)
+            if (_currentUser != null)
             {
-                await GetUsersAsync();
-                CurrentUser = users.FirstOrDefault(u => u.Id == CurrentUser.Id);
-                if (CurrentUser != null)
+                await UserService.GetAllUsers();
+                _currentUser = UserService.Users.FirstOrDefault(u => u.Id == _currentUser.Id);
+                if (_currentUser != null)
                 {
-                    CurrentUser.Tickets = GetUserTickets(CurrentUser.Id);
+                    _currentUser.Tickets = UserService.GetUserTickets(_currentUser.Id);
                 }
             }
         }
