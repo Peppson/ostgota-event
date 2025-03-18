@@ -5,13 +5,12 @@
 @inject HttpClient HttpClient
 @inject IJSRuntime JS
 
+<PageTitle>Östgöta Event</PageTitle>
 
 <section class="landing-page">
-    <video autoplay muted loop playsinline class="background-video">
-        <source src="images/ostgotaevent-final.mp4" type="video/mp4">
-    </video>
-
-    <PageTitle>Home</PageTitle>
+    <video autoplay muted loop playsinline preload="auto" class="background-video">
+        <source src="movies/ostgota-event-3.mp4" type="video/mp4">
+    </video>    
 </section>
 
 <section id="event-section" class="event-section">
@@ -62,7 +61,7 @@
     </div>    
 </section>
 
-@* JS to the rescue *@
+@* JS to the rescue - WHY WOULD YOU EVER SAY THAT!?*@
 <script> 
     function scrollToEventSection() {
         document.getElementById('event-section').scrollIntoView();
