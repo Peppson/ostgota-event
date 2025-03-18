@@ -18,6 +18,7 @@ public class Program
             BaseAddress = new Uri(baseUrl)
         });
         builder.Services.AddScoped<SessionStorageService>();
+        builder.Services.AddScoped<IUserService, UserService>();
 
         await builder.Build().RunAsync();
     }
