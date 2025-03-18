@@ -1,6 +1,7 @@
 ﻿@* TicketForm.razor*@
 
 <EditForm Model="TicketModel" OnValidSubmit="HandleSubmit" class="edit-form">
+    <DataAnnotationsValidator />
     <h3>Add Ticket</h3>
     <div class="form-group">
         <label><strong>User Id:</strong></label>
