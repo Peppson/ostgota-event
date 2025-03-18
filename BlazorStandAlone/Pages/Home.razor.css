@@ -15,7 +15,6 @@
     position: absolute; 
     bottom: 0; 
     z-index: 9999;
-/*     background-color: red; */
 }
 
 #landing-page-arrow {
@@ -58,6 +57,8 @@
     color: white;
     gap: 20px;
     clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+    z-index: 9999;
+    position: relative;
 }
 
 .event-input-box {

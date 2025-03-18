@@ -86,8 +86,8 @@ header {
 }
 
 header .nav-link:hover,
-.nav .nav-link:hover,
-footer a:hover {
+footer a:hover, 
+.nav .nav-link:hover {
     color: gold;
     transform: scale(1.05);
 }
