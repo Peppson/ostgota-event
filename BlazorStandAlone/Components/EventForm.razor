@@ -1,6 +1,7 @@
 ﻿@* EventForm.razor *@
 
 <EditForm Model="EventModel" OnValidSubmit="HandleSubmit" class="edit-form">
+    <DataAnnotationsValidator />
     <h3>@(IsEventEditMode ? "Edit Event" : "Add Event")</h3>
     <div class="form-group">
         <label><strong>Title:</strong></label>

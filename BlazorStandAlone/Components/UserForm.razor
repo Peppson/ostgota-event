@@ -1,6 +1,7 @@
 ﻿@* UserForm.razor*@
 
 <EditForm Model="UserModel" OnValidSubmit="HandleSubmit" class="edit-form">
+    <DataAnnotationsValidator />
     <h3>@(IsUserEditMode ? "Edit User" : "Add User")</h3>
     <div class="form-group">
         <label><strong>Username:</strong></label>
