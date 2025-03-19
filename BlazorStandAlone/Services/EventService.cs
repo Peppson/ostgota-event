@@ -44,11 +44,11 @@ namespace BlazorStandAlone.Services
                     _events = await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new();
                     return _events;
                 }
-                throw new EventServiceException($"Failed to fetch users: {response.StatusCode}");
+                throw new EventServiceException($"Failed to fetch event: {response.StatusCode}");
             }
-            catch (Exception ex) when (ex is not UserServiceException)
+            catch (Exception ex) when (ex is not EventServiceException)
             {
-                throw new UserServiceException("An error occurred while fetching users", ex);
+                throw new EventServiceException("An error occurred while fetching event", ex);
             }
         }
         public EventDto? GetEventById(int id)
@@ -88,7 +88,7 @@ namespace BlazorStandAlone.Services
             }
             catch (Exception ex) when (ex is not EventServiceException)
             {
-                throw new EventServiceException("An error occurred while updating evnt", ex);
+                throw new EventServiceException("An error occurred while updating event", ex);
             }
         }
 

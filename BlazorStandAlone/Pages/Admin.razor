@@ -73,6 +73,7 @@
             @if (_searchTicket && _currentTicket != null)
             {
                 <div class="info-box"><strong>Ticket ID:</strong> @_currentTicket.Id</div>
+                <div class="info-box"><strong>Ticket Title:</strong> @_currentTicket.Title </div>
                 <div class="info-box"><strong>Ticket UserID:</strong> @_currentTicket.UserId</div>
                 <div class="info-box"><strong>Ticket EventID:</strong> @_currentTicket.EventId</div>
                 <div class="info-box"><strong>Ticket Price:</strong> @_currentTicket.Price</div>
@@ -183,12 +184,17 @@
 
     private async Task PopulateLists()
     {
-        await HandleUserOperation(async () =>
+        try
         {
             await EventService.GetAllEvents();
             await TicketService.GetAllTickets();
             await UserService.GetAllUsers();
-        }, "Lists populated successfully");
+            Console.WriteLine("Lists populated successfully");
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"Error while populating lists: {ex}");
+        }
     }
 
     //users
@@ -386,12 +392,12 @@
 
     private async Task DeleteEvent(int id)
     {
-        await HandleUserOperation(async () =>
+        await HandleEventOperation(async () =>
         {
-            if (await UserService.DeleteUser(id))
+            if (await EventService.DeleteEvent(id))
             {
-                ClearUser();
-                ShowPopup("Success", "User deleted successfully");
+                ClearEvent();
+                ShowPopup("Success", "Event deleted successfully");
             }
         }, null);
     }
@@ -456,12 +462,13 @@
     private void AddTicket()
     {
         ClearTicket();
-        _currentTicket = new TicketDto() 
-        { 
-            UserId = 0,
-            EventId = 0,
-            Price = 0,
-            Seat = null };
+        _currentTicket = new TicketDto()
+            {
+                UserId = 0,
+                EventId = 0,
+                Price = 0,
+                Seat = null
+            };
         _ticketFormVisible = true;
     }
 
@@ -469,7 +476,7 @@
     {
         await HandleTicketOperation(async () =>
         {
-            if(await TicketService.DeleteTicket(id))
+            if (await TicketService.DeleteTicket(id))
             {
                 ClearTicket();
                 ShowPopup("Success", "Ticket deleted successfully");
