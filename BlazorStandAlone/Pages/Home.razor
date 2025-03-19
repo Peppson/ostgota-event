@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using BlazorStandAlone.Models
+@using BlazorStandAlone.Components
 @inject SessionStorageService SessionStorage
 @inject NavigationManager NavigationManager
 @inject HttpClient HttpClient
@@ -8,10 +9,20 @@
 <PageTitle>Östgöta Event</PageTitle>
 
 <section class="landing-page">
-    <video autoplay muted loop playsinline preload="auto" class="background-video">
+    <video autoplay muted loop playsinline class="background-video">
         <source src="movies/ostgota-event-3.mp4" type="video/mp4">
     </video>
+    <div class="landing-page-icon-wrapper">
+        <a id="landing-page-link" href="#event-section">
+            <i id="landing-page-arrow" class="fa-solid fa-arrow-down"></i>
+        </a> 
+    </div>
 </section>
+
+@*
+dunno kanske todo  
+<CostumerSupport></CostumerSupport> 
+*@
 
 <section id="event-section" class="event-section">
     <header class="event-section-header">
@@ -132,6 +143,7 @@
 
     </div>
 </section>
+
 
 @* JS to the rescue - WHY WOULD YOU EVER SAY THAT!?*@
 <script>

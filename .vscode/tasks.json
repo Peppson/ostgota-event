@@ -17,7 +17,7 @@
           {
             "label": "Run Blazor",
             "command": "dotnet",
-            "args": ["run", "--project", "BlazorStandAlone"],
+            "args": ["watch", "--project", "BlazorStandAlone"],
             "group": "build",
             "problemMatcher": [],
             "isBackground": true,

@@ -1,0 +1,86 @@
+<header id="site-header" class="header">
+    <a class="logo-wrapper" href="">
+        <img src="icons/logo-white.svg" alt="Logo" class="header-logo">
+    </a>
+    <nav class="nav">
+        <NavLink class="nav-link" href="#event-section">
+            <i id="event-icon" class="fa-solid fa-location-dot header-icons"></i> Event
+        </NavLink>
+        <NavLink class="nav-link" href="#event-section">
+            <i id="boka-icon" class="fa-solid fa-paper-plane header-icons"></i> Boka
+        </NavLink>
+        <NavLink class="nav-link" href="/login" Match="NavLinkMatch.All">
+            <i id="login-icon" class="fa-solid fa-arrow-right-to-bracket header-icons"></i> Logga in
+        </NavLink>
+    </nav>
+</header>
+
+@* Blazor being Blazor... *@
+<style>
+    header {
+        background: transparent;
+        display: flex;
+        padding: 20px;
+        padding-right: 50px;
+        padding-left: 50px;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .logo-wrapper {
+        padding: 8px;
+    }
+
+    .header-logo {
+        width: 110px;  
+        height: auto; 
+        position: absolute;
+    }
+
+    .header-icons {
+        font-size: 20px;
+        vertical-align: baseline;
+        position: relative;
+    }
+
+    #event-icon {
+        top: -2px;
+    }
+
+    #boka-icon {
+        top: -2px;
+        font-size: 19px;
+    }
+
+    #login-icon {
+        top: -1px;
+    }
+
+    .nav {
+        display: flex;
+        margin-left: auto;
+        padding-top: 30px;
+        padding-right: 20px;
+        gap: 10px;
+    }
+
+    .nav-link {
+        font-size: 24px;
+        padding: 16px 12px;
+        text-decoration: none;
+        display: inline-block;
+        transition: color 0.5s ease-in-out;
+    }
+
+    header .nav-link:hover,
+    footer a:hover, 
+    .nav .nav-link:hover {
+        color: var(--text-color-hover);
+        transform: scale(1.05);
+    }
+
+    .nav-link:link,
+    .nav-link:visited {
+        color: var(--text-color-light);
+    }
+</style>

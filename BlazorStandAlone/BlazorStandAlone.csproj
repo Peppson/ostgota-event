@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <EnableScopedCss>true</EnableScopedCss>
+  </PropertyGroup>
+
 </Project>

@@ -3,10 +3,14 @@
 @inject HttpClient HttpClient
 @inject IUserService UserService
 @using BlazorStandAlone.Components
-@layout NoHeaderLayout
+@layout AdminLayout
 @page "/admin"
 
 <PageTitle>Admin</PageTitle>
+
+<div class="logo-wrapper">
+    <img src="icons/logo-white.svg" alt="Logo" class="header-logo">
+</div>
 
 <div class="admin-background"></div>
 <h1 class="admin-title">Admin Dashboard</h1>
