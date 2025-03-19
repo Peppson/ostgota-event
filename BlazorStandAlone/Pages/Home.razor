@@ -65,7 +65,7 @@ dunno kanske todo
 
                 <div class="event-card-info">
                     <h3>@ev.Name</h3>
-                    <p class="event-description">@ev.Description</p>
+                    <p class="event-description">@GetClampedDescription(ev.Description)</p>
                     <p id="event-card-address">@ev.Address, @ev.City
                         <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(ev.Address),@Uri.EscapeDataString(ev.City)" 
                         class="map-icon" target="_blank"> 
@@ -101,8 +101,6 @@ dunno kanske todo
                         {
                             lowTicketThreshold = null;
                         }
-
-
                     }
                     @if (remainingTickets.HasValue)
                     {
@@ -112,15 +110,15 @@ dunno kanske todo
                         }
                         else if (remainingTickets <= lowTicketThreshold)
                         {
-                            <p class="few-tickets-text">Endast @remainingTickets biljetter kvar!</p>
+                            <p class="few-tickets-text">@remainingTickets biljetter kvar!</p>
                         }
                     }
 
                     <div class="event-card-button-container">
-                        <button @onclick="() => OpenModal(ev)">Visa mer info</button>
+                        <button @onclick="() => OpenModal(ev)">Visa info</button>
                         @if (ev.AccessType == AccessType.Free && !ev.HasSeat)
                         {
-                            <p class="free-text">Gratis!</p>
+                            <button class="not-a-button">Gratis!</button>
                         }
                         else if (ev.AccessType == AccessType.Free && ev.HasSeat)
                         {
@@ -133,11 +131,8 @@ dunno kanske todo
                     </div>
                 </div>
             </div>
-            
-
         }
- 
- 
+
         <div class="pagination-buttons">
             <button @onclick="PreviousPage" disabled="@IsPreviousDisabled">Föregående</button>
             <span>Sida @CurrentPage av @TotalPages</span>
@@ -334,6 +329,17 @@ dunno kanske todo
         }
         StateHasChanged();
     }
+
+    private string GetClampedDescription(string description)
+    {   
+        const int threshold = 220;
+
+        if (description.Length <= threshold)
+            return description;
+
+        return description.Substring(0, threshold) + "...";
+    }
+
 
     @* OPEN SHOW MORE INFO MODAL *@
 

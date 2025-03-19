@@ -33,14 +33,14 @@
     list-style: none;
     padding: 0;
     margin: 8px 0;
-    transition: color 0.5s ease-in-out;
+    transition: Transform 0.5s ease-in-out;
 }
 
 .footer-links a,
 .footer-contact a {
     color: var(--text-color-light);
     text-decoration: none;
-    transition: color 0.5s ease-in-out;
+    transition: Transform 0.2s ease-in-out;
 }
 
 .footer-social a {
@@ -67,5 +67,5 @@
 footer a:hover, 
 .nav .nav-link:hover {
     color: var(--text-color-hover);
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
