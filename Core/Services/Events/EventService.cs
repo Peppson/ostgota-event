@@ -55,6 +55,7 @@ public class EventService(IDatabase DbContext) : IEventService
         existingEvent.ImagePath = updatedEvent.ImagePath;
         existingEvent.TicketsMax = updatedEvent.TicketsMax;
         existingEvent.TicketsSold = updatedEvent.TicketsSold;
+        existingEvent.Price = updatedEvent.Price;
 
         await _db.SaveChangesAsync();
 

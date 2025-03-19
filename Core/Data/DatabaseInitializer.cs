@@ -10,6 +10,7 @@ public class DatabaseInitializer(Database db)
         if (_db.Database.EnsureCreated())
         {
             await SeedDatabase();
+            //await SeedDatabaseDebug(); //TODO
         }
     }
 
@@ -297,6 +298,53 @@ public class DatabaseInitializer(Database db)
         await _db.Tickets.AddAsync(ticket2);
         await _db.Tickets.AddAsync(ticket3);
         await _db.Tickets.AddAsync(ticket4);
+        await _db.SaveChangesAsync();
+    }
+
+    private async Task SeedDatabaseDebug()
+    {
+        var user = new User
+        {
+            Username = "user",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("password"),
+            Email = "user@example.com",
+            PhoneNumber = "123-456-7890",
+        };
+
+        var sampleEvent1 = new Event
+        {
+            Name = "Chad Event",
+            Description = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            City = "Chad City",
+            AccessType = AccessType.Paid,
+            StartTime = DateTime.UtcNow,
+            EndTime = DateTime.UtcNow.AddHours(3),
+            Address = "Kungsberget 3",
+            TicketsMax = 2000,
+            TicketsSold = 0,
+            //HasSeat = false,                  // default
+            ImagePath = "images/Knight.jpg",   // nullable
+            Price = 999
+        };
+
+        await _db.Users.AddAsync(user);
+        await _db.Events.AddAsync(sampleEvent1);
+        await _db.SaveChangesAsync();
+
+        var ticket = new Ticket
+        {
+            UserId = _db.Users.First().Id,
+            User = _db.Users.First(),
+            EventId = _db.Events.First().Id,
+            Event = _db.Events.First(),
+            Price = _db.Events.First().AccessType == AccessType.Paid ? sampleEvent1.Price : 0,
+            Seat = "A1",
+        };
+
+        user.BuyTicket(ticket);
+        sampleEvent1.RegisterTicket();
+        
+        await _db.Tickets.AddAsync(ticket);
         await _db.SaveChangesAsync();
     }
 }

@@ -11,21 +11,7 @@ public class Ticket
     public int EventId { get; set; }
     public required Event Event { get; set; }
     public string? Seat { get; set; }
-    public string Title => Event.Name;
     [Required]
-    public decimal Price
-    {
-        get
-        {
-            return _price;
-        }
-        set
-        {
-            if (Event.AccessType == AccessType.Free)
-                _price = 0;
-            else
-                _price = value;
-        }
-    }
-    private decimal _price;
+    public required decimal Price { get; set; }
+    public string Title => Event.Name;
 }

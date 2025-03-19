@@ -39,8 +39,7 @@ dunno kanske todo
                 *@
             </div>
             <div class="sort-dropdown">
-                <label for="sortOptions">Sortera:</label>
-                <select id="sortOptions" @onchange="SortChanged">
+                <select id="sort-options" @onchange="SortChanged">
                     <option value="date">Närmaste datum</option>
                     <option value="date-desc">Senaste datum</option>
                     <option value="name">Namn A-Ö</option>
@@ -52,6 +51,7 @@ dunno kanske todo
                     <option value="size">Mindre event först</option>
                     <option value="size-desc">Större event först</option>
                 </select>
+                <i class="fa-solid fa-arrow-up-wide-short"></i>
             </div>
         </div>
     </header>

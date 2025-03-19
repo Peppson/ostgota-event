@@ -25,7 +25,23 @@ public class Event
     [Required]
     public required int TicketsSold { get; set; } = 0;
     [Required]
-    public required decimal Price { get; set; } = 0;
+    public required decimal Price
+    {
+        get 
+        {
+            return _price;
+        }
+        set
+        {
+            if (AccessType == AccessType.Free)
+                _price = 0;
+            else
+                _price = value;
+        }
+    }
+    private decimal _price;
+
+
     public int? RemainingTickets
     {
         get
