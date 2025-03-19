@@ -19,6 +19,7 @@ public class Program
         });
         builder.Services.AddScoped<SessionStorageService>();
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IEventService, EventService>();
 
         await builder.Build().RunAsync();
     }
