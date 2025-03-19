@@ -2,16 +2,24 @@
     --text-color-light: white;
     --text-color-dark: black;
     --text-color-hover: gold;
+
     --background-color-light: white;
     --background-color-mid: #e0e0e0;
+    --background-color-grey: rgb(160, 160, 160);
     --background-color-dark: rgb(153, 136, 136);
-    --header-color: #2c3e50;
-    --admin-border-color: #3498db;
-    --admin-button-color: #3498db;
-    --admin-button-hover: #bdc3c7;
-    --error-color: #dc3545;
+    
+    --header-color: #427bb4; /* #2c3e50 */
+    --home-button-color: rgb(31, 209, 209);
+    --home-button-color-grey: lightgray;
+    --home-date-color: rgb(31, 170, 66);
+
     --success-color: #198754;
-    --warning-color: #ffc107;
+    --warning-color: darkorange;
+    --error-color: #dc3545;
+
+    --admin-button-color: #3498db;
+    --admin-border-color: #3498db;
+    --admin-button-hover: #bdc3c7;
 }
 
 * {
