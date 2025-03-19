@@ -12,6 +12,7 @@ public record EventCreateDTO
     public bool HasSeat { get; set; }
     public required string ImagePath { get; set; }
     public int? TicketsMax { get; set; }
+    public required decimal Price { get; set; }
 };
 
 public record EventUpdateDTO 
@@ -27,4 +28,5 @@ public record EventUpdateDTO
     public required string ImagePath { get; set; }
     public int? TicketsMax { get; set; }
     public int TicketsSold { get; set; }
+    public required decimal Price { get; set; }
 };

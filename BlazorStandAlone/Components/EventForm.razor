@@ -68,6 +68,12 @@
         <ValidationMessage For="@(() => EventModel.ImagePath)" />
     </div>
 
+    <div class="form-group">
+        <label><strong>Price:</strong></label>
+        <InputNumber @bind-Value="EventModel.Price" @bind-Value:format="0.00" />
+        <ValidationMessage For="@(() => EventModel.Price)" />
+    </div>
+
     <div class="button-container">
         <button type="submit">Save</button>
         <button type="button" @onclick="Cancel">Cancel</button>

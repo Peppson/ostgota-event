@@ -115,6 +115,7 @@
                 <div class="info-box"><strong>Image path:</strong> @_currentEvent.ImagePath</div>
                 <div class="info-box"><strong>Max tickets:</strong> @_currentEvent.TicketsMax</div>
                 <div class="info-box"><strong>Tickets sold:</strong> @_currentEvent.TicketsSold</div>
+                <div class="info-box"><strong>Price:</strong> @_currentEvent.Price</div>
                 <button @onclick="() => EditEvent(_currentEvent)">Edit</button>
                 <button @onclick="() => DeleteEvent(_currentEvent.Id)">Delete</button>
                 <button @onclick="ClearEvent">Clear</button>
@@ -348,12 +349,12 @@
                 HasSeat = ev.HasSeat,
                 ImagePath = ev.ImagePath,
                 TicketsMax = ev.TicketsMax,
-                TicketsSold = ev.TicketsSold
+                TicketsSold = ev.TicketsSold,
+                Price = ev.Price
             };
         _isEventEditMode = true;
         _eventFormVisible = true;
         _searchEvent = false;
-
     }
 
     private void HideEventForm() => _eventFormVisible = false;
@@ -392,7 +393,8 @@
             HasSeat = false,
             ImagePath = "images/default.jpg",
             TicketsMax = null,
-            TicketsSold = 0
+            TicketsSold = 0,
+            Price = 0
         };
         _isEventEditMode = false;
         _eventFormVisible = true;

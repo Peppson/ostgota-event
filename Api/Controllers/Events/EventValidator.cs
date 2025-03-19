@@ -23,6 +23,10 @@ public class EventCreateValidator : AbstractValidator<EventCreateDTO>
         RuleFor(x => x.TicketsMax)
           .GreaterThan(0)
           .When(x => x.AccessType != AccessType.Free || x.HasSeat);
+        RuleFor(x => x.Price)
+            .GreaterThanOrEqualTo(0)
+            .When(x => x.AccessType == AccessType.Paid)
+            .WithMessage("Price is required for paid events");
     }
 }
 
@@ -51,5 +55,9 @@ public class EventUpdateValidator : AbstractValidator<EventUpdateDTO>
           .When(x => x.AccessType != AccessType.Free || x.HasSeat);
         RuleFor(x => x.TicketsSold).GreaterThanOrEqualTo(0);
         RuleFor(x => x.TicketsSold).LessThan(x => x.TicketsMax).When(x => x.TicketsMax != null);
+        RuleFor(x => x.Price)
+            .GreaterThanOrEqualTo(0)
+            .When(x => x.AccessType == AccessType.Paid)
+            .WithMessage("Price is required for paid events");
     }
 }

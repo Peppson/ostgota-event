@@ -73,7 +73,8 @@ public class DatabaseInitializer(Database db)
             TicketsMax = 2000,
             TicketsSold = 0,
             //HasSeat = false,                  // default
-            ImagePath = "images/Knight.jpg"     // nullable
+            ImagePath = "images/Knight.jpg",   // nullable
+            Price = 0
         };
 
         var sampleEvent2 = new Event
@@ -88,7 +89,8 @@ public class DatabaseInitializer(Database db)
             TicketsMax = 100,
             TicketsSold = 0,
             //HasSeat = false,                  // default
-            ImagePath = "images/Food.jpg"
+            ImagePath = "images/Food.jpg",
+            Price = 0
         };
 
         var sampleEvent3 = new Event
@@ -103,7 +105,8 @@ public class DatabaseInitializer(Database db)
             TicketsMax = 500,
             TicketsSold = 0,
             //HasSeat = false,                  // default
-            ImagePath = "images/Talk.jpg"
+            ImagePath = "images/Talk.jpg",
+            Price = 0
         };
         var sampleEvent4 = new Event
         {
@@ -117,7 +120,8 @@ public class DatabaseInitializer(Database db)
             TicketsMax = null,
             TicketsSold = 0,
             //HasSeat = false,                  // default
-            ImagePath = "images/Art.jpg"
+            ImagePath = "images/Art.jpg",
+            Price = 0
         };
         var sampleEvent5 = new Event
         {
@@ -130,7 +134,8 @@ public class DatabaseInitializer(Database db)
             Address = "Stora Torget",
             TicketsMax = null, 
             TicketsSold = 0,
-            ImagePath = "images/Market.jpg"
+            ImagePath = "images/Market.jpg",
+            Price = 0
         };
 
         var sampleEvent6 = new Event
@@ -144,7 +149,8 @@ public class DatabaseInitializer(Database db)
             Address = "Vätterstranden",
             TicketsMax = 3000,
             TicketsSold = 0,
-            ImagePath = "images/Festival.jpg"
+            ImagePath = "images/Festival.jpg",
+            Price = 0
         };
 
         var sampleEvent7 = new Event
@@ -158,7 +164,8 @@ public class DatabaseInitializer(Database db)
             Address = "Gamla Linköping",
             TicketsMax = null,
             TicketsSold = 0,
-            ImagePath = "images/Run.jpg"
+            ImagePath = "images/Run.jpg",
+            Price = 0
         };
 
         var sampleEvent8 = new Event
@@ -172,7 +179,8 @@ public class DatabaseInitializer(Database db)
             Address = "Stadshuset",
             TicketsMax = 5000,
             TicketsSold = 0,
-            ImagePath = "images/Spa.jpg"
+            ImagePath = "images/Spa.jpg",
+            Price = 0
         };
 
         var sampleEvent9 = new Event
@@ -186,7 +194,8 @@ public class DatabaseInitializer(Database db)
             Address = "Vadstena Slott",
             TicketsMax = 800,
             TicketsSold = 0,
-            ImagePath = "images/Whiskey.jpg"
+            ImagePath = "images/Whiskey.jpg",
+            Price = 0
         };
 
         var sampleEvent10 = new Event
@@ -200,7 +209,8 @@ public class DatabaseInitializer(Database db)
             Address = "Torget i Kisa",
             TicketsMax = 100,
             TicketsSold = 0,
-            ImagePath = "images/MantorpRacing.jpg"
+            ImagePath = "images/MantorpRacing.jpg",
+            Price = 0
         };
 
 
