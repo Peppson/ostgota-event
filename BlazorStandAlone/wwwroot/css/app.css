@@ -9,13 +9,14 @@
     --background-color-grey: rgb(55, 165, 40);
     --background-color-dark: rgb(153, 136, 136);
     
-    --home-button-color: #6eb46c /* rgb(82, 165, 103) */;
+    --home-button-color: #73c770;
     --home-button-color-grey: lightgray;
-    --home-date-color: rgb(0, 153, 255); /*rgb(0, 153, 255)*/
+    --home-date-color: rgb(124, 199, 209); 
+    --home-free-color: #198754;
 
     --success-color: #198754;
-    --warning-color: darkorange;
-    --error-color: #dc3545;
+    --warning-color: rgb(255, 123, 0);
+    --error-color: #da2828;
 
     --admin-button-color: #3498db;
     --admin-border-color: #3498db;
@@ -96,7 +97,7 @@ body {
 .admin-TODO {
     font-size: 16px;
     padding: 8px 12px;
-    color: red;
+    color: white;
     text-decoration: none;
     display: inline-block;
     position: absolute;

@@ -15,5 +15,4 @@ public record TicketCreateDTO
     public int UserId { get; set; }
     public int EventId { get; set; }
     public string? Seat { get; set; } 
-    public decimal Price { get; set; }
 }

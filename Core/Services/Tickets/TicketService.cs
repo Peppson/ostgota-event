@@ -12,7 +12,7 @@ public class TicketService(IDatabase DbContext) : ITicketService
             .ToListAsync();
     }
 
-    public async Task<Ticket?> AddTicket(int userId, int eventId, decimal price, string? seat)
+    public async Task<Ticket?> AddTicket(int userId, int eventId, string? seat)
     {   
         var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
         var foundEvent = await _db.Events.FirstOrDefaultAsync(e => e.Id == eventId);
@@ -33,7 +33,7 @@ public class TicketService(IDatabase DbContext) : ITicketService
             EventId = eventId,
             Event = foundEvent,
             Seat = seat,
-            Price = (foundEvent.AccessType == AccessType.Free) ? 0 : price
+            Price = (foundEvent.AccessType == AccessType.Free) ? 0 : foundEvent.Price
         };
 
         user.BuyTicket(newTicket);

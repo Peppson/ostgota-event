@@ -6,6 +6,5 @@ public class TicketValidator : AbstractValidator<TicketCreateDTO>
     {   
         RuleFor(x => x.UserId).GreaterThanOrEqualTo(1).NotNull();
         RuleFor(x => x.EventId).GreaterThanOrEqualTo(1).NotNull();
-        RuleFor(x => x.Price).GreaterThanOrEqualTo(0).NotNull();
     }
 }

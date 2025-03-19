@@ -66,7 +66,7 @@ public class Program
 
         var apiUrl = builder.Configuration["apiUrl"];
         Console.WriteLine($"\n{apiUrl}/swagger\n");
-        
+
         app.Run(apiUrl);
     }
 }

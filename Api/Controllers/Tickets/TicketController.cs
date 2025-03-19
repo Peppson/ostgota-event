@@ -31,7 +31,7 @@ public class TicketController(ITicketService ticketService, Validator validator)
 
         try
         {
-            var ticket = await _ticketService.AddTicket(dto.UserId, dto.EventId, dto.Price, dto.Seat);
+            var ticket = await _ticketService.AddTicket(dto.UserId, dto.EventId, dto.Seat);
             return Ok( GetTicketDTO(ticket!) );
         }
         catch (InvalidOperationException ex)  
