@@ -24,6 +24,8 @@ public class Event
     public int? TicketsMax { get; set; }
     [Required]
     public required int TicketsSold { get; set; } = 0;
+    [Required]
+    public required decimal Price { get; set; } = 0;
     public int? RemainingTickets
     {
         get

@@ -96,7 +96,8 @@ public class EventController(IEventService eventService, Validator validator) : 
             HasSeat = ev.HasSeat,
             ImagePath = ev.ImagePath,
             TicketsMax = ev.TicketsMax,
-            TicketsSold = 0
+            TicketsSold = 0,
+            Price = ev.Price
         };
 
         try
@@ -131,7 +132,8 @@ public class EventController(IEventService eventService, Validator validator) : 
             HasSeat = ev.HasSeat,
             ImagePath = ev.ImagePath,
             TicketsMax = ev.TicketsMax,
-            TicketsSold = ev.TicketsSold
+            TicketsSold = ev.TicketsSold,
+            Price = ev.Price
         };
 
         try
