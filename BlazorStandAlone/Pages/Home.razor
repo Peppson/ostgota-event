@@ -70,8 +70,12 @@ dunno kanske todo
                     <p>@ev.TicketsSold</p>
                     <p>@ev.StartTime - @ev.EndTime</p>
                     <p>@ev.Address, @ev.City
-                        <a href="#" class="map-icon"><i class="fas fa-location-dot"></i></a>
+                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(ev.Address),@Uri.EscapeDataString(ev.City)" 
+                        class="map-icon" target="_blank"> 
+                            <i class="fas fa-location-dot"></i>
+                        </a>
                     </p>
+
                 </div>
 
                 <div class="event-card-buttons">
