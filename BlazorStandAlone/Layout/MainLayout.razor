@@ -3,56 +3,13 @@
 @using BlazorStandAlone.Components
 
 <div class="page">
-
     <NavLink class="admin-TODO" href="/admin">
         AdminTODO
     </NavLink>
 
-    <header id="site-header" class="header">
-        <a class="logo-wrapper" href="">
-            <img src="icons/logo-white.svg" alt="Logo" class="header-logo">
-        </a>
-        <nav class="nav">
-            <NavLink class="nav-link" href="#event-section">
-                <i id="event-icon" class="fa-solid fa-location-dot header-icons"></i> Event
-            </NavLink>
-            <NavLink class="nav-link" href="#event-section">
-                <i id="boka-icon" class="fa-solid fa-paper-plane header-icons"></i> Boka
-            </NavLink>
-            <NavLink class="nav-link" href="/login" Match="NavLinkMatch.All">
-                <i id="login-icon" class="fa-solid fa-arrow-right-to-bracket header-icons"></i> Logga in
-            </NavLink>
-        </nav>
-    </header>
-
+    <AppHeader></AppHeader>
     <main class="content">
         @Body
     </main>
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <a href="" class="footer-link">
-                    <img src="icons/logo-white.svg" alt="Logo" class="footer-logo">
-                    <h2>Östgöta Event</h2>
-                </a>
-            </div>
-            <div class="footer-contact">
-                <h3>Kontakt</h3>
-                <p><a href="mailto:info@ostgotaevent.se">info@ostgotaevent.se</a></p>
-                <p><a href="tel:+46123456789">+46 123 456 789</a></p>
-            </div>
-            <div class="footer-social">
-                <h3>Följ oss</h3>
-                <div id="footer-spacer"></div>
-                <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-twitter"></i></a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Östgöta Event. Alla rättigheter förbehållna.</p>
-        </div>
-    </footer>
-    
+    <AppFooter></AppFooter>
 </div>

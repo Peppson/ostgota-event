@@ -7,6 +7,35 @@
     width: 100%;
 }
 
+.landing-page-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: absolute; 
+    bottom: 0; 
+    z-index: 9999;
+}
+
+#landing-page-arrow {
+    font-size: 36px;
+    color: var(--text-color-light);
+    opacity: 0.98;
+    padding-bottom: 16px;
+    padding-top: 20px;
+    animation: jump 4s infinite ease-in-out;
+    animation-delay: 2s;
+    transition: color 0.5s ease-in-out;
+}
+
+#landing-page-arrow:hover {
+    color: var(--text-color-hover);
+}
+
+#landing-page-link:hover {
+    transform: scale(1.1);
+}
+
 .background-video {
     position: absolute;
     top: 0;
@@ -20,7 +49,7 @@
 .event-section {
     min-height: 100vh;
     width: 100%;
-    background-color: #ffffff;
+    background-color: var(--text-color-light);
 }
 
 .event-section-header {
@@ -29,40 +58,57 @@
     margin-bottom: -40px;
     font-size: 45px;
     width: 100%;
-    
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* background-color: rgb(230, 211, 44); */
-    background-color: #2c3e50;
-    color: white;
+    background-color: var(--header-color);
+    color: var(--text-color-light);
     gap: 20px;
     clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+    z-index: 9999;
+    position: relative;
+}
+
+.event-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+.event-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
 }
 
 .event-input-box {
     display: flex;
-    gap:5px;
+    gap: 5px;
 }
 
 #event-search {
-    flex: 2;
+    flex: 1;
     padding: 10px;
     border: none;
     outline: none;
     font-size: 18px;
+    width: 500px;
 }
 
-.dropbtn {
+.drop-btn {
     font-size: 18px;
-    flex: 1;
+    padding-inline: 0px;
     padding: 10px;
-    text-align: left;
+    width:100px;
+    text-align: center;
     cursor: pointer;
     border: none;
-    color: rgb(0, 0, 0);
-    background-color: rgb(160, 160, 160);
+    color: var(--text-color-dark);
+    background-color: var(--background-color-grey);
 }
 
 .event-container {
@@ -78,9 +124,9 @@
 }
 
 .event-card {
-    width: 60%;
+    width: 1000px;
+    max-width: 80%;
     background-color: transparent;
-    /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
     display: flex;
 
 }
@@ -88,7 +134,8 @@
 .event-img {
     width: 300px;
     height: 300px;
-    box-shadow: -5px -5px 17px -8px rgba(0, 0, 0, 0.75);
+    /* box-shadow: -5px -5px 17px -8px rgba(0, 0, 0, 0.75); */
+    clip-path: polygon(0 6%, 100% 0, 100% 94%, 0 100%);
 }
 
 .event-card-info {
@@ -103,8 +150,8 @@
 
 .event-card,
 .event-img {
-    border-top-left-radius: 35%;
-    border-bottom-left-radius: 15px;
+    /* border-top-left-radius: 35%;
+    border-bottom-left-radius: 15px; */    
 }
 
 .event-card-buttons {
@@ -114,24 +161,33 @@
     align-items: end;
 }
 
+.event-card-button-container {
+    display: flex;
+    gap: 10px;
+}
+
 .event-card-button-container button {
-    flex: 1;
     border: none;
-    background-color: aquamarine;
+    background-color: var(--home-button-color);
     padding: 15px;
     border-radius: 5px;
     cursor: pointer;
 }
 
+.free-text {
+    align-self: center;
+    justify-self: center;
+}
+
 .event-description {
     word-wrap: break-word;
     white-space: normal;
-    max-width: 100%;
+    max-width: 400px;
 }
 
 .event-time {
     font-size: 24px;
-    background-color: rgb(233, 255, 135);
+    background-color: var(--home-date-color);
     border-radius: 50%;
     width: 120px;
     height: 120px;
@@ -144,7 +200,7 @@
 }
 
 .map-icon {
-    color: green;
+    color: var(--home-date-color);
     font-size: 24px;
 }
 
@@ -157,7 +213,46 @@
 .pagination-buttons button {
     padding: 10px;
     border: none;
-    background-color:lightgray;
+    background-color: var(--home-button-color-grey);
     cursor: pointer;
     border-radius: 5px;
+}
+
+@keyframes jump {
+    0% {
+        transform: translateY(0);
+    }
+    8% {
+        transform: translateY(-20px);
+    }
+    16% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.sold-out-text {
+    color: var(--error-color);
+}
+
+.few-tickets-text {
+    color: var(--warning-color);
+}
+
+/* sorting */
+
+.sort-dropdown {
+    font-size: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+/* sorting */
+
+.sort-dropdown {
+    font-size: 20px;
+    display: flex;
+    gap: 20px;
 }
