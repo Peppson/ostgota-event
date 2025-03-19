@@ -6,7 +6,7 @@ namespace BlazorStandAlone.Services
     public interface IUserService
     {
         Task<List<UserDto>> GetAllUsers();
-        Task<UserDto?> GetUserById(int id);
+        UserDto? GetUserById(int id);
         Task<bool> CreateUser(UserDto user);
         Task<bool> UpdateUser(UserDto user);
         Task<bool> DeleteUser(int id);
@@ -62,7 +62,7 @@ namespace BlazorStandAlone.Services
             return _tickets.Where(t => t.UserId == userId).ToList();
         }
 
-        public async Task<UserDto?> GetUserById(int id)
+        public UserDto? GetUserById(int id)
         {
             return _users.FirstOrDefault(u => u.Id == id);
         }
