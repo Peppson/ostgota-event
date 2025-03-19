@@ -67,15 +67,12 @@ dunno kanske todo
                 <div class="event-card-info">
                     <h3>@ev.Name</h3>
                     <p class="event-description">@ev.Description</p>
-                    <p>@ev.TicketsSold</p>
-                    <p>@ev.StartTime - @ev.EndTime</p>
-                    <p>@ev.Address, @ev.City
+                    <p id="event-card-address">@ev.Address, @ev.City
                         <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(ev.Address),@Uri.EscapeDataString(ev.City)" 
                         class="map-icon" target="_blank"> 
                             <i class="fas fa-location-dot"></i>
                         </a>
                     </p>
-
                 </div>
 
                 <div class="event-card-buttons">
@@ -121,7 +118,7 @@ dunno kanske todo
                     }
 
                     <div class="event-card-button-container">
-                        <button>Visa mer info</button>
+                        <button>Visa info</button>
                         @if (ev.AccessType == AccessType.Free && !ev.HasSeat)
                         {
                             <p class="free-text">Gratis!</p>
