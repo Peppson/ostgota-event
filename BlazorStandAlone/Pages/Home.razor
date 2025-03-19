@@ -66,11 +66,9 @@ dunno kanske todo
                 <div class="event-card-info">
                     <h3>@ev.Name</h3>
                     <p class="event-description">@ev.Description</p>
-                    <p>@ev.TicketsSold</p>
-                    <p>@ev.StartTime - @ev.EndTime</p>
-                    <p>@ev.Address, @ev.City
-                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(ev.Address),@Uri.EscapeDataString(ev.City)"
-                            class="map-icon" target="_blank">
+                    <p id="event-card-address">@ev.Address, @ev.City
+                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(ev.Address),@Uri.EscapeDataString(ev.City)" 
+                        class="map-icon" target="_blank"> 
                             <i class="fas fa-location-dot"></i>
                         </a>
                     </p>
