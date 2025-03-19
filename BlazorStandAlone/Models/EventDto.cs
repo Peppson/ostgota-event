@@ -40,7 +40,7 @@ public class EventDto
     [Required(ErrorMessage = "HasSeat value is required")]
     public bool HasSeat { get; set; }
     
-    [Required(ErrorMessage = "Image path is required"), Url(ErrorMessage = "Invalid URL")]
+    [Required(ErrorMessage = "Image path is required")]
     public required string ImagePath { get; set; } 
 }
 

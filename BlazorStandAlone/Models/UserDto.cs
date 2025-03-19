@@ -6,7 +6,7 @@ namespace BlazorStandAlone.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Username is required")]
+        [Required(ErrorMessage = "Username is required"), ]
         [StringLength(30, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 30 characters")]
         public required string Username { get; set; }
 

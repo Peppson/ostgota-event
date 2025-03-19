@@ -10,9 +10,11 @@ namespace BlazorStandAlone.Services
         Task<bool> CreateUser(UserDto user);
         Task<bool> UpdateUser(UserDto user);
         Task<bool> DeleteUser(int id);
-        List<TicketDto> GetUserTickets(int userId);
+        Task<List<TicketDto>> GetUserTickets(int userId);
+        void UpdateTickets(List<TicketDto> tickets);
         List<UserDto> Users { get; }
         int UserCount { get; }
+
     }
 
     public class UserServiceException : Exception
@@ -24,15 +26,17 @@ namespace BlazorStandAlone.Services
     public class UserService : IUserService
     {
         private readonly HttpClient _httpClient;
+        private readonly ITicketService _ticketService;
         private List<UserDto> _users = new();
-        private List<TicketDto> _tickets = new();
+        public List<TicketDto> _tickets = new();
 
         public List<UserDto> Users => _users;
         public int UserCount => _users.Count;
 
-        public UserService(HttpClient httpClient)
+        public UserService(HttpClient httpClient, ITicketService ticketService)
         {
             _httpClient = httpClient;
+            _ticketService = ticketService;
         }
 
         public async Task<List<UserDto>> GetAllUsers()
@@ -45,7 +49,7 @@ namespace BlazorStandAlone.Services
                     _users = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new();
                     foreach (var user in _users)
                     {
-                        user.Tickets = GetUserTickets(user.Id);
+                        user.Tickets = await GetUserTickets(user.Id);
                     }
                     return _users;
                 }
@@ -57,8 +61,9 @@ namespace BlazorStandAlone.Services
             }
         }
 
-        public List<TicketDto> GetUserTickets(int userId)
+        public async Task<List<TicketDto>> GetUserTickets(int userId)
         {
+            _tickets = await _ticketService.GetAllTickets();
             return _tickets.Where(t => t.UserId == userId).ToList();
         }
 
@@ -125,7 +130,10 @@ namespace BlazorStandAlone.Services
 
         public void UpdateTickets(List<TicketDto> tickets)
         {
-            _tickets = tickets;
+            foreach(var user in _users)
+            {
+                user.Tickets = tickets.Where(t => t.UserId == user.Id).ToList();
+            }
         }
     }
 }

@@ -381,15 +381,19 @@
     {
         ClearEvent();
         _currentEvent = new EventDto()
-            {
-                Name = null!,
-                City = null!,
-                Description = null!,
-                Address = null!,
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now.AddHours(1),
-                ImagePath = "hehe"
-            };
+        {
+            Name = string.Empty,
+            Description = string.Empty,
+            City = string.Empty,
+            Address = string.Empty,
+            StartTime = DateTime.Now,
+            EndTime = DateTime.Now.AddHours(1),
+            AccessType = AccessType.Free,
+            HasSeat = false,
+            ImagePath = "images/default.jpg",
+            TicketsMax = null,
+            TicketsSold = 0
+        };
         _isEventEditMode = false;
         _eventFormVisible = true;
     }
@@ -461,6 +465,8 @@
             HideTicketForm();
             StateHasChanged();
         }, null);
+        UserService.UpdateTickets(TicketService.Tickets);
+        StateHasChanged();
     }
 
     private void AddTicket()
@@ -486,6 +492,7 @@
                 ShowPopup("Success", "Ticket deleted successfully");
             }
         }, null);
+        UserService.UpdateTickets(TicketService.Tickets);
     }
 
     private void ClearTicket()
