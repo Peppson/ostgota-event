@@ -29,7 +29,7 @@
     margin-bottom: -40px;
     font-size: 45px;
     width: 100%;
-    
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -43,7 +43,7 @@
 
 .event-input-box {
     display: flex;
-    gap:5px;
+    gap: 5px;
 }
 
 #event-search {
@@ -78,7 +78,8 @@
 }
 
 .event-card {
-    width: 60%;
+    width: 1000px;
+    max-width: 80%;
     background-color: transparent;
     /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
     display: flex;
@@ -114,8 +115,12 @@
     align-items: end;
 }
 
+.event-card-button-container {
+    display: flex;
+    gap: 10px;
+}
+
 .event-card-button-container button {
-    flex: 1;
     border: none;
     background-color: aquamarine;
     padding: 15px;
@@ -123,10 +128,15 @@
     cursor: pointer;
 }
 
+.free-text {
+    align-self: center;
+    justify-self: center;
+}
+
 .event-description {
     word-wrap: break-word;
     white-space: normal;
-    max-width: 100%;
+    max-width: 400px;
 }
 
 .event-time {
@@ -157,7 +167,15 @@
 .pagination-buttons button {
     padding: 10px;
     border: none;
-    background-color:lightgray;
+    background-color: lightgray;
     cursor: pointer;
     border-radius: 5px;
+}
+
+.sold-out-text {
+    color: red;
+}
+
+.few-tickets-text {
+    color: darkorange;
 }
