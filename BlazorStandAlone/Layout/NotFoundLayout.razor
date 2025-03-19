@@ -1,0 +1,23 @@
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+<div id="not-found-page" class="page">
+    <main id="not-found-body" class="content">
+        @Body
+    </main>
+    <AppFooter></AppFooter>
+</div>
+
+<style>
+    #not-found-page {
+        height: 100vh;
+    }
+
+    #not-found-body {
+        height: 100%;
+    }
+
+    main p {
+        font-size: 1.3rem;
+    }
+</style>

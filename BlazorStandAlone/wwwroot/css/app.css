@@ -1,3 +1,19 @@
+:root {
+    --text-color-light: white;
+    --text-color-dark: black;
+    --text-color-hover: gold;
+    --background-color-light: white;
+    --background-color-mid: #e0e0e0;
+    --background-color-dark: rgb(153, 136, 136);
+    --header-color: #2c3e50;
+    --admin-border-color: #3498db;
+    --admin-button-color: #3498db;
+    --admin-button-hover: #bdc3c7;
+    --error-color: #dc3545;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -28,75 +44,47 @@ body {
     flex-direction: column;
 }
 
-/* header */
+/* WASM loading page */
+#app-loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
 
-header {
-    background: transparent;
-    display: flex;
-    padding: 20px;
-    padding-right: 50px;
-    padding-left: 50px;
+#app-loading img {
+    width: 200px;
+    height: auto;
+}
+
+#app-loading p {
+    margin-top: 30px;
+    font-size: 1.4rem;
+    color: var(--text-color-dark);
+}
+
+/* Blazor error UI */
+#blazor-error-ui {
+    background: rgb(185, 185, 177);
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
     width: 100%;
-    justify-content: space-between;
+    z-index: 1000;
 }
 
-.logo-wrapper {
-    padding: 8px;
-}
-
-.header-logo {
-    width: 110px;  
-    height: auto; 
+#blazor-error-ui .dismiss {
+    cursor: pointer;
     position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
 }
 
-.header-icons {
-    font-size: 20px;
-    vertical-align: baseline;
-    position: relative;
-}
-
-#event-icon {
-    top: -2px;
-}
-
-#boka-icon {
-    top: -2px;
-    font-size: 19px;
-}
-
-#login-icon {
-    top: -1px;
-}
-
-.nav {
-    display: flex;
-    margin-left: auto;
-    padding-top: 30px;
-    padding-right: 20px;
-    gap: 10px;
-}
-
-.nav-link {
-    font-size: 24px;
-    padding: 16px 12px;
-    text-decoration: none;
-    display: inline-block;
-    transition: color 0.5s ease-in-out;
-}
-
-header .nav-link:hover,
-footer a:hover, 
-.nav .nav-link:hover {
-    color: gold;
-    transform: scale(1.05);
-}
-
-.nav-link:link,
-.nav-link:visited {
-    color: white;
-}
-
+/* TODO */
 .admin-TODO {
     font-size: 16px;
     padding: 8px 12px;
@@ -108,72 +96,4 @@ footer a:hover,
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9999;
-}
-
-/* footer */
-
-.footer {
-    background-color: #2c3e50;
-    color: white;
-    margin-top: -20px;
-    padding-top: 120px;
-    padding-bottom: 50px;
-    text-align: center;
-    position: relative;
-    clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
-}
-
-.footer-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.footer-brand {
-    text-align: center;
-}
-
-.footer-logo {
-    width: 110px;
-    height: 110px;
-}
-
-.footer-links ul,
-.footer-contact p,
-.footer-social a {
-    list-style: none;
-    padding: 0;
-    margin: 8px 0;
-    transition: color 0.5s ease-in-out;
-}
-
-.footer-links a,
-.footer-contact a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.5s ease-in-out;
-}
-
-.footer-social a {
-    color: white;
-    font-size: 24px;
-    margin: 0 10px;
-}
-
-#footer-spacer {
-    padding-top: 6px;
-}
-
-.footer-bottom {
-    margin-top: 30px;
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-.footer-link {
-    text-decoration: none;
-    color: white;
 }
