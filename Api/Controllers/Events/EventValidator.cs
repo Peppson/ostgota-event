@@ -50,6 +50,6 @@ public class EventUpdateValidator : AbstractValidator<EventUpdateDTO>
           .GreaterThan(0)
           .When(x => x.AccessType != AccessType.Free || x.HasSeat);
         RuleFor(x => x.TicketsSold).GreaterThanOrEqualTo(0);
-        RuleFor(x => x.TicketsSold).LessThan(x => x.TicketsMax);
+        RuleFor(x => x.TicketsSold).LessThan(x => x.TicketsMax).When(x => x.TicketsMax != null);
     }
 }
