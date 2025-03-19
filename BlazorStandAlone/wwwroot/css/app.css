@@ -1,17 +1,17 @@
 :root {
     --text-color-light: white;
     --text-color-dark: black;
-    --text-color-hover: gold;
+    --text-color-hover: rgb(0, 153, 255);
 
+    --header-color: #313131; /*#313131*/
     --background-color-light: white;
     --background-color-mid: #e0e0e0;
-    --background-color-grey: rgb(160, 160, 160);
+    --background-color-grey: rgb(31, 170, 66);
     --background-color-dark: rgb(153, 136, 136);
     
-    --header-color: #427bb4; /* #2c3e50 */
-    --home-button-color: rgb(31, 209, 209);
+    --home-button-color: rgb(31, 170, 66);
     --home-button-color-grey: lightgray;
-    --home-date-color: rgb(31, 170, 66);
+    --home-date-color: rgb(0, 153, 255);
 
     --success-color: #198754;
     --warning-color: darkorange;
