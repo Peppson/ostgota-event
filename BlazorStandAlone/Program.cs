@@ -20,6 +20,7 @@ public class Program
         builder.Services.AddScoped<SessionStorageService>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IEventService, EventService>();
+        builder.Services.AddScoped<ITicketService, TicketService>();
 
         await builder.Build().RunAsync();
     }

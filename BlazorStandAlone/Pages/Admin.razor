@@ -3,6 +3,7 @@
 @inject HttpClient HttpClient
 @inject IUserService UserService
 @inject IEventService EventService
+@inject ITicketService TicketService
 @using BlazorStandAlone.Components
 @layout NoHeaderLayout
 @page "/admin"
@@ -62,26 +63,26 @@
     </div>
 
     <div class="box">
-        <div class="box-header">Amount of Tickets: @ticketNumber</div>
+        <div class="box-header">Amount of Tickets: @TicketService.TicketCount</div>
         <div class="search-section">
-            <input @bind="ticketId" placeholder="Enter Ticket ID" />
+            <input @bind="_ticketId" placeholder="Enter Ticket ID" />
             <button @onclick="GetTicketById">Search</button>
             <button @onclick="AddTicket">Add Ticket</button>
         </div>
         <div class="box-content">
-            @if (SearchTicket && CurrentTicket != null)
+            @if (_searchTicket && _currentTicket != null)
             {
-                <div class="info-box"><strong>Ticket ID:</strong> @CurrentTicket.Id</div>
-                <div class="info-box"><strong>Ticket UserID:</strong> @CurrentTicket.UserId</div>
-                <div class="info-box"><strong>Ticket EventID:</strong> @CurrentTicket.EventId</div>
-                <div class="info-box"><strong>Ticket Price:</strong> @CurrentTicket.Price</div>
-                <div class="info-box"><strong>Seat:</strong> @CurrentTicket.Seat</div>
-                <button @onclick="() => DeleteTicket(CurrentTicket.Id)">Delete</button>
+                <div class="info-box"><strong>Ticket ID:</strong> @_currentTicket.Id</div>
+                <div class="info-box"><strong>Ticket UserID:</strong> @_currentTicket.UserId</div>
+                <div class="info-box"><strong>Ticket EventID:</strong> @_currentTicket.EventId</div>
+                <div class="info-box"><strong>Ticket Price:</strong> @_currentTicket.Price</div>
+                <div class="info-box"><strong>Seat:</strong> @_currentTicket.Seat</div>
+                <button @onclick="() => DeleteTicket(_currentTicket.Id)">Delete</button>
                 <button @onclick="ClearTicket">Clear</button>
             }
-            @if (TicketFormVisible)
+            @if (_ticketFormVisible)
             {
-                <TicketForm TicketModel="CurrentTicket"
+                <TicketForm TicketModel="_currentTicket"
                 OnSave="SaveTicket"
                 OnCancel="HideTicketForm" />
             }
@@ -146,15 +147,14 @@
     private EventDto? _currentEvent;
     private int _eventId;
 
+    //ticket
+    private bool _ticketFormVisible;
+    private bool _isTicketEditMode;
+    private bool _searchTicket;
+    private TicketDto? _currentTicket;
+    private int _ticketId;
 
-    //tickets
-    public List<TicketDto> tickets { get; set; } = new();
-    public int ticketNumber { get; set; }
-    public int ticketId { get; set; }
-    private bool TicketFormVisible = false;
-    private bool SearchTicket = false;
-    public TicketDto? CurrentTicket { get; set; } = null;
-
+    //global
     protected override async Task OnInitializedAsync()
     {
         if (development)
@@ -186,11 +186,12 @@
         await HandleUserOperation(async () =>
         {
             await EventService.GetAllEvents();
-            await GetTicketsAsync();
+            await TicketService.GetAllTickets();
             await UserService.GetAllUsers();
         }, "Lists populated successfully");
     }
 
+    //users
     private void GetUserById()
     {
         HideUserForm();
@@ -209,15 +210,15 @@
     private void EditUser(UserDto user)
     {
         _currentUser = new UserDto
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
-            Role = user.Role,
-            Tickets = user.Tickets,
-            CreatedAt = user.CreatedAt
-        };
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Role = user.Role,
+                Tickets = user.Tickets,
+                CreatedAt = user.CreatedAt
+            };
         _isUserEditMode = true;
         _userFormVisible = true;
         _searchUser = false;
@@ -247,14 +248,14 @@
     private void AddUser()
     {
         ClearUser();
-        _currentUser = new UserDto() 
-        { 
-            Username = null!, 
-            Email = null!, 
-            PhoneNumber = null, 
-            Role = UserRole.User, 
-            CreatedAt = DateTime.Now 
-        };
+        _currentUser = new UserDto()
+            {
+                Username = null!,
+                Email = null!,
+                PhoneNumber = null,
+                Role = UserRole.User,
+                CreatedAt = DateTime.Now
+            };
         _isUserEditMode = false;
         _userFormVisible = true;
     }
@@ -307,8 +308,6 @@
     }
 
     //events
-
-
     private void GetEventById()
     {
         HideEventForm();
@@ -371,21 +370,19 @@
     private void AddEvent()
     {
         ClearEvent();
-        _currentEvent = new EventDto() 
-        {
-            Name = null!,
-            City = null!,
-            Description = null!,
-            Address = null!,
-            StartTime = DateTime.Now,
-            EndTime = DateTime.Now.AddHours(1),
-            ImagePath = "hehe" 
-        };
+        _currentEvent = new EventDto()
+            {
+                Name = null!,
+                City = null!,
+                Description = null!,
+                Address = null!,
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now.AddHours(1),
+                ImagePath = "hehe"
+            };
         _isEventEditMode = false;
         _eventFormVisible = true;
     }
-
-
 
     private async Task DeleteEvent(int id)
     {
@@ -428,104 +425,84 @@
     }
 
     //tickets
-    private async Task GetTicketsAsync()
-    {
-        try
-        {
-            var response = await HttpClient.GetAsync("api/ticket/get");
-            if (response.IsSuccessStatusCode)
-            {
-                tickets = await response.Content.ReadFromJsonAsync<List<TicketDto>>() ?? new();
-                ticketNumber = tickets.Count;
-                StateHasChanged();
-            }
-            else
-            {
-                Console.WriteLine($"Error fetching tickets: {response.StatusCode}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception while fetching tickets: {ex.Message}");
-        }
-    }
-
     private void GetTicketById()
     {
         HideTicketForm();
-        CurrentTicket = tickets.Where(t => t.Id == ticketId).FirstOrDefault();
-        if (CurrentTicket == null)
+        var ticket = TicketService.GetTicketById(_ticketId);
+        if (ticket == null)
         {
-            Console.WriteLine("ticket was not found");
+            ShowPopup("Error", "Ticket not found");
         }
         else
         {
-            SearchTicket = true;
+            _currentTicket = ticket;
+            _searchTicket = true;
         }
     }
 
-
-    private void HideTicketForm() => TicketFormVisible = false;
+    private void HideTicketForm() => _ticketFormVisible = false;
 
     private async void SaveTicket(TicketDto ticket)
     {
-        await CreateTicket(ticket);
-        HideTicketForm();
+        await HandleTicketOperation(async () =>
+        {
+            await TicketService.CreateTicket(ticket);
+            ShowPopup("Success", "Ticket created successfully");
+            HideTicketForm();
+            StateHasChanged();
+        }, null);
     }
 
     private void AddTicket()
     {
         ClearTicket();
-        CurrentTicket = new TicketDto() { UserId = 0, EventId = 0, Price = 0, Seat = null };
-        TicketFormVisible = true;
+        _currentTicket = new TicketDto() 
+        { 
+            UserId = 0,
+            EventId = 0,
+            Price = 0,
+            Seat = null };
+        _ticketFormVisible = true;
     }
 
-    private async Task CreateTicket(TicketDto ticket)
+    private async Task DeleteTicket(int id)
     {
-        var response = await HttpClient.PostAsJsonAsync("api/ticket/create", ticket);
-        if (response.IsSuccessStatusCode)
+        await HandleTicketOperation(async () =>
         {
-            await GetTicketsAsync();
-            ClearTicket();
-            PopupMessage = "Ticket created successfully.";
-            popupRef?.Show();
-        }
-        else
-        {
-            Console.WriteLine($"error: {response.ReasonPhrase}");
-        }
-    }
-
-    private async Task DeleteTicket(int ticketId)
-    {
-        var response = await HttpClient.DeleteAsync($"api/ticket/delete/{ticketId}");
-        if (response.IsSuccessStatusCode)
-        {
-            await GetTicketsAsync();
-            ClearTicket();
-            PopupMessage = "Ticket deleted successfully";
-            popupRef?.Show();
-
-            if (_currentUser != null)
+            if(await TicketService.DeleteTicket(id))
             {
-                await UserService.GetAllUsers();
-                _currentUser = UserService.Users.FirstOrDefault(u => u.Id == _currentUser.Id);
-                if (_currentUser != null)
-                {
-                    _currentUser.Tickets = UserService.GetUserTickets(_currentUser.Id);
-                }
+                ClearTicket();
+                ShowPopup("Success", "Ticket deleted successfully");
             }
-        }
-        else
-        {
-            Console.WriteLine($"error: {response.StatusCode}");
-        }
+        }, null);
     }
 
     private void ClearTicket()
     {
-        SearchTicket = false;
-        CurrentTicket = null;
+        _searchTicket = false;
+        _currentTicket = null;
+        _ticketFormVisible = false;
+    }
+
+    private async Task HandleTicketOperation(Func<Task> operation, string? successMessage)
+    {
+        try
+        {
+            await operation();
+            if (!string.IsNullOrEmpty(successMessage))
+            {
+                ShowPopup("Success", successMessage);
+            }
+        }
+        catch (TicketServiceException ex)
+        {
+            ShowPopup("Error", ex.Message);
+        }
+        catch (Exception ex)
+        {
+            ShowPopup("error", "An uenexpected error occurred");
+            Console.WriteLine($"Unexpected error: {ex}");
+        }
     }
 }
 
