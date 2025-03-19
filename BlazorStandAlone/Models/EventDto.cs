@@ -40,7 +40,10 @@ public class EventDto
     [Required(ErrorMessage = "HasSeat value is required")]
     public bool HasSeat { get; set; }
     
-    [Required(ErrorMessage = "Image path is required"), Url(ErrorMessage = "Invalid URL")]
-    public required string ImagePath { get; set; } 
+    [Required(ErrorMessage = "Image path is required")]
+    public required string ImagePath { get; set; }
+
+    [Required(ErrorMessage = "Price is required"), Range(0, double.MaxValue, ErrorMessage = "Price must be a positive number")]
+    public required decimal Price { get; set; }
 }
 

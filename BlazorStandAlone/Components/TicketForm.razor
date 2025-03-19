@@ -1,4 +1,5 @@
 ﻿@* TicketForm.razor*@
+@inject IEventService EventService
 
 <EditForm Model="TicketModel" OnValidSubmit="HandleSubmit" class="edit-form">
     <DataAnnotationsValidator />
@@ -12,8 +13,14 @@
     </div>
 
     <div class="form-group">
-        <label><strong>Event Id:</strong></label>
-        <InputNumber @bind-Value="TicketModel.EventId" />
+        <label><strong>Event:</strong></label>
+        <InputSelect @bind-Value="TicketModel.EventId">
+            <option value="">Select an event...</option>
+            @foreach (var ev in PaidEvents)
+            {
+                <option value="@ev.Id">@ev.Name</option>
+            }
+        </InputSelect>
         <ValidationMessage For="@(() => TicketModel.EventId)" />
     </div>
 
@@ -21,12 +28,6 @@
         <label><strong>Seat:</strong></label>
         <InputText @bind-Value="TicketModel.Seat" />
         <ValidationMessage For="@(() => TicketModel.Seat)" />
-    </div>
-
-    <div class="form-group">
-        <label><strong>Price:</strong></label>
-        <InputNumber @bind-Value="TicketModel.Price" @bind-Value:format="0.00" />
-        <ValidationMessage For="@(() => TicketModel.Price)" />
     </div>
 
     <div class="button-container">
@@ -40,18 +41,37 @@
     [Parameter] public EventCallback<TicketDto> OnSave { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
 
+    private List<EventDto> PaidEvents { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPaidEvents();
+    }
+
+    private async Task LoadPaidEvents()
+    {
+        try
+        {
+            await EventService.GetAllEvents();
+            PaidEvents = EventService.Events
+                .Where(e => e.AccessType != AccessType.Free)
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading events: {ex.Message}");
+        }
+    }
+
     private async Task HandleSubmit()
     {
         if(OnSave.HasDelegate)
             await OnSave.InvokeAsync(TicketModel);
-
-
     }
 
     private async Task Cancel()
     {
         if (OnCancel.HasDelegate)
             await OnCancel.InvokeAsync();
-            
     }
 }
