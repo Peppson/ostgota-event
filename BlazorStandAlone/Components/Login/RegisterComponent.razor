@@ -1,0 +1,76 @@
+﻿@*Register Component*@
+@inject HttpClient HttpClient
+
+<Popup @ref="popupRef" Title="@PopupTitle" Message="@PopupMessage"></Popup>
+
+<div class="form-container">
+    <div class="form-title">
+        <h2>Registrera</h2>
+    </div>
+
+    <EditForm Model="@RegisterModel" OnValidSubmit="RegisterUser" class="form-wrapper">
+        <div class="form-fields">
+            <div class="form-group">
+                <label for="username">Användarnamn</label>
+                <InputText id="username" @bind-Value="RegisterModel.Username" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="password">Lösenord</label>
+                <InputText type="password" id="password" @bind-Value="RegisterModel.Password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="email">E-post</label>
+                <InputText id="email" @bind-Value="RegisterModel.Email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="phone">Telefonnummer</label>
+                <InputText id="phone" @bind-Value="RegisterModel.PhoneNumber" class="form-control" />
+            </div>
+        </div>
+        <button type="submit" class="submit-button">Registrera</button>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public UserRegister? RegisterModel { get; set; } = new() {Username = "username", Password = "password", Email="email@email.com"};
+    [Parameter] public EventCallback<UserRegister> OnRegister { get; set; }
+
+    private Popup? popupRef;
+    private string PopupMessage = string.Empty;
+    private string PopupTitle = "Notification";
+    private bool development = true;
+
+    public async Task RegisterUser()
+    {
+        if (OnRegister.HasDelegate)
+        {
+            await OnRegister.InvokeAsync(RegisterModel);
+        }
+    }
+
+    private void ShowPopup(string title, string message)
+    {
+        PopupTitle = title;
+        PopupMessage = message;
+        popupRef?.Show();
+    }
+}
+
+<style>
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .form-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .form-fields {
+        flex: 1;
+    }
+</style>
+

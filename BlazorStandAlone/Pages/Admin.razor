@@ -165,7 +165,7 @@
     {
         if (development)
         {
-            user = new LoginDto() { Username = "admin", Role = UserRole.Admin };
+            user = new LoginDto() { Username = "admin" };
         }
         else
         {
@@ -175,12 +175,6 @@
         if (user == null)
         {
             NavigationManager.NavigateTo("/login");
-            return;
-        }
-
-        if (user.Role != UserRole.Admin)
-        {
-            NavigationManager.NavigateTo("/");
             return;
         }
 
