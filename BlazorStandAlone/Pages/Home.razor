@@ -19,11 +19,6 @@
     </div>
 </section>
 
-@*
-dunno kanske todo  
-<CostumerSupport></CostumerSupport> 
-*@
-
 <section id="event-section" class="event-section">
     <header class="event-section-header">
         <h2>Kommande Event</h2>
@@ -133,9 +128,9 @@ dunno kanske todo
             </div>
         }
 
-        <div class="pagination-buttons">
+        <div class="pagination-buttons"> 
             <button @onclick="PreviousPage" disabled="@IsPreviousDisabled">Föregående</button>
-            <span>Sida @CurrentPage av @TotalPages</span>
+            <span>@CurrentPage av @TotalPages</span>
             <button @onclick="NextPage" disabled="@IsNextDisabled">Nästa</button>
         </div>
 
@@ -144,32 +139,43 @@ dunno kanske todo
 
 
     @* SHOW EVENT MODAL  *@
-     @if (selectedEvent != null)
-        {
-            <div class="modal" style="@(isModalVisible ? "display:flex;" : "display:none;")">
-                <div class="modal-content">
-                    <h3>@selectedEvent.Name
-                        <span class="close" @onclick="CloseModal"><i class="fas fa-circle-xmark"></i></span>
-                    </h3>
-                   
-                    <div class="event-time-box">
-                        <p><strong>Starttid:</strong> @selectedEvent.StartTime.ToString("MMM dd @ HH:mm")</p>
-                        <p><strong>Slutar:</strong> @selectedEvent.EndTime.ToString("MMM dd @ HH:mm")</p>
-                    </div>   
-                    <p class="event-modal-description">@selectedEvent.Description</p>
+    @if (selectedEvent != null)
+    {
+        <div class="modal" style="@(isModalVisible ? "display:flex;" : "display:none;")">
+            <div class="modal-content">
+                <h3>@selectedEvent.Name
+                    <span class="close" @onclick="CloseModal"><i class="fas fa-circle-xmark"></i></span>
+                </h3>
+                
+                <div class="event-time-box">
+                    <p><strong>Start:</strong> @selectedEvent.StartTime.ToString("MMM dd @ HH:mm")</p>
+                    <p><strong>Slutar:</strong> @selectedEvent.EndTime.ToString("MMM dd @ HH:mm")</p>
+                </div>   
+                <p class="event-modal-description">@selectedEvent.Description</p>
 
-                    <p><strong>Biljetter:</strong> @selectedEvent.TicketsSold <strong>biljetter kvar:</strong> @(selectedEvent.TicketsMax.HasValue ? (selectedEvent.TicketsMax - selectedEvent.TicketsSold) : "Unlimited")</p>
-                    
-                    <p class="find-us-tab"><strong>Hitta hit:</strong> @selectedEvent.Address, @selectedEvent.City
-                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(selectedEvent.Address),@Uri.EscapeDataString(selectedEvent.City)"
-                            class="map-icon" target="_blank">
-                            <i class="fas fa-location-dot"></i> 
-                        </a>
-                    </p>
-                    <button class="modal-buy-btn">Köp BILJETT</button>
-                </div>
+                @if (selectedEvent.AccessType != AccessType.Free)
+                {
+                    <p><strong>Pris:</strong> @(selectedEvent.Price)kr</p>
+                }
+                <p><strong>Biljetter kvar:</strong> @(selectedEvent.TicketsMax.HasValue ? (selectedEvent.TicketsMax - selectedEvent.TicketsSold + "st") : "Ej begränsat")</p>
+                
+                <p class="find-us-tab"><strong>Hitta hit:</strong> @selectedEvent.Address, @selectedEvent.City
+                    <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(selectedEvent.Address),@Uri.EscapeDataString(selectedEvent.City)"
+                        class="map-icon" target="_blank">
+                        <i class="fas fa-location-dot"></i>
+                    </a>
+                </p>
+                @if (selectedEvent.AccessType == AccessType.Free)
+                {
+                    <button class="modal-buy-btn modal-buy-btn-locked">Gratis!</button>
+                }
+                else
+                {
+                    <button class="modal-buy-btn modal-buy-btn-transform">Köp BILJETT</button>
+                }
             </div>
-        }
+        </div>
+    }
 
  
 @* JS to the rescue - WHY WOULD YOU EVER SAY THAT!?*@
@@ -183,7 +189,7 @@ dunno kanske todo
 
     //PAGINATION
     public int CurrentPage { get; set; } = 1;
-    public int PageSize { get; set; } = 5;
+    public int PageSize { get; set; } = 4;
 
     // making sure there's always atleast one page
     public int TotalPages => Math.Max(1, (int)Math.Ceiling((double)FilteredEvents.Count / PageSize));
