@@ -1,0 +1,125 @@
+.checkout-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 110vh;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.checkout-info {
+    width: 50%;
+    padding: 30px;
+    background-color: white;
+    margin: auto; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: start;
+}
+
+.header-div{
+    text-align: center;
+}
+
+.ticket-info{
+
+}
+
+.seat-div{
+    display: flex;
+    gap:10px;
+}
+.checkout-page .checkout-info {
+    flex: 1;
+}
+
+.checkout-info h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.checkout-info p {
+    font-size: 16px;
+    margin: 8px 0;
+    color: #444;
+}
+
+.checkout-info strong {
+    color: #222;
+}
+
+.ticket-selector {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.ticket-selector p {
+    margin-right: 10px;
+}
+
+.ticket-selector button {
+    background-color: #464646;
+    color: white;
+    border: none;
+    padding-inline: 5px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    
+}
+.ticket-selector button:hover{
+    background-color: #218838;
+}
+.ticket-selector button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.ticket-selector span {
+    margin: 0 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.total-price {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.buttons{
+    display: flex;
+    gap:10px;
+    width: 50%;
+}
+.buttons button {
+    width: 50%;
+    color: white;
+    padding: 12px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.confirm-btn{
+    background-color:var( --home-button-color);
+
+}
+.cancel-btn{
+    background-color:var(--warning-color);
+}
+.cancel-btn:hover{
+    background-color: #333;
+}
+
+.confirm-btn:hover {
+    background-color: #218838;
+}
+
+.confirm-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
