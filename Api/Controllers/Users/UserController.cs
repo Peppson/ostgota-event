@@ -155,7 +155,7 @@ public class UserController(IUserService userService, Validator validator) : Con
         }
 
         await _userService.AddUser(newUser);
-        return Created("user created successfully", new Response(newUser.Username, newUser.Role));
+        return Created("user created successfully", new Response(newUser.Username));
     }
 
     private static List<UserDTO> GetUserDTO(List<User> users)
