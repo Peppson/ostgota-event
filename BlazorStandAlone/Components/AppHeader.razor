@@ -94,7 +94,6 @@
         isLoggedIn = false;
         currentUser = string.Empty;
         showUserMenu = false;
-        ShowPopup("Success", "You have been logged out successfully!");
     }
 
     private async Task HandleLogin(UserLogin user)
@@ -111,7 +110,6 @@
                     await SessionStorageService.SetItemAsync<string>("user", newUser.Username);
                     currentUser = newUser.Username;
                     isLoggedIn = true;
-                    ShowPopup("Success", $"Welcome {newUser.Username}!");
                     loginRef?.ClosePopup();
                 }
                 else
@@ -142,7 +140,7 @@
             
             if (response.IsSuccessStatusCode)
             {
-                ShowPopup("Success", "Registration successful! Please log in.");
+                ShowPopup("Success", "Registration successful! Welcome!");
                 loginRef?.ClosePopup();
             }
             else
