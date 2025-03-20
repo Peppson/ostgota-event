@@ -1,7 +1,7 @@
 :root {
     --text-color-light: white;
     --text-color-dark: black;
-    --text-color-hover: rgb(0, 153, 255);
+    --text-color-hover: var(--header-color);
 
     --header-color: #313131; /*#313131*/
     --background-color-light: white;

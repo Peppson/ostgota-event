@@ -4,35 +4,31 @@
 <Popup @ref="popupRef" Title="@PopupTitle" Message="@PopupMessage"></Popup>
 
 <div class="form-container">
-    <div class="form-title">
-        <h2>Registrera</h2>
-    </div>
-
     <EditForm Model="@RegisterModel" OnValidSubmit="RegisterUser" class="form-wrapper">
         <div class="form-fields">
             <div class="form-group">
-                <label for="username">Användarnamn</label>
-                <InputText id="username" @bind-Value="RegisterModel.Username" class="form-control" />
+                <label for="username">Namn<span>*</span></label>
+                <InputText id="username" @bind-Value="RegisterModel.Username" class="form-control" required autocomplete="off"/>
+            </div>
+            <div class="form-group"> 
+                <label for="password">Lösenord<span>*</span></label>
+                <InputText type="password" id="password" @bind-Value="RegisterModel.Password" class="form-control" required autocomplete="new-password"/>
             </div>
             <div class="form-group">
-                <label for="password">Lösenord</label>
-                <InputText type="password" id="password" @bind-Value="RegisterModel.Password" class="form-control" />
+                <label for="email">E-post<span>*</span></label>
+                <InputText id="email" @bind-Value="RegisterModel.Email" class="form-control" required/>
             </div>
             <div class="form-group">
-                <label for="email">E-post</label>
-                <InputText id="email" @bind-Value="RegisterModel.Email" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="phone">Telefonnummer</label>
+                <label for="phone">Telefon</label>
                 <InputText id="phone" @bind-Value="RegisterModel.PhoneNumber" class="form-control" />
             </div>
+            <button type="submit" class="submit-button">Registrera</button>
         </div>
-        <button type="submit" class="submit-button">Registrera</button>
     </EditForm>
 </div>
 
 @code {
-    [Parameter] public UserRegister? RegisterModel { get; set; } = new() {Username = "username", Password = "password", Email="email@email.com"};
+    [Parameter] public UserRegister? RegisterModel { get; set; } = new() {Username = "", Password = "", Email=""};
     [Parameter] public EventCallback<UserRegister> OnRegister { get; set; }
 
     private Popup? popupRef;
