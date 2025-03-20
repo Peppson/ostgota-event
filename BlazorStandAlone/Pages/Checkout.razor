@@ -1,0 +1,177 @@
+@page "/checkout/{eventId:int}"
+@layout AdminLayout
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+@inject HttpClient Http
+@inject SessionStorageService SessionStorage
+@inject IEventService EventService
+
+<main class="checkout-page">
+    <section class="checkout-info">
+
+
+        @if (eventDetails != null) 
+        {
+            <div class="header-div">
+
+                <h2>@eventDetails.Name</h2>
+                @if (user != null)
+                {
+                    <p><strong>Inloggad som:</strong> @user.Username</p>
+                }
+                else
+                {
+                    <p style="color: red;">Ingen användare, logga in</p>
+                }
+            </div>
+
+            <div class="ticket-info">
+                <p><strong>Plats:</strong> @eventDetails.Address, @eventDetails.City</p>
+                <p><strong>Datum:</strong> @eventDetails.StartTime.ToString("MMM dd @ HH:mm")</p>
+
+                @if (eventDetails.HasSeat)
+                {
+                    <div class="seat-div">
+
+                        <label for="seat-selection"><strong>Välj plats:</strong></label>
+                        <select id="seat-selection" @bind="selectedSeat">
+                            @foreach (var seat in availableSeats)
+                            {
+                                <option value="@seat">@seat</option>
+                            }
+                        </select>
+                    </div>
+                }
+                <div class="ticket-selector">
+                    <p><strong>Pris:</strong> @eventDetails.Price kr / styck</p>
+                    <button @onclick="DecrementTicketCount" disabled="@IsDecrementDisabled">-</button>
+                    <span>@ticketCount</span>
+                    <button @onclick="IncrementTicketCount" disabled="@IsIncrementDisabled">+</button>
+                </div>
+            </div>
+
+            <p class="total-price">Total Price: @TotalPrice kr</p>
+
+            <div class="buttons">
+                <button class="confirm-btn" @onclick="ConfirmPurchase">Bekräfta köp</button>
+                <button class="cancel-btn" @onclick="GoBack">Gå tillbaka</button>
+
+            </div>
+        }
+        else
+        {
+            <p>Laddar event...</p>
+        }
+    </section>
+
+</main>
+
+@code {
+
+    private List<string> availableSeats = new() { "A1", "A2", "B1", "B2", "C1", "C2" }; // Example seats
+    private string selectedSeat = "A1";
+
+    private async Task GoBack()
+    {
+        await JS.InvokeVoidAsync("window.close");
+    }
+
+    private LoginDto? loginDto;
+    private UserDto? user;
+    private List<UserDto>? users;
+    private int ticketCount = 1;
+    private EventDto? eventDetails;
+    private decimal TotalPrice => ticketCount * eventDetails!.Price;
+    private int remainingTickets;
+    private bool IsIncrementDisabled => remainingTickets == 0 || ticketCount >= remainingTickets;
+    private bool IsDecrementDisabled => ticketCount <= 1;
+
+    [Parameter] public int EventId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await SessionStorage.GetItemAsync<string>("user");
+
+        if (result != null) 
+        {
+            users = await GetAllUsers();
+            user = users?.FirstOrDefault(u => u.Username == result);
+        }
+
+        await EventService.GetAllEvents();
+        LoadEvent(EventId);
+    }
+
+    private void LoadEvent(int id)
+    {
+        eventDetails = EventService.GetEventById(id);
+        if (eventDetails?.TicketsMax.HasValue == true)
+        {
+            remainingTickets = eventDetails.TicketsMax.Value - eventDetails.TicketsSold;
+        }
+    }
+
+    private async Task<List<UserDto>> GetAllUsers()
+    {
+
+        var response = await Http.GetAsync("api/user/get");
+        if (response.IsSuccessStatusCode)
+        {
+            var users = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new();
+            foreach (var user in users)
+            {
+                user.Tickets = await GetUserTickets(user.Id);
+            }
+            return users;
+        }
+        else
+        {
+            return new List<UserDto>();
+        }
+    }
+
+    private async Task<List<TicketDto>> GetUserTickets(int userId)
+    {
+        var response = await Http.GetAsync($"api/ticket/getByUser/{userId}");
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<List<TicketDto>>() ?? new();
+        }
+        return new List<TicketDto>();
+    }
+
+    private void IncrementTicketCount()
+    {
+        if (ticketCount < remainingTickets)
+        {
+            ticketCount++;
+        }
+    }
+
+    private void DecrementTicketCount()
+    {
+        if (ticketCount > 1)
+        {
+            ticketCount--;
+        }
+    }
+
+    private async Task ConfirmPurchase()
+    {
+        if (user != null)
+        {
+            for (int i = 0; i < ticketCount; i++)
+            {
+                var response = await Http.PostAsJsonAsync("api/ticket/create", new
+                {
+                    UserId = user.Id,
+                    EventId = EventId,
+                    Seat = eventDetails!.HasSeat ? selectedSeat : null,
+                    Quantity = 1
+                });
+            }
+
+            Navigation.NavigateTo("/confirmation"); 
+        }
+    }
+}
