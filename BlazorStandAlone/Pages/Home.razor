@@ -23,7 +23,7 @@
 dunno kanske todo  
 <CostumerSupport></CostumerSupport> 
 *@
-
+ 
 <section id="event-section" class="event-section">
     <header class="event-section-header">
         <h2>Kommande Event</h2>
@@ -67,8 +67,8 @@ dunno kanske todo
                     <h3>@ev.Name</h3>
                     <p class="event-description">@GetClampedDescription(ev.Description)</p>
                     <p id="event-card-address">@ev.Address, @ev.City
-                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(ev.Address),@Uri.EscapeDataString(ev.City)" 
-                        class="map-icon" target="_blank"> 
+                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(ev.Address),@Uri.EscapeDataString(ev.City)"
+                            class="map-icon" target="_blank">
                             <i class="fas fa-location-dot"></i>
                         </a>
                     </p>
@@ -116,18 +116,20 @@ dunno kanske todo
 
                     <div class="event-card-button-container">
                         <button @onclick="() => OpenModal(ev)">Visa info</button>
+
                         @if (ev.AccessType == AccessType.Free && !ev.HasSeat)
                         {
                             <button class="not-a-button">Gratis!</button>
                         }
                         else if (ev.AccessType == AccessType.Free && ev.HasSeat)
                         {
-                            <button>Boka</button>
+                            <button @onclick="() => GoToCheckout(ev.Id)">Boka</button>
                         }
                         else
                         {
-                            <button>Köp</button>
+                            <button @onclick="() => GoToCheckout(ev.Id)">Köp</button>
                         }
+
                     </div>
                 </div>
             </div>
@@ -139,47 +141,61 @@ dunno kanske todo
             <button @onclick="NextPage" disabled="@IsNextDisabled">Nästa</button>
         </div>
 
-    </div>   
+    </div>
 </section>
 
 
-    @* SHOW EVENT MODAL  *@
-     @if (selectedEvent != null)
-        {
-            <div class="modal" style="@(isModalVisible ? "display:flex;" : "display:none;")">
-                <div class="modal-content">
-                    <h3>@selectedEvent.Name
-                        <span class="close" @onclick="CloseModal"><i class="fas fa-circle-xmark"></i></span>
-                    </h3>
-                   
-                    <div class="event-time-box">
-                        <p><strong>Starttid:</strong> @selectedEvent.StartTime.ToString("MMM dd @ HH:mm")</p>
-                        <p><strong>Slutar:</strong> @selectedEvent.EndTime.ToString("MMM dd @ HH:mm")</p>
-                    </div>   
-                    <p class="event-modal-description">@selectedEvent.Description</p>
+@* SHOW EVENT MODAL  *@
+@if (selectedEvent != null)
+{
+    <div class="modal" style="@(isModalVisible ? "display:flex;" : "display:none;")">
+        <div class="modal-content">
+            <h3>@selectedEvent.Name
+                <span class="close" @onclick="CloseModal"><i class="fas fa-circle-xmark"></i></span>
+            </h3>
 
-                    <p><strong>Biljetter:</strong> @selectedEvent.TicketsSold <strong>biljetter kvar:</strong> @(selectedEvent.TicketsMax.HasValue ? (selectedEvent.TicketsMax - selectedEvent.TicketsSold) : "Unlimited")</p>
-                    
-                    <p class="find-us-tab"><strong>Hitta hit:</strong> @selectedEvent.Address, @selectedEvent.City
-                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(selectedEvent.Address),@Uri.EscapeDataString(selectedEvent.City)"
-                            class="map-icon" target="_blank">
-                            <i class="fas fa-location-dot"></i> 
-                        </a>
-                    </p>
-                    <button class="modal-buy-btn">Köp BILJETT</button>
-                </div>
+            <div class="event-time-box">
+                <p><strong>Starttid:</strong> @selectedEvent.StartTime.ToString("MMM dd @ HH:mm")</p>
+                <p><strong>Slutar:</strong> @selectedEvent.EndTime.ToString("MMM dd @ HH:mm")</p>
             </div>
-        }
+            <p class="event-modal-description">@selectedEvent.Description</p>
 
- 
+            <p><strong>Biljetter:</strong> @selectedEvent.TicketsSold <strong>biljetter kvar:</strong>
+                @(selectedEvent.TicketsMax.HasValue ? (selectedEvent.TicketsMax - selectedEvent.TicketsSold) : "Unlimited")
+            </p>
+
+            <p class="find-us-tab"><strong>Hitta hit:</strong> @selectedEvent.Address, @selectedEvent.City
+                <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(selectedEvent.Address),@Uri.EscapeDataString(selectedEvent.City)"
+                    class="map-icon" target="_blank">
+                    <i class="fas fa-location-dot"></i>
+                </a>
+            </p>
+            <button class="modal-buy-btn">Köp BILJETT</button>
+        </div>
+    </div>
+}
+
+
 @* JS to the rescue - WHY WOULD YOU EVER SAY THAT!?*@
 <script>
     function scrollToEventSection() {
         document.getElementById('event-section').scrollIntoView();
     }
+
+    window.openCheckoutWindow = (url) => {
+        window.open(url, "_blank", "width=1200,height=800,scrollbars=yes,resizable=yes");
+    };
 </script>
 
-@code {
+
+@code { 
+
+   
+private async Task GoToCheckout(int eventId)
+{
+    await JS.InvokeVoidAsync("openCheckoutWindow", $"/checkout/{eventId}");
+}
+
 
     //PAGINATION
     public int CurrentPage { get; set; } = 1;
@@ -331,7 +347,7 @@ dunno kanske todo
     }
 
     private string GetClampedDescription(string description)
-    {   
+    {
         const int threshold = 220;
 
         if (description.Length <= threshold)
@@ -354,7 +370,7 @@ dunno kanske todo
 
     private void CloseModal()
     {
-        isModalVisible = false; 
+        isModalVisible = false;
     }
 
 
