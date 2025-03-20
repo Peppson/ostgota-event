@@ -14,7 +14,7 @@
 
     <div class="form-group">
         <label><strong>Event:</strong></label>
-        <InputSelect @bind-Value="TicketModel.EventId">
+        <InputSelect @bind-Value="TicketModel.EventId" @bind-Value:after="@OnEventSelected">
             <option value="">Select an event...</option>
             @foreach (var ev in PaidEvents)
             {
@@ -24,11 +24,14 @@
         <ValidationMessage For="@(() => TicketModel.EventId)" />
     </div>
 
-    <div class="form-group">
-        <label><strong>Seat:</strong></label>
-        <InputText @bind-Value="TicketModel.Seat" />
-        <ValidationMessage For="@(() => TicketModel.Seat)" />
-    </div>
+    @if (_selectedEventHasSeats)
+    {
+        <div class="form-group">
+            <label><strong>Seat:</strong></label>
+            <InputText @bind-Value="TicketModel.Seat" />
+            <ValidationMessage For="@(() => TicketModel.Seat)" />
+        </div>
+    }
 
     <div class="button-container">
         <button type="submit">Save</button>
@@ -42,6 +45,7 @@
     [Parameter] public EventCallback OnCancel { get; set; }
 
     private List<EventDto> PaidEvents { get; set; } = new();
+    private bool _selectedEventHasSeats;
 
     protected override async Task OnInitializedAsync()
     {
@@ -65,7 +69,7 @@
 
     private async Task HandleSubmit()
     {
-        if(OnSave.HasDelegate)
+        if (OnSave.HasDelegate)
             await OnSave.InvokeAsync(TicketModel);
     }
 
@@ -73,5 +77,20 @@
     {
         if (OnCancel.HasDelegate)
             await OnCancel.InvokeAsync();
+    }
+
+    private void OnEventSelected()
+    {
+        try
+        {
+            var selectedEvent = EventService.Events.FirstOrDefault(e => e.Id == TicketModel.EventId);
+            _selectedEventHasSeats = selectedEvent?.HasSeat ?? false;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error checking event seats: {ex.Message}");
+            _selectedEventHasSeats = false;
+        }
     }
 }
