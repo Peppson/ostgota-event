@@ -62,8 +62,8 @@
                     <h3>@ev.Name</h3>
                     <p class="event-description">@GetClampedDescription(ev.Description)</p>
                     <p id="event-card-address">@ev.Address, @ev.City
-                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(ev.Address),@Uri.EscapeDataString(ev.City)" 
-                        class="map-icon" target="_blank"> 
+                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(ev.Address),@Uri.EscapeDataString(ev.City)"
+                            class="map-icon" target="_blank">
                             <i class="fas fa-location-dot"></i>
                         </a>
                     </p>
@@ -111,18 +111,20 @@
 
                     <div class="event-card-button-container">
                         <button @onclick="() => OpenModal(ev)">Visa info</button>
+
                         @if (ev.AccessType == AccessType.Free && !ev.HasSeat)
                         {
                             <button class="not-a-button">Gratis!</button>
                         }
                         else if (ev.AccessType == AccessType.Free && ev.HasSeat)
                         {
-                            <button>Boka</button>
+                            <button @onclick="() => GoToCheckout(ev.Id)">Boka</button>
                         }
                         else
                         {
-                            <button>Köp</button>
+                            <button @onclick="() => GoToCheckout(ev.Id)">Köp</button>
                         }
+
                     </div>
                 </div>
             </div>
@@ -134,7 +136,7 @@
             <button @onclick="NextPage" disabled="@IsNextDisabled">Nästa</button>
         </div>
 
-    </div>   
+    </div>
 </section>
 
 
@@ -177,15 +179,27 @@
         </div>
     }
 
- 
+
 @* JS to the rescue - WHY WOULD YOU EVER SAY THAT!?*@
 <script>
     function scrollToEventSection() {
         document.getElementById('event-section').scrollIntoView();
     }
+
+    window.openCheckoutWindow = (url) => {
+        window.open(url, "_blank", "width=1200,height=800,scrollbars=yes,resizable=yes");
+    };
 </script>
 
-@code {
+
+@code { 
+
+   
+private async Task GoToCheckout(int eventId)
+{
+    await JS.InvokeVoidAsync("openCheckoutWindow", $"/checkout/{eventId}");
+}
+
 
     //PAGINATION
     public int CurrentPage { get; set; } = 1;
@@ -337,7 +351,7 @@
     }
 
     private string GetClampedDescription(string description)
-    {   
+    {
         const int threshold = 220;
 
         if (description.Length <= threshold)
@@ -360,7 +374,7 @@
 
     private void CloseModal()
     {
-        isModalVisible = false; 
+        isModalVisible = false;
     }
 
 
