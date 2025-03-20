@@ -1,6 +1,7 @@
 @using BlazorStandAlone.Components.Login
 @inject HttpClient HttpClient
 @inject SessionStorageService SessionStorageService
+@inject IUserService UserService
 
 <Popup @ref="popupRef" Title="@PopupTitle" Message="@PopupMessage"></Popup>
 
@@ -29,6 +30,13 @@
                             <i class="fa-solid fa-user-circle"></i>
                             <span>@currentUser</span>
                         </div>
+                        <div class="user-tickets">
+                            @foreach(var ticket in userTickets)
+                            {
+                                <div class="user-tickets">Ticket: @ticket.Title</div>
+                                <div class="user-tickets">Price: @ticket.Price</div>
+                            }
+                        </div>
                         <button class="dropdown-item" @onclick="HandleLogout">
                             <i class="fa-solid fa-sign-out-alt"></i>
                             Logout
@@ -56,6 +64,8 @@
     private bool showUserMenu = false;
     private string currentUser = string.Empty;
 
+    private List<TicketDto> userTickets = new();
+
     protected override async Task OnInitializedAsync()
     {
         await CheckLoginStatus();
@@ -68,6 +78,20 @@
         if (isLoggedIn)
         {
             currentUser = user;
+            await GetUsersTickets();
+        }
+    }
+
+    private async Task GetUsersTickets()
+    {
+        try
+        {
+            var user = UserService.GetUserByUsername(currentUser);
+            userTickets = await UserService.GetUserTickets(user.Id);
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"error: {ex}");
         }
     }
 
@@ -101,7 +125,7 @@
         try
         {
             var response = await HttpClient.PostAsJsonAsync("/api/auth/login", user);
-            
+
             if (response.IsSuccessStatusCode)
             {
                 var newUser = await response.Content.ReadFromJsonAsync<LoginDto>();
@@ -109,6 +133,7 @@
                 {
                     await SessionStorageService.SetItemAsync<string>("user", newUser.Username);
                     currentUser = newUser.Username;
+                    await GetUsersTickets();
                     isLoggedIn = true;
                     loginRef?.ClosePopup();
                 }
