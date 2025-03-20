@@ -1,7 +1,14 @@
+@using BlazorStandAlone.Components.Login
+@inject HttpClient HttpClient
+@inject SessionStorageService SessionStorageService
+
+<Popup @ref="popupRef" Title="@PopupTitle" Message="@PopupMessage"></Popup>
+
 <header id="site-header" class="header">
     <a class="logo-wrapper" href="">
         <img src="icons/logo-white.svg" alt="Logo" class="header-logo">
     </a>
+    <LogInPopup @ref="loginRef" OnLogin="HandleLogin" OnRegister="HandleRegister" />
     <nav class="nav">
         <NavLink class="nav-link" href="#event-section">
             <i id="event-icon" class="fa-solid fa-location-dot header-icons"></i> Event
@@ -9,11 +16,147 @@
         <NavLink class="nav-link" href="#event-section">
             <i id="boka-icon" class="fa-solid fa-paper-plane header-icons"></i> Boka
         </NavLink>
-        <NavLink class="nav-link" href="/login" Match="NavLinkMatch.All">
-            <i id="login-icon" class="fa-solid fa-arrow-right-to-bracket header-icons"></i> Logga in
-        </NavLink>
+        @if (isLoggedIn)
+        {
+            <div class="user-menu">
+                <button class="nav-link user-button" @onclick="ToggleUserMenu">
+                    <i class="fa-solid fa-user-circle header-icons"></i>
+                </button>
+                @if (showUserMenu)
+                {
+                    <div class="user-dropdown">
+                        <div class="user-info">
+                            <i class="fa-solid fa-user-circle"></i>
+                            <span>@currentUser</span>
+                        </div>
+                        <button class="dropdown-item" @onclick="HandleLogout">
+                            <i class="fa-solid fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <NavLink class="nav-link" @onclick="ShowLogin" Match="NavLinkMatch.All">
+                <i id="login-icon" class="fa-solid fa-arrow-right-to-bracket header-icons"></i> Logga in
+            </NavLink>
+        }
     </nav>
 </header>
+
+@code {
+    private LogInPopup? loginRef;
+    private Popup? popupRef;
+    private string PopupMessage = string.Empty;
+    private string PopupTitle = "Notification";
+    private bool development = true;
+    private bool isLoggedIn = false;
+    private bool showUserMenu = false;
+    private string currentUser = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CheckLoginStatus();
+    }
+
+    private async Task CheckLoginStatus()
+    {
+        var user = await SessionStorageService.GetItemAsync<string>("user");
+        isLoggedIn = !string.IsNullOrEmpty(user);
+        if (isLoggedIn)
+        {
+            currentUser = user;
+        }
+    }
+
+    private void ShowLogin()
+    {
+        loginRef?.Show();
+    }
+
+    private void ShowPopup(string title, string message)
+    {
+        PopupTitle = title;
+        PopupMessage = message;
+        popupRef?.Show();
+    }
+
+    private void ToggleUserMenu()
+    {
+        showUserMenu = !showUserMenu;
+    }
+
+    private async Task HandleLogout()
+    {
+        await SessionStorageService.RemoveItemAsync("user");
+        isLoggedIn = false;
+        currentUser = string.Empty;
+        showUserMenu = false;
+        ShowPopup("Success", "You have been logged out successfully!");
+    }
+
+    private async Task HandleLogin(UserLogin user)
+    {
+        try
+        {
+            var response = await HttpClient.PostAsJsonAsync("/api/auth/login", user);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var newUser = await response.Content.ReadFromJsonAsync<LoginDto>();
+                if (newUser != null)
+                {
+                    await SessionStorageService.SetItemAsync<string>("user", newUser.Username);
+                    currentUser = newUser.Username;
+                    isLoggedIn = true;
+                    ShowPopup("Success", $"Welcome {newUser.Username}!");
+                    loginRef?.ClosePopup();
+                }
+                else
+                {
+                    ShowPopup("Error", "Invalid login response from server.");
+                    loginRef?.ClosePopup();
+                }
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                ShowPopup("Error", $"Login failed: {errorMessage}");
+                loginRef?.ClosePopup();
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowPopup("Error", $"An error occurred during login: {ex.Message}");
+            loginRef?.ClosePopup();
+        }
+    }
+
+    private async Task HandleRegister(UserRegister user)
+    {
+        try
+        {
+            var response = await HttpClient.PostAsJsonAsync("/api/auth/register", user);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                ShowPopup("Success", "Registration successful! Please log in.");
+                loginRef?.ClosePopup();
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                ShowPopup("Error", $"Registration failed: {errorMessage}");
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowPopup("Error", $"An error occurred during registration: {ex.Message}");
+        }
+    }
+}
 
 @* Blazor being Blazor... *@
 <style>
@@ -70,6 +213,10 @@
         text-decoration: none;
         display: inline-block;
         transition: Transform 0.4s ease-in-out;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-color-light);
     }
 
     header .nav-link:hover,
@@ -82,5 +229,73 @@
     .nav-link:link,
     .nav-link:visited {
         color: var(--text-color-light);
+    }
+
+    .user-menu {
+        position: relative;
+    }
+
+    .user-button {
+        padding: 16px 12px;
+    }
+
+    .user-button i {
+        font-size: 24px;
+        color: var(--text-color-light);
+        transition: color 0.4s ease-in-out;
+        position: relative;
+        top: -2px;
+    }
+
+    .user-button:hover i {
+        color: var(--text-color-hover);
+    }
+
+    .user-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        min-width: 200px;
+        z-index: 1000;
+    }
+
+    .user-info {
+        padding: 12px 16px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #333;
+    }
+
+    .user-info i {
+        font-size: 24px;
+        color: #666;
+    }
+
+    .dropdown-item {
+        padding: 12px 16px;
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.2s;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f5f5f5;
+    }
+
+    .dropdown-item i {
+        font-size: 16px;
+        color: #666;
     }
 </style>

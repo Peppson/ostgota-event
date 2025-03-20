@@ -19,7 +19,7 @@ public class LoginController(IAuthService authService, Validator validator) : Co
         if (result == null)
             return NotFound("Invalid username or password");
 
-        var response = new Response(result.Username, result.Role);
+        var response = new Response(result.Username);
 
         return Ok(response);
     }
@@ -36,7 +36,7 @@ public class LoginController(IAuthService authService, Validator validator) : Co
         {
             return BadRequest("Username already exists");
         }
-        var response = new Response(result.Username, result.Role);
+        var response = new Response(result.Username);
         
         return Created("User created", response);
     }
