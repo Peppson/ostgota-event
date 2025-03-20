@@ -7,6 +7,8 @@ namespace BlazorStandAlone.Services
     {
         Task<List<UserDto>> GetAllUsers();
         UserDto? GetUserById(int id);
+
+        Task<UserDto?> GetUserByUsername(string username);
         Task<bool> CreateUser(UserDto user);
         Task<bool> UpdateUser(UserDto user);
         Task<bool> DeleteUser(int id);
@@ -58,6 +60,25 @@ namespace BlazorStandAlone.Services
             catch (Exception ex) when (ex is not UserServiceException)
             {
                 throw new UserServiceException("An error occurred while fetching users", ex);
+            }
+        }
+
+        public async Task<UserDto?> GetUserByUsername(string username)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/user/get/name/{username}");
+                if(response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<UserDto>();
+                }
+                Console.WriteLine($"Error while getting user: {response.StatusCode}");
+                return null;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error in getting user: {ex}");
+                return null;
             }
         }
 

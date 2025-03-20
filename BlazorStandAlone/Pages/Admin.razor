@@ -133,11 +133,11 @@
 
 @code {
     // Page-wide
-    private LoginDto? user;
+    private string? user;
     private Popup? popupRef;
     private string PopupMessage = string.Empty;
     private string PopupTitle = "Notification";
-    private bool development = true;
+    private bool development = false;
 
     // User-related state
     private bool _userFormVisible;
@@ -165,16 +165,18 @@
     {
         if (development)
         {
-            user = new LoginDto() { Username = "admin" };
+            user = "admin";
         }
         else
         {
-            user = await SessionStorage.GetItemAsync<LoginDto>("user");
+            user = await SessionStorage.GetItemAsync<string>("user");
         }
 
-        if (user == null)
+        var loggedInUser = await UserService.GetUserByUsername(user);
+
+        if (loggedInUser == null || loggedInUser.Role != UserRole.Admin)
         {
-            NavigationManager.NavigateTo("/login");
+            NavigationManager.NavigateTo("/");
             return;
         }
 
