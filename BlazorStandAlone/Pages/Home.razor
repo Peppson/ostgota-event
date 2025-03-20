@@ -399,7 +399,7 @@ private async Task GoToCheckout(int eventId)
 
         if (result != null)
         {
-            user = new LoginDto() { Username = result.Username, Role = result.Role };
+            user = new LoginDto() { Username = result.Username };
         }
         else
         {
