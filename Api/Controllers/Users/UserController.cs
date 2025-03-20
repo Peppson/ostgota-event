@@ -96,8 +96,8 @@ public class UserController(IUserService userService, Validator validator) : Con
         }
     }
 
-    [HttpPut("update/{id}")]
-    public async Task<ActionResult<User>> UpdateUser(int id, [FromBody] UserCreateDTO user)
+    [HttpPut("update/admin/{id}")]
+    public async Task<ActionResult<User>> UpdateUserAdmin(int id, [FromBody] UserCreateDTO user)
     {
         var validation = _validator.Validate(new UserValidator(), user);
         if (validation != null)
@@ -111,6 +111,40 @@ public class UserController(IUserService userService, Validator validator) : Con
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
             Role = user.Role,
+            CreatedAt = DateTime.Now,
+            Tickets = null!
+        };
+
+        try
+        {
+            var updatedUser = await _userService.UpdateUserAdmin(id, newUser);
+            if (updatedUser == null)
+            {
+                return NotFound($"User with id: {id} not found.");
+            }
+            return Ok(updatedUser);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpPut("update/{id}")]
+    public async Task<ActionResult<User>> UpdateUser(int id, [FromBody] UserUpdateDTO user)
+    {
+        var validation = _validator.Validate(new UserUpdateValidator(), user);
+        if (validation != null)
+            return validation;
+
+        var newUser = new User
+        {
+            Id = id,
+            Username = user.Username,
+            PasswordHash = user.Password,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Role = UserRole.User,
             CreatedAt = DateTime.Now,
             Tickets = null!
         };

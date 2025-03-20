@@ -10,7 +10,8 @@ namespace BlazorStandAlone.Services
 
         Task<UserDto?> GetUserByUsername(string username);
         Task<bool> CreateUser(UserDto user);
-        Task<bool> UpdateUser(UserDto user);
+        Task<bool> UpdateUserAdmin(UserDto user);
+        Task<bool> UpdateUser(RegisterUserDto user, int userId);
         Task<bool> DeleteUser(int id);
         Task<List<TicketDto>> GetUserTickets(int userId);
         void UpdateTickets(List<TicketDto> tickets);
@@ -113,11 +114,29 @@ namespace BlazorStandAlone.Services
             }
         }
 
-        public async Task<bool> UpdateUser(UserDto user)
+        public async Task<bool> UpdateUserAdmin(UserDto user)
         {
             try
             {
-                var response = await _httpClient.PutAsJsonAsync($"api/user/update/{user.Id}", user);
+                var response = await _httpClient.PutAsJsonAsync($"api/user/update/admin/{user.Id}", user);
+                if (response.IsSuccessStatusCode)
+                {
+                    await GetAllUsers(); // Refresh the list
+                    return true;
+                }
+                throw new UserServiceException($"Failed to update user: {response.StatusCode}");
+            }
+            catch (Exception ex) when (ex is not UserServiceException)
+            {
+                throw new UserServiceException("An error occurred while updating user", ex);
+            }
+        }
+
+        public async Task<bool> UpdateUser(RegisterUserDto user, int userId)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"api/user/update/{userId}", user);
                 if (response.IsSuccessStatusCode)
                 {
                     await GetAllUsers(); // Refresh the list

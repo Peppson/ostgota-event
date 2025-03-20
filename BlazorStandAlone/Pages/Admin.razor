@@ -239,7 +239,7 @@
         {
             if (_isUserEditMode)
             {
-                await UserService.UpdateUser(user);
+                await UserService.UpdateUserAdmin(user);
                 ShowPopup("Success", "User updated successfully");
             }
             else

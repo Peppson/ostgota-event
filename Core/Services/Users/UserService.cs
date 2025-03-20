@@ -6,7 +6,7 @@ public class UserService(IDatabase DbContext) : IUserService
 
 
     public async Task<List<User>> GetAllUsers()
-    {   
+    {
         var users = await _db.Users
             .Include(t => t.Tickets)
             .ThenInclude(e => e.Event)
@@ -21,7 +21,7 @@ public class UserService(IDatabase DbContext) : IUserService
     }
 
     public async Task<User?> GetUserByName(string username)
-    {   
+    {
         var user = await _db.Users
             .Include(u => u.Tickets)
             .ThenInclude(e => e.Event)
@@ -47,13 +47,13 @@ public class UserService(IDatabase DbContext) : IUserService
     }
 
     public async Task AddUser(User user)
-    {   
+    {
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
     }
 
     public async Task<bool> RemoveUserById(int userId)
-    {   
+    {
         var user = await _db.Users
             .Include(u => u.Tickets)
             .ThenInclude(t => t.Event)
@@ -64,7 +64,7 @@ public class UserService(IDatabase DbContext) : IUserService
         if (user.Tickets.Count > 0)
         {
             foreach (var ticket in user.Tickets)
-            {   
+            {
                 ticket.Event.CancelTicket();
             }
         }
@@ -75,7 +75,7 @@ public class UserService(IDatabase DbContext) : IUserService
         return true;
     }
 
-    public async Task<User?> UpdateUser(int userId, User updatedUser)
+    public async Task<User?> UpdateUserAdmin(int userId, User updatedUser)
     {
         var existingUser = await _db.Users.FindAsync(userId);
         if (existingUser == null)
@@ -85,7 +85,22 @@ public class UserService(IDatabase DbContext) : IUserService
         existingUser.Email = updatedUser.Email;
         existingUser.PhoneNumber = updatedUser.PhoneNumber;
         existingUser.Role = updatedUser.Role;
-        
+
+        await _db.SaveChangesAsync();
+
+        return existingUser;
+    }
+
+    public async Task<User?> UpdateUser(int userId, User updatedUser)
+    {
+        var existingUser = await _db.Users.FindAsync(userId);
+        if (existingUser == null)
+            return null;
+
+        existingUser.PasswordHash = updatedUser.PasswordHash;
+        existingUser.Email = updatedUser.Email;
+        existingUser.PhoneNumber = updatedUser.PhoneNumber;
+
         await _db.SaveChangesAsync();
 
         return existingUser;
