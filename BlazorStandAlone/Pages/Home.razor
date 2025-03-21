@@ -172,8 +172,8 @@
                     <button class="modal-buy-btn modal-buy-btn-locked">Gratis!</button>
                 }
                 else
-                {
-                    <button class="modal-buy-btn modal-buy-btn-transform">Köp BILJETT</button>
+                { 
+                    <button class="modal-buy-btn modal-buy-btn-transform" @onclick="() => GoToCheckout(selectedEvent.Id)">Köp BILJETT</button>
                 }
             </div>
         </div>
