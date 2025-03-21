@@ -105,44 +105,31 @@
     {
         try
         {
-            var user = UserService.GetUserByUsername(currentUser);
-            userTickets = await UserService.GetUserTickets(user.Id);
-            uniqueTickets = GetUniqueTickets(userTickets);
+            var user = await UserService.GetUserByUsername(currentUser);
+            if (user != null)
+            {
+                userTickets = await UserService.GetUserTickets(user.Id);
+                uniqueTickets = GetUniqueTickets(userTickets);
+            }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"error: {ex}");
+            Console.WriteLine($"Error fetching user tickets: {ex.Message}");
+            ShowPopup("Error", "Failed to load tickets. Please try again later.");
         }
     }
 
     private List<UserTicket> GetUniqueTickets(List<TicketDto> userTickets)
     {
-        var newList = new List<UserTicket>();
-        for (int i = 0; i < userTickets.Count; i++)
-        {
-            if (i > 0 && TicketToEventExists(uniqueTickets, userTickets[i].Title))
+        return userTickets
+            .GroupBy(ticket => ticket.Title)
+            .Select(group => new UserTicket
             {
-                var uniqueTicket = uniqueTickets.FirstOrDefault(t => t.Title == userTickets[i].Title);
-                if (uniqueTicket != null) uniqueTicket.Count++;
-                continue;
-            }
-            else
-            {
-                var userTicket = new UserTicket
-                    {
-                        Title = userTickets[i].Title,
-                        Price = userTickets[i].Price,
-                        Count = 1
-                    };
-                uniqueTickets.Add(userTicket);
-            }
-        }
-        return uniqueTickets;
-    }
-
-    private bool TicketToEventExists(List<UserTicket> userTickets, string title)
-    {
-        return userTickets.Any(t => t.Title == title);
+                Title = group.Key,
+                Price = group.First().Price,
+                Count = group.Count()
+            })
+            .ToList();
     }
 
     private void ShowLogin()
@@ -165,6 +152,8 @@
     private async Task HandleLogout()
     {
         await SessionStorageService.RemoveItemAsync("user");
+        userTickets.Clear();
+        uniqueTickets.Clear();
         isLoggedIn = false;
         currentUser = string.Empty;
         showUserMenu = false;
