@@ -21,7 +21,7 @@ public class User
             Tickets.Add(ticket);
     }
 
-    public void CancelTicket(Ticket ticket)
+    public void RemoveTicket(Ticket ticket)
     {   
         if (Tickets.Count > 0)
             Tickets.Remove(ticket);
