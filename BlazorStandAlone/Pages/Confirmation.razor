@@ -1,0 +1,60 @@
+@page "/confirmation"
+@layout AdminLayout
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@inject SessionStorageService SessionStorage
+@inject IJSRuntime JS
+
+<main class="confirmation-page">
+    <section class="receipt-container">
+        <h2>Tack för ditt köp!</h2>
+        <p>Här är din biljettinformation:</p>
+        <p style="font-style: italic;">En bekräftelse kommer även att skickas till din mail</p>
+
+        @if (tickets.Any())
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Plats</th>
+                        <th>Pris</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in tickets)
+                    {
+                        <tr>
+                            <td>@ticket.Title</td>
+                            <td>@(ticket.Seat ?? "Ingen plats")</td>
+                            <td>@ticket.Price kr</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <p class="total-price"><strong>Totalt:</strong> @TotalPrice kr</p>
+        }
+        else
+        {
+            <p>Inga biljetter hittades.</p>
+        }
+
+         <button class="cancel-btn" @onclick="CloseWindow">Stäng sidan</button>
+    </section>
+</main>
+
+@code {
+     private async Task CloseWindow()
+    {
+        await JS.InvokeVoidAsync("window.close");
+    }
+    
+    private List<TicketDto> tickets = new();
+    private decimal TotalPrice => tickets.Sum(t => t.Price);
+
+    protected override async Task OnInitializedAsync()
+    {
+        tickets = await SessionStorage.GetItemAsync<List<TicketDto>>("purchasedTickets") ?? new();
+    }
+}

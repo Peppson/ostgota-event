@@ -1,0 +1,46 @@
+.confirmation-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+.receipt-container {
+    padding: 30px;
+    text-align: center;
+    width: 400px;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.total-price {
+
+    padding-left:10px;
+    text-align: left;
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background: var(--admin-button-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: rgb(21, 77, 129);
+}
