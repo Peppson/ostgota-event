@@ -92,17 +92,3 @@ body {
     right: 0.75rem;
     top: 0.5rem;
 }
-
-/* TODO */
-.admin-TODO {
-    font-size: 16px;
-    padding: 8px 12px;
-    color: white;
-    text-decoration: none;
-    display: inline-block;
-    position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-}
