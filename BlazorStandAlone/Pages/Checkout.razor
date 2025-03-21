@@ -1,16 +1,17 @@
 @page "/checkout/{eventId:int}"
 @layout AdminLayout
-@inject NavigationManager Navigation
 @inject IJSRuntime JS
 @inject HttpClient Http
+@inject NavigationManager Navigation
 @inject SessionStorageService SessionStorage
 @inject IEventService EventService
+@inject IUserService UserService
 
 <main class="checkout-page">
     <section class="checkout-info">
 
 
-        @if (eventDetails != null) 
+        @if (eventDetails != null)
         {
             <div class="header-div">
 
@@ -68,7 +69,7 @@
 
 @code {
 
-    private List<string> availableSeats = new() { "A1", "A2", "B1", "B2", "C1", "C2" }; // Example seats
+    private List<string> availableSeats = new() { "A1", "A2", "B1", "B2", "C1", "C2" };
     private string selectedSeat = "A1";
 
     private async Task GoBack()
@@ -92,54 +93,23 @@
     {
         var result = await SessionStorage.GetItemAsync<string>("user");
 
-        if (result != null) 
+        if (result != null)
         {
-            users = await GetAllUsers();
+            users = await UserService.GetAllUsers();
             user = users?.FirstOrDefault(u => u.Username == result);
         }
 
         await EventService.GetAllEvents();
         LoadEvent(EventId);
     }
-
     private void LoadEvent(int id)
     {
         eventDetails = EventService.GetEventById(id);
-        if (eventDetails?.TicketsMax.HasValue == true)
+        if (eventDetails?.TicketsMax.HasValue == true) 
         {
             remainingTickets = eventDetails.TicketsMax.Value - eventDetails.TicketsSold;
         }
     }
-
-    private async Task<List<UserDto>> GetAllUsers()
-    {
-
-        var response = await Http.GetAsync("api/user/get");
-        if (response.IsSuccessStatusCode)
-        {
-            var users = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new();
-            foreach (var user in users)
-            {
-                user.Tickets = await GetUserTickets(user.Id);
-            }
-            return users;
-        }
-        else
-        {
-            return new List<UserDto>();
-        }
-    }
-
-    private async Task<List<TicketDto>> GetUserTickets(int userId)
-    {
-        var response = await Http.GetAsync($"api/ticket/getByUser/{userId}");
-        if (response.IsSuccessStatusCode)
-        {
-            return await response.Content.ReadFromJsonAsync<List<TicketDto>>() ?? new();
-        }
-        return new List<TicketDto>();
-    }
-
     private void IncrementTicketCount()
     {
         if (ticketCount < remainingTickets)
@@ -160,18 +130,30 @@
     {
         if (user != null)
         {
+            var purchasedTickets = new List<TicketDto>();
+
             for (int i = 0; i < ticketCount; i++)
             {
-                var response = await Http.PostAsJsonAsync("api/ticket/create", new
+                var ticket = new TicketDto
                 {
                     UserId = user.Id,
                     EventId = EventId,
                     Seat = eventDetails!.HasSeat ? selectedSeat : null,
-                    Quantity = 1
-                });
-            }
+                    Price = eventDetails.Price,
+                    Title = eventDetails.Name
+                };
 
-            Navigation.NavigateTo("/confirmation"); 
+                var response = await Http.PostAsJsonAsync("api/ticket/create", ticket);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    purchasedTickets.Add(ticket);
+                }
+            }
+            // Save the tickets to session storage for easy access in the confirmation page
+            await SessionStorage.SetItemAsync("purchasedTickets", purchasedTickets);
+
+            Navigation.NavigateTo("/confirmation");
         }
     }
 }
