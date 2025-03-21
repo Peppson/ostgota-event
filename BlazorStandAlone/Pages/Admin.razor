@@ -20,7 +20,7 @@
 
 <div class="admin-container">
     <div class="box">
-        <div class="box-header">Amount of Users: @UserService.UserCount</div>
+        <div class="box-header">Users: @UserService.UserCount</div>
         <div class="search-section">
             <input @bind="_userId" placeholder="Enter User ID" />
             <button @onclick="GetUserById">Search</button>
@@ -29,11 +29,11 @@
         <div class="box-content">
             @if (_searchUser && _currentUser != null)
             {
-                <div class="info-box"><strong>User ID:</strong> @_currentUser.Id</div>
-                <div class="info-box"><strong>Username:</strong> @_currentUser.Username</div>
-                <div class="info-box"><strong>User Email:</strong> @_currentUser.Email</div>
-                <div class="info-box"><strong>User PhoneNumber:</strong> @_currentUser.PhoneNumber</div>
-                <div class="info-box"><strong>User Role:</strong> @_currentUser.Role</div>
+                <div class="info-box"><strong>ID:</strong> @_currentUser.Id</div>
+                <div class="info-box"><strong>Name:</strong> @_currentUser.Username</div>
+                <div class="info-box"><strong>Email:</strong> @_currentUser.Email</div>
+                <div class="info-box"><strong>PhoneNumber:</strong> @_currentUser.PhoneNumber</div>
+                <div class="info-box"><strong>Role:</strong> @_currentUser.Role</div>
                 <div class="info-box"><strong>Created at:</strong> @_currentUser.CreatedAt</div>
                 <div class="user-tickets">
                     <h3>User's Tickets</h3>
@@ -67,7 +67,7 @@
     </div>
 
     <div class="box">
-        <div class="box-header">Amount of Tickets: @TicketService.TicketCount</div>
+        <div class="box-header">Tickets: @TicketService.TicketCount</div>
         <div class="search-section">
             <input @bind="_ticketId" placeholder="Enter Ticket ID" />
             <button @onclick="GetTicketById">Search</button>
@@ -76,11 +76,11 @@
         <div class="box-content">
             @if (_searchTicket && _currentTicket != null)
             {
-                <div class="info-box"><strong>Ticket ID:</strong> @_currentTicket.Id</div>
-                <div class="info-box"><strong>Ticket Title:</strong> @_currentTicket.Title </div>
-                <div class="info-box"><strong>Ticket UserID:</strong> @_currentTicket.UserId</div>
-                <div class="info-box"><strong>Ticket EventID:</strong> @_currentTicket.EventId</div>
-                <div class="info-box"><strong>Ticket Price:</strong> @_currentTicket.Price</div>
+                <div class="info-box"><strong>ID:</strong> @_currentTicket.Id</div>
+                <div class="info-box"><strong>Title:</strong> @_currentTicket.Title </div>
+                <div class="info-box"><strong>UserID:</strong> @_currentTicket.UserId</div>
+                <div class="info-box"><strong>EventID:</strong> @_currentTicket.EventId</div>
+                <div class="info-box"><strong>Price:</strong> @_currentTicket.Price</div>
                 <div class="info-box"><strong>Seat:</strong> @_currentTicket.Seat</div>
                 <button @onclick="() => DeleteTicket(_currentTicket.Id)">Delete</button>
                 <button @onclick="ClearTicket">Clear</button>
@@ -95,7 +95,7 @@
     </div>
 
     <div class="box">
-        <div class="box-header">Amount of Events: @EventService.EventCount</div>
+        <div class="box-header">Events: @EventService.EventCount</div>
         <div class="search-section">
             <input @bind="_eventId" placeholder="Enter Event ID" />
             <button @onclick="GetEventById">Search</button>
@@ -104,8 +104,8 @@
         <div class="box-content">
             @if (_searchEvent && _currentEvent != null)
             {
-                <div class="info-box"><strong>Event ID:</strong> @_currentEvent.Id</div>
-                <div class="info-box"><strong>Event name:</strong> @_currentEvent.Name</div>
+                <div class="info-box"><strong>ID:</strong> @_currentEvent.Id</div>
+                <div class="info-box"><strong>Name:</strong> @_currentEvent.Name</div>
                 <div class="info-box"><strong>City:</strong> @_currentEvent.City</div>
                 <div class="info-box"><strong>Address:</strong> @_currentEvent.Address</div>
                 <div class="info-box"><strong>AccessType:</strong> @_currentEvent.AccessType</div>
