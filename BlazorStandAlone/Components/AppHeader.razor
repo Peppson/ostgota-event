@@ -35,7 +35,7 @@
         {
             <div class="user-menu">
                 <NavLink class="nav-link" @onclick="ToggleUserMenu">
-                    <i id="user-icon" class="fa-solid fa-user-circle header-icons"></i> Inloggad
+                    <i id="user-icon" class="fa-solid fa-user-circle header-icons"></i> @currentUser
                 </NavLink>
                 @if (showUserMenu)
                 {
@@ -333,26 +333,26 @@
         position: absolute;
         top: 100%;
         right: 0;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        min-width: 200px;
+        background-color: var(--background-color-light);
+        min-width: 240px;   
         z-index: 1000;
     }
 
     .user-info {
-        padding: 12px 16px;
         border-bottom: 1px solid #eee;
         display: flex;
         align-items: center;
+        font-size: 24px;
         gap: 8px;
         color: #333;
+        @* TODO *@
+        background-color: red;
     }
 
-        .user-info i {
-            font-size: 24px;
-            color: #666;
-        }
+    .user-info i {
+        font-size: 24px;
+        color: #666;
+    }
 
     .dropdown-item {
         padding: 12px 16px;
