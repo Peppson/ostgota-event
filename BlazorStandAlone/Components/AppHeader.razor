@@ -45,10 +45,12 @@
                             <span>@currentUser</span>
                         </div>
                         <div class="user-tickets">
-                            @foreach(var ticket in userTickets)
+                            @foreach (var ticket in uniqueTickets)
                             {
                                 <div class="user-tickets">Ticket: @ticket.Title</div>
                                 <div class="user-tickets">Price: @ticket.Price</div>
+                                <div class="user-tickets">x: @ticket.Count</div>
+
                             }
                         </div>
                         <button class="dropdown-item" @onclick="HandleLogout">
@@ -78,7 +80,10 @@
     private bool showUserMenu = false;
     private string currentUser = string.Empty;
 
+
     private List<TicketDto> userTickets = new();
+
+    private List<UserTicket> uniqueTickets = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -102,11 +107,42 @@
         {
             var user = UserService.GetUserByUsername(currentUser);
             userTickets = await UserService.GetUserTickets(user.Id);
+            uniqueTickets = GetUniqueTickets(userTickets);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine($"error: {ex}");
         }
+    }
+
+    private List<UserTicket> GetUniqueTickets(List<TicketDto> userTickets)
+    {
+        var newList = new List<UserTicket>();
+        for (int i = 0; i < userTickets.Count; i++)
+        {
+            if (i > 0 && TicketToEventExists(uniqueTickets, userTickets[i].Title))
+            {
+                var uniqueTicket = uniqueTickets.FirstOrDefault(t => t.Title == userTickets[i].Title);
+                if (uniqueTicket != null) uniqueTicket.Count++;
+                continue;
+            }
+            else
+            {
+                var userTicket = new UserTicket
+                    {
+                        Title = userTickets[i].Title,
+                        Price = userTickets[i].Price,
+                        Count = 1
+                    };
+                uniqueTickets.Add(userTicket);
+            }
+        }
+        return uniqueTickets;
+    }
+
+    private bool TicketToEventExists(List<UserTicket> userTickets, string title)
+    {
+        return userTickets.Any(t => t.Title == title);
     }
 
     private void ShowLogin()
@@ -176,7 +212,7 @@
         try
         {
             var response = await HttpClient.PostAsJsonAsync("/api/auth/register", user);
-            
+
             if (response.IsSuccessStatusCode)
             {
                 ShowPopup("Success", "Registration successful! Welcome!");
@@ -212,8 +248,8 @@
     }
 
     .header-logo {
-        width: 110px;  
-        height: auto; 
+        width: 110px;
+        height: auto;
         position: absolute;
     }
 
@@ -262,7 +298,7 @@
     }
 
     header .nav-link:hover,
-    footer a:hover, 
+    footer a:hover,
     .nav .nav-link:hover {
         color: var(--text-color-hover);
         transform: scale(1.05);
@@ -275,6 +311,22 @@
 
     .user-menu {
         position: relative;
+    }
+
+    .user-button {
+        padding: 16px 12px;
+    }
+
+    .user-button i {
+        font-size: 24px;
+        color: var(--text-color-light);
+        transition: color 0.4s ease-in-out;
+        position: relative;
+        top: -2px;
+    }
+
+    .user-button:hover i {
+        color: var(--text-color-hover);
     }
 
     .user-dropdown {
@@ -297,10 +349,10 @@
         color: #333;
     }
 
-    .user-info i {
-        font-size: 24px;
-        color: #666;
-    }
+        .user-info i {
+            font-size: 24px;
+            color: #666;
+        }
 
     .dropdown-item {
         padding: 12px 16px;
@@ -316,12 +368,12 @@
         transition: background-color 0.2s;
     }
 
-    .dropdown-item:hover {
-        background-color: #f5f5f5;
-    }
+        .dropdown-item:hover {
+            background-color: #f5f5f5;
+        }
 
-    .dropdown-item i {
-        font-size: 16px;
-        color: #666;
-    }
+        .dropdown-item i {
+            font-size: 16px;
+            color: #666;
+        }
 </style>
