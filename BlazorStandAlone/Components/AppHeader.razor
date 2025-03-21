@@ -10,19 +10,33 @@
         <img src="icons/logo-white.svg" alt="Logo" class="header-logo">
     </a>
     <LogInPopup @ref="loginRef" OnLogin="HandleLogin" OnRegister="HandleRegister" />
+
     <nav class="nav">
+        @* Admin Dashboard *@ 
+        @if (currentUser == "admin") @* This is just something *@
+        {
+            <NavLink class="nav-link" href="/admin">
+                <i id="admin-icon" class="fa-solid fa-cog header-icons"></i> Admin
+            </NavLink>
+        }
+
+        @* Event *@
         <NavLink class="nav-link" href="#event-section">
             <i id="event-icon" class="fa-solid fa-location-dot header-icons"></i> Event
         </NavLink>
+
+        @* Boka *@
         <NavLink class="nav-link" href="#event-section">
             <i id="boka-icon" class="fa-solid fa-paper-plane header-icons"></i> Boka
         </NavLink>
+
+        @* Login *@
         @if (isLoggedIn)
         {
             <div class="user-menu">
-                <button class="nav-link user-button" @onclick="ToggleUserMenu">
-                    <i class="fa-solid fa-user-circle header-icons"></i>
-                </button>
+                <NavLink class="nav-link" @onclick="ToggleUserMenu">
+                    <i id="user-icon" class="fa-solid fa-user-circle header-icons"></i> Inloggad
+                </NavLink>
                 @if (showUserMenu)
                 {
                     <div class="user-dropdown">
@@ -209,6 +223,10 @@
         position: relative;
     }
 
+    #admin-icon {
+        top: -1px;
+    }
+
     #event-icon {
         top: -2px;
     }
@@ -218,8 +236,9 @@
         font-size: 19px;
     }
 
-    #login-icon {
-        top: -1px;
+    #login-icon,
+    #user-icon {
+        font-size: 23px;
     }
 
     .nav {
@@ -256,22 +275,6 @@
 
     .user-menu {
         position: relative;
-    }
-
-    .user-button {
-        padding: 16px 12px;
-    }
-
-    .user-button i {
-        font-size: 24px;
-        color: var(--text-color-light);
-        transition: color 0.4s ease-in-out;
-        position: relative;
-        top: -2px;
-    }
-
-    .user-button:hover i {
-        color: var(--text-color-hover);
     }
 
     .user-dropdown {
