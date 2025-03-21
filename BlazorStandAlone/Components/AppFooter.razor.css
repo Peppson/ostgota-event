@@ -66,6 +66,6 @@
 
 footer a:hover, 
 .nav .nav-link:hover {
-    color: var(--text-color-hover);
+    color: var(--home-date-color);
     transform: scale(1.02);
 }
