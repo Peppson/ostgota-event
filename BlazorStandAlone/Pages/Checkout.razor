@@ -1,16 +1,20 @@
 @page "/checkout/{eventId:int}"
 @layout AdminLayout
-@inject NavigationManager Navigation
 @inject IJSRuntime JS
 @inject HttpClient Http
+@inject NavigationManager Navigation
 @inject SessionStorageService SessionStorage
 @inject IEventService EventService
+@inject IUserService UserService
+
+
+
 
 <main class="checkout-page">
     <section class="checkout-info">
 
 
-        @if (eventDetails != null) 
+        @if (eventDetails != null)
         {
             <div class="header-div">
 
@@ -92,7 +96,7 @@
     {
         var result = await SessionStorage.GetItemAsync<string>("user");
 
-        if (result != null) 
+        if (result != null)
         {
             users = await GetAllUsers();
             user = users?.FirstOrDefault(u => u.Username == result);
@@ -160,18 +164,30 @@
     {
         if (user != null)
         {
+            var purchasedTickets = new List<TicketDto>();
+
             for (int i = 0; i < ticketCount; i++)
             {
-                var response = await Http.PostAsJsonAsync("api/ticket/create", new
+                var ticket = new TicketDto
                 {
                     UserId = user.Id,
                     EventId = EventId,
                     Seat = eventDetails!.HasSeat ? selectedSeat : null,
-                    Quantity = 1
-                });
+                    Price = eventDetails.Price,
+                    Title = eventDetails.Name
+                };
+
+                var response = await Http.PostAsJsonAsync("api/ticket/create", ticket);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    purchasedTickets.Add(ticket);
+                }
             }
 
-            Navigation.NavigateTo("/confirmation"); 
+            await SessionStorage.SetItemAsync("purchasedTickets", purchasedTickets);
+
+            Navigation.NavigateTo("/confirmation");
         }
     }
 }
