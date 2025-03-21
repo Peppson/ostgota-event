@@ -52,9 +52,13 @@
             </div>
 
             <p class="total-price">Total Price: @TotalPrice kr</p>
+            @if (IsSoldOut)
+            {
+                <p style="color:red">Tyvärr, inga biljetter kvar</p>
+            }
 
             <div class="buttons">
-                <button class="confirm-btn" @onclick="ConfirmPurchase">Bekräfta köp</button>
+                <button class="confirm-btn" @onclick="Confirmation" disabled="@IsSoldOut">Bekräfta köp</button>
                 <button class="cancel-btn" @onclick="GoBack">Gå tillbaka</button>
 
             </div>
@@ -68,6 +72,16 @@
 </main>
 
 @code {
+
+
+    async Task Confirmation()
+    {
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Bekräfta för att slutföra order");
+        if (confirmed)
+        {
+            await ConfirmPurchase();
+        }
+    }
 
     private List<string> availableSeats = new() { "A1", "A2", "B1", "B2", "C1", "C2" };
     private string selectedSeat = "A1";
@@ -87,6 +101,7 @@
     private bool IsIncrementDisabled => remainingTickets == 0 || ticketCount >= remainingTickets;
     private bool IsDecrementDisabled => ticketCount <= 1;
 
+    private bool IsSoldOut => remainingTickets == 0;
     [Parameter] public int EventId { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -105,7 +120,7 @@
     private void LoadEvent(int id)
     {
         eventDetails = EventService.GetEventById(id);
-        if (eventDetails?.TicketsMax.HasValue == true) 
+        if (eventDetails?.TicketsMax.HasValue == true)
         {
             remainingTickets = eventDetails.TicketsMax.Value - eventDetails.TicketsSold;
         }
@@ -152,7 +167,7 @@
             }
             // Save the tickets to session storage for easy access in the confirmation page
             await SessionStorage.SetItemAsync("purchasedTickets", purchasedTickets);
-
+            
             Navigation.NavigateTo("/confirmation");
         }
     }
