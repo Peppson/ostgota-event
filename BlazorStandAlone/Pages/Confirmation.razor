@@ -6,10 +6,11 @@
 @inject IJSRuntime JS
 
 <main class="confirmation-page">
+    <img src="icons/favicon-black.svg" alt="Logo" class="logo">
+
     <section class="receipt-container">
         <h2>Tack för ditt köp!</h2>
-        <p>Här är din biljettinformation:</p>
-        <p style="font-style: italic;">En bekräftelse kommer även att skickas till din mail</p>
+        <p style="font-style: italic;">En bekräftelse kommer även att skickas till din mail!</p>
 
         @if (tickets.Any())
         {
