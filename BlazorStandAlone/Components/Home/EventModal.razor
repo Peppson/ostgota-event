@@ -1,0 +1,161 @@
+@using System.Globalization
+
+@if (Event != null)
+{
+
+<div class="modal" style="@(IsVisible ? "display:flex;" : "display:none;")">
+    <div class="modal-content">
+        <h3>@Event.Name
+            <span class="close" @onclick="OnClose"><i class="fas fa-circle-xmark"></i></span>
+        </h3>
+
+        <div class="event-time-box">
+            <p><strong>Start:</strong> @Event.StartTime.ToString("MMM dd @ HH:mm")</p>
+            <p><strong>Slutar:</strong> @Event.EndTime.ToString("MMM dd @ HH:mm")</p>
+        </div>
+        <p class="event-modal-description">@Event.Description</p>
+
+        @if (Event.AccessType != AccessType.Free)
+        {
+            <p><strong>Pris:</strong> @(Event.Price)kr</p>
+        }
+        <p><strong>Biljetter kvar:</strong> @(Event.TicketsMax.HasValue ? (Event.TicketsMax - Event.TicketsSold + "st") : "Ej begränsat")</p>
+
+        <p class="find-us-tab"><strong>Hitta hit:</strong> @Event.Address, @Event.City
+            <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(Event.Address),@Uri.EscapeDataString(Event.City)"
+                class="map-icon" target="_blank">
+                <i class="fas fa-location-dot"></i>
+            </a>
+        </p>
+        <iframe src="@($"https://www.google.com/maps?q={Uri.EscapeDataString(Event.Address + ' ' + Event.City)}&output=embed")"
+                allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+
+        @if (Event.AccessType == AccessType.Free && Event.HasSeat || Event.AccessType == AccessType.Free && Event.TicketsMax.HasValue)
+        {
+            <button class="modal-buy-btn modal-buy-btn-transform" @onclick="() => OnGoToCheckout.InvokeAsync(Event.Id)">BOKA BILJETT</button>
+        }
+        else if (Event.AccessType == AccessType.Free && !Event.HasSeat)
+        {
+            <button class="modal-buy-btn modal-buy-btn-locked">Gratis!</button>
+        }
+        else 
+        {
+            <button class="modal-buy-btn modal-buy-btn-transform" @onclick="() => OnGoToCheckout.InvokeAsync(Event.Id)">KÖP BILJETT</button>
+        }
+    </div>
+</div>
+}
+
+@code {
+    [Parameter] public EventDto Event { get; set; } = default!;
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback<int> OnGoToCheckout { get; set; }
+}
+
+<style>
+
+iframe {
+    position: absolute;
+    right: 10px;
+    bottom: 80px;
+    border: none;
+    filter: grayscale(70%);
+    width: 400px;
+    height: 180px;
+}
+    
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    position: relative;
+    background-color: var(--background-color-light);
+    border: none;
+    width: 80%;
+    max-width: 1100px;
+    height: 80%;
+    max-height: 650px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content h3 {
+    background-color: var(--header-color);
+    padding: 30px;
+    font-size: 40px;
+    color: var(--text-color-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    padding: 10px;
+    padding-left: 20px;
+    font-size: 22px;
+}
+
+.event-time-box {
+    display: flex;
+}
+
+.event-modal-description {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.modal-buy-btn {
+    background-color: var(--home-button-color);
+    padding: 20px;
+    margin-top: 10px;
+    font-size: 32px;
+    color: var(--text-color-dark);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.1s ease-in-out;
+}
+
+.modal-buy-btn-transform:hover {
+    opacity: 0.8;
+}
+
+.modal-buy-btn-locked {
+    cursor: default;
+}
+
+.close {
+    color: var(--home-date-color);
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.1s ease-in-out;
+}
+
+.close:hover {
+    transform: scale(1.1);
+}
+
+.close:hover,
+.close:focus {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+</style>
