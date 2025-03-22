@@ -63,9 +63,10 @@ public class UserService(IDatabase DbContext) : IUserService
 
         if (user.Tickets.Count > 0)
         {
-            foreach (var ticket in user.Tickets)
+            foreach (var ticket in user.Tickets.ToList())
             {
                 ticket.Event.CancelTicket();
+                ticket.User.RemoveTicket(ticket);
             }
         }
 

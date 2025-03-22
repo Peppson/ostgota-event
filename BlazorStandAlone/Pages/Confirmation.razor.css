@@ -24,7 +24,6 @@ th, td {
 }
 
 .total-price {
-
     padding-left:10px;
     text-align: left;
     margin-top: 15px;
@@ -32,9 +31,9 @@ th, td {
 }
 
 button {
-    margin-top: 20px;
+    margin-top: 30px;
     padding: 10px 15px;
-    background: var(--admin-button-color);
+    background: var(--home-button-color);
     color: white;
     border: none;
     cursor: pointer;
@@ -42,5 +41,20 @@ button {
 }
 
 button:hover {
-    background: rgb(21, 77, 129);
+    background-color: #218838;
 }
+
+.logo {  
+    position: absolute;
+    width: 180px;
+    height: auto;
+    top: 0;
+    left: 0;
+    padding: 20px;
+}
+
+h2 {
+    padding-bottom: 20px;
+    font-size: 32px;
+}
+
