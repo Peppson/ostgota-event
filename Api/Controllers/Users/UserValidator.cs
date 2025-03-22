@@ -37,8 +37,5 @@ public class UserUpdateValidator : AbstractValidator<UserUpdateDTO>
             .EmailAddress()
             .MaximumLength(60);
 
-        RuleFor(x => x.Password)
-            .NotEmpty()
-            .NotNull();
     }
 }

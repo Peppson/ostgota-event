@@ -10,6 +10,7 @@
         <img src="icons/logo-white.svg" alt="Logo" class="header-logo">
     </a>
     <LogInPopup @ref="loginRef" OnLogin="HandleLogin" OnRegister="HandleRegister" />
+    <UserEdit @ref="userEditRef" OnEdit="HandleEdit" />
 
     <nav class="nav">
         @* Admin Dashboard *@ 
@@ -50,9 +51,9 @@
                                 <div class="user-tickets">Ticket: @ticket.Title</div>
                                 <div class="user-tickets">Price: @ticket.Price</div>
                                 <div class="user-tickets">x: @ticket.Count</div>
-
                             }
                         </div>
+                        <button class="dropdown-item" @onclick="OpenEditMenu">Ändra information</button>
                         <button class="dropdown-item" @onclick="HandleLogout">
                             <i class="fa-solid fa-sign-out-alt"></i>
                             Logout
@@ -73,6 +74,7 @@
 @code {
     private LogInPopup? loginRef;
     private Popup? popupRef;
+    private UserEdit? userEditRef;
     private string PopupMessage = string.Empty;
     private string PopupTitle = "Notification";
     private bool development = true;
@@ -149,6 +151,12 @@
         showUserMenu = !showUserMenu;
     }
 
+    private void OpenEditMenu()
+    {
+        userEditRef?.Show();
+        showUserMenu = false;
+    }
+
     private async Task HandleLogout()
     {
         await SessionStorageService.RemoveItemAsync("user");
@@ -216,6 +224,35 @@
         catch (Exception ex)
         {
             ShowPopup("Error", $"An error occurred during registration: {ex.Message}");
+        }
+    }
+
+    private async Task HandleEdit(UserRegister user)
+    {
+        try
+        {
+            var newUser = await UserService.GetUserByUsername(user.Username);
+            if (newUser != null)
+            {
+                var response = await HttpClient.PutAsJsonAsync($"api/user/update/{newUser.Id}", user);
+                if (response.IsSuccessStatusCode)
+                {
+                    ShowPopup("Success", "Information updated successfully!");
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    ShowPopup("Error", $"Failed to update information: {errorMessage}");
+                }
+            }
+            else
+            {
+                ShowPopup("Error", "User not found");
+            }
+        }
+        catch(Exception ex)
+        {
+            ShowPopup("Error", $"An error occurred while updating information: {ex.Message}");
         }
     }
 }

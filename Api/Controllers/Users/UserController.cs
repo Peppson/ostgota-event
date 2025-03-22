@@ -133,6 +133,7 @@ public class UserController(IUserService userService, Validator validator) : Con
     [HttpPut("update/{id}")]
     public async Task<ActionResult<User>> UpdateUser(int id, [FromBody] UserUpdateDTO user)
     {
+        
         var validation = _validator.Validate(new UserUpdateValidator(), user);
         if (validation != null)
             return validation;
