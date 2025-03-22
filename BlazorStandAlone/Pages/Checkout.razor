@@ -12,55 +12,55 @@
     <img src="icons/favicon-black.svg" alt="Logo-bg" class="logo-bg">
     
     <section class="checkout-info">
-            @if (eventDetails != null)
-            {
-                <div class="header-div">
+        @if (eventDetails != null)
+        {
+            <div class="header-div">
 
-                    <h2>@eventDetails.Name</h2>
-                    @if (user != null)
-                    {
-                        <p><strong>Inloggad som:</strong> @user.Username</p>
-                    }
-                    else
-                    {
-                        <p style="color: red;">Logga in för att Bekräfta köp</p>
-                    }
-                </div>
-
-                    
-
-                <div class="ticket-info">
-                    <p><strong>Plats:</strong> @eventDetails.Address, @eventDetails.City</p>
-                    <p><strong>Datum:</strong> @eventDetails.StartTime.ToString("MMM dd @ HH:mm")</p>
-
-                    @if (eventDetails.HasSeat)
-                    {
-                        <div class="seat-div">
-
-                            <label for="seat-selection"><strong>Välj plats:</strong></label>
-                            <select id="seat-selection" @bind="selectedSeat">
-                                @foreach (var seat in availableSeats)
-                                {
-                                    <option value="@seat">@seat</option>
-                                }
-                            </select>
-                        </div>
-                    }
-                    <div class="ticket-selector">
-                        <p><strong>Pris:</strong> @eventDetails.Price kr / styck</p>
-                        <button @onclick="DecrementTicketCount" disabled="@IsDecrementDisabled">-</button>
-                        <span>@ticketCount</span>
-                        <button @onclick="IncrementTicketCount" disabled="@IsIncrementDisabled">+</button>
-                    </div>
-                </div>
-
-                <p class="total-price">Total Price: @TotalPrice kr</p>
-                @if (IsSoldOut)
+                <h2>@eventDetails.Name</h2>
+                @if (user != null)
                 {
-                    <p style="color:red">Tyvärr, inga biljetter kvar</p>
+                    <p><strong>Inloggad som:</strong> @user.Username</p>
                 }
+                else
+                {
+                    <p style="color: red;">Logga in för att Bekräfta köp</p>
+                }
+            </div>
 
-                <div class="buttons">
+                
+
+            <div class="ticket-info">
+                <p><strong>Plats:</strong> @eventDetails.Address, @eventDetails.City</p>
+                <p><strong>Datum:</strong> @eventDetails.StartTime.ToString("MMM dd @ HH:mm")</p>
+
+                @if (eventDetails.HasSeat)
+                {
+                    <div class="seat-div">
+
+                        <label for="seat-selection"><strong>Välj plats:</strong></label>
+                        <select id="seat-selection" @bind="selectedSeat">
+                            @foreach (var seat in availableSeats)
+                            {
+                                <option value="@seat">@seat</option>
+                            }
+                        </select>
+                    </div>
+                }
+                <div class="ticket-selector">
+                    <p><strong>Pris:</strong> @eventDetails.Price kr / styck</p>
+                    <button @onclick="DecrementTicketCount" disabled="@IsDecrementDisabled">-</button>
+                    <span>@ticketCount</span>
+                    <button @onclick="IncrementTicketCount" disabled="@IsIncrementDisabled">+</button>
+                </div>
+            </div>
+
+            <p class="total-price">Total Price: @TotalPrice kr</p>
+            @if (IsSoldOut)
+            {
+                <p style="color:red">Tyvärr, inga biljetter kvar</p>
+            }
+
+            <div class="buttons">
                    
         @if (user != null)
         {
@@ -78,12 +78,9 @@
                 <p>Laddar event...</p>
             }
     </section>
-
 </main>
 
 @code {
-
-
     async Task Confirmation()
     {
         bool confirmed = await JS.InvokeAsync<bool>("confirm", "Bekräfta för att slutföra order");
@@ -127,6 +124,7 @@
         await EventService.GetAllEvents();
         LoadEvent(EventId);
     }
+    
     private void LoadEvent(int id)
     {
         eventDetails = EventService.GetEventById(id);
