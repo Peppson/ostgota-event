@@ -34,30 +34,39 @@
         @* Login *@
         @if (isLoggedIn)
         {
-            <div class="user-menu">
+            <div class="user-menu" @onclick:stopPropagation>
                 <NavLink class="nav-link" @onclick="ToggleUserMenu">
                     <i id="user-icon" class="fa-solid fa-user-circle header-icons"></i> @currentUser
                 </NavLink>
                 @if (showUserMenu)
                 {
-                    <div class="user-dropdown">
-                        <div class="user-info">
-                            <i class="fa-solid fa-user-circle"></i>
-                            <span>@currentUser</span>
+                    <div class="popup-overlay" style="display: flex" @onclick="CloseUserMenu">
+                        <div class="popup-content" @onclick:stopPropagation>
+                            <div class="form-container">
+                                <div class="form-wrapper">
+                                    <div class="form-fields">
+                                        <div class="form-group">
+                                            <i class="fa-solid fa-user-circle"></i>
+                                            <span>@currentUser</span>
+                                        </div>
+                                        <div class="form-group">
+                                            @foreach (var ticket in uniqueTickets)
+                                            {
+                                                <div class="ticket-container">
+                                                    <div class="ticket-info">Ticket: @ticket.Title</div>
+                                                    <div class="ticket-info">x: @ticket.Count</div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <button class="submit-button" @onclick="OpenEditMenu">Ändra information</button>
+                                        <button class="submit-button" @onclick="HandleLogout">
+                                            <i class="fa-solid fa-sign-out-alt"></i>
+                                            Logout
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="user-tickets">
-                            @foreach (var ticket in uniqueTickets)
-                            {
-                                <div class="user-tickets">Ticket: @ticket.Title</div>
-                                <div class="user-tickets">Price: @ticket.Price</div>
-                                <div class="user-tickets">x: @ticket.Count</div>
-                            }
-                        </div>
-                        <button class="dropdown-item" @onclick="OpenEditMenu">Ändra information</button>
-                        <button class="dropdown-item" @onclick="HandleLogout">
-                            <i class="fa-solid fa-sign-out-alt"></i>
-                            Logout
-                        </button>
                     </div>
                 }
             </div>
@@ -126,11 +135,11 @@
         return userTickets
             .GroupBy(ticket => ticket.Title)
             .Select(group => new UserTicket
-            {
-                Title = group.Key,
-                Price = group.First().Price,
-                Count = group.Count()
-            })
+                {
+                    Title = group.Key,
+                    Price = group.First().Price,
+                    Count = group.Count()
+                })
             .ToList();
     }
 
@@ -250,10 +259,15 @@
                 ShowPopup("Error", "User not found");
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             ShowPopup("Error", $"An error occurred while updating information: {ex.Message}");
         }
+    }
+
+    private void CloseUserMenu()
+    {
+        showUserMenu = false;
     }
 }
 
@@ -339,67 +353,17 @@
         position: relative;
     }
 
-    .user-button {
-        padding: 16px 12px;
+    /*Userticket styling*/
+
+    .ticket-container{
+        overflow-y: auto; 
+        border-bottom: 1px solid var(--header-color);
+        display:flex;
+        gap: 5px;
+        margin-bottom: 10px;
     }
 
-    .user-button i {
-        font-size: 24px;
-        color: var(--text-color-light);
-        transition: color 0.4s ease-in-out;
-        position: relative;
-        top: -2px;
+    .ticket-info{
+        flex-direction: column;
     }
-
-    .user-button:hover i {
-        color: var(--text-color-hover);
-    }
-
-    .user-dropdown {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background-color: var(--background-color-light);
-        min-width: 240px;   
-        z-index: 1000;
-    }
-
-    .user-info {
-        border-bottom: 1px solid #eee;
-        display: flex;
-        align-items: center;
-        font-size: 24px;
-        gap: 8px;
-        color: #333;
-        @* TODO *@
-        background-color: red;
-    }
-
-    .user-info i {
-        font-size: 24px;
-        color: #666;
-    }
-
-    .dropdown-item {
-        padding: 12px 16px;
-        width: 100%;
-        text-align: left;
-        background: none;
-        border: none;
-        color: #333;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: background-color 0.2s;
-    }
-
-        .dropdown-item:hover {
-            background-color: #f5f5f5;
-        }
-
-        .dropdown-item i {
-            font-size: 16px;
-            color: #666;
-        }
 </style>
