@@ -1,0 +1,72 @@
+﻿@*User Edit*@
+@inject IUserService UserService
+@inject SessionStorageService SessionStorageService
+<div class="popup-overlay" style="display: @(IsVisible ? "flex" : "none")">
+    <div class="popup-content">
+        <button class="close-button" @onclick="ClosePopup">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3>Ändra information</h3>
+
+        <div class="form-container">
+            <EditForm Model="@EditModel" OnValidSubmit="HandleSubmit" class="form-wrapper">
+                <div class="form-fields">
+                    <div class="form-group">
+                        <label for="password">Lösenord<span>*</span></label>
+                        <InputText type="password" id="password" @bind-Value="EditModel.Password" class="form-control" autocomplete="new-password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-post<span>*</span></label>
+                        <InputText id="email" @bind-Value="EditModel.Email" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefon</label>
+                        <InputText id="phone" @bind-Value="EditModel.PhoneNumber" class="form-control" />
+                    </div>
+                    <button type="submit" class="submit-button">Spara ändringar</button>
+                    <button @onclick="ClosePopup" class="submit-button">Avbryt</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public UserRegister? EditModel { get; set; } = new() { Username = "", Password = "", Email = "" };
+    [Parameter] public EventCallback<UserRegister> OnEdit { get; set; }
+
+    public bool IsVisible { get; private set; }
+
+    private async Task LoadUser()
+    {
+        string username = await SessionStorageService.GetItemAsync<string>("user");
+        var newUser = await UserService.GetUserByUsername(username);
+
+        EditModel.Username = newUser.Username;
+        EditModel.Email = newUser.Email;
+        EditModel.PhoneNumber = newUser.PhoneNumber;
+    }
+
+    public async void Show()
+    {
+        await LoadUser();
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    public async Task ClosePopup()
+    {
+        IsVisible = false;
+        StateHasChanged();
+    }
+
+    private async Task HandleSubmit()
+    {
+        if (OnEdit.HasDelegate)
+        {
+            await OnEdit.InvokeAsync(EditModel);
+            await ClosePopup();
+        }
+    }
+}
+
