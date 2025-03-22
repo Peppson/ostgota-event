@@ -1,0 +1,50 @@
+
+<div class="sort-dropdown">
+    <select id="sort-options" @onchange="OnSortChanged">
+        <option value="date">Närmaste datum</option>
+        <option value="date-desc">Senaste datum</option>
+        <option value="name">Namn A-Ö</option>
+        <option value="name-desc">Namn Ö-A</option>
+        <option value="city">Stad A-Ö</option>
+        <option value="city-desc">Stad Ö-A</option>
+        <option value="availability">Mest biljetter kvar</option>
+        <option value="availability-desc">Minst biljetter kvar</option>
+        <option value="size">Mindre event först</option>
+        <option value="size-desc">Större event först</option>
+    </select>
+    <i class="fa-solid fa-arrow-up-wide-short"></i>
+</div>
+
+@code {
+    [Parameter] public EventCallback<string> SortChanged { get; set; }
+
+    private async Task OnSortChanged(ChangeEventArgs e)
+    {
+        if (e.Value is not null)
+        {
+            await SortChanged.InvokeAsync(e.Value.ToString());
+        }
+    }
+}
+
+<style>
+    
+.sort-dropdown {
+    font-size: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 22px;
+}
+
+#sort-options {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 5px;
+    background-color: var(--background-color-mid);
+    color: rgba(117, 117, 117)
+}
+
+</style>
