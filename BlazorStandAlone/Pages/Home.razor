@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using BlazorStandAlone.Models
 @using BlazorStandAlone.Components
+@using BlazorStandAlone.Components.Home
 @inject SessionStorageService SessionStorage
 @inject NavigationManager NavigationManager
 @inject HttpClient HttpClient
@@ -29,105 +30,20 @@
                 <input type="text" id="event-search" @bind="searchEvent" @bind:event="oninput"
                     @onkeypress="HandleSearchKeyPress" placeholder="Sök efter namn, stad, datum">
                 <button class="drop-btn" @onclick="FilterEvents">Sök</button>
-                @* bind:event to make sure searchfield updates when typing
-                onkeypress update searchfield when pressing enter  
-                *@
             </div>
-            <div class="sort-dropdown">
-                <select id="sort-options" @onchange="SortChanged">
-                    <option value="date">Närmaste datum</option>
-                    <option value="date-desc">Senaste datum</option>
-                    <option value="name">Namn A-Ö</option>
-                    <option value="name-desc">Namn Ö-A</option>
-                    <option value="city">Stad A-Ö</option>
-                    <option value="city-desc">Stad Ö-A</option>
-                    <option value="availability">Mest biljetter kvar</option>
-                    <option value="availability-desc">Minst biljetter kvar</option>
-                    <option value="size">Mindre event först</option>
-                    <option value="size-desc">Större event först</option>
-                </select>
-                <i class="fa-solid fa-arrow-up-wide-short"></i>
-            </div>
+
+            <SortDropdown SortChanged="SortEvents" />
+        
         </div>
     </header>
 
     <div class="event-container">
-        @foreach (var ev in EventPages)
+        
+      @foreach (var ev in EventPages)
         {
-            <div class="event-card">
-
-                <img class="event-img" src="@ev.ImagePath">
-
-                <div class="event-card-info">
-                    <h3>@ev.Name</h3>
-                    <p class="event-description">@GetClampedDescription(ev.Description)</p>
-                    <p id="event-card-address">@ev.Address, @ev.City
-                        <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(ev.Address),@Uri.EscapeDataString(ev.City)"
-                            class="map-icon" target="_blank">
-                            <i class="fas fa-location-dot"></i>
-                        </a>
-                    </p>
-                </div>
-
-                <div class="event-card-buttons">
-                    <p class="event-time">@ev.StartTime.ToString("MMM dd", new System.Globalization.CultureInfo("sv-SV"))
-                    </p>
-
-                    @{
-                        int? remainingTickets = ev.TicketsMax.HasValue ? ev.TicketsMax - ev.TicketsSold : null;
-
-                        int? lowTicketThreshold;
-                        if (ev.TicketsMax.HasValue)
-                        {
-                            if (ev.TicketsMax < 100)
-                            {
-                                lowTicketThreshold = 10;
-                            }
-                            else if (ev.TicketsMax < 1000)
-                            {
-                                lowTicketThreshold = 50;
-                            }
-                            else
-                            {
-                                lowTicketThreshold = 100;
-                            }
-                        }
-                        else
-                        {
-                            lowTicketThreshold = null;
-                        }
-                    }
-                    @if (remainingTickets.HasValue)
-                    {
-                        if (remainingTickets <= 0)
-                        {
-                            <p class="sold-out-text">Slutsålt!</p>
-                        }
-                        else if (remainingTickets <= lowTicketThreshold)
-                        {
-                            <p class="few-tickets-text">@remainingTickets biljetter kvar!</p>
-                        }
-                    }
-
-                    <div class="event-card-button-container">
-                        <button @onclick="() => OpenModal(ev)">Visa info</button>
-
-                        @if (ev.AccessType == AccessType.Free && ev.HasSeat || ev.AccessType == AccessType.Free && ev.TicketsMax.HasValue)
-                        {
-                            <button @onclick="() => GoToCheckout(ev.Id)">Boka</button>
-                        }
-                        else if (ev.AccessType == AccessType.Free && !ev.HasSeat)
-                        {
-                            <button class="not-a-button">Gratis!</button>
-                        }
-                        else
-                        {
-                            <button @onclick="() => GoToCheckout(ev.Id)">Köp</button>
-                        }
-
-                    </div>
-                </div>
-            </div>
+            <EventCard Event="ev" 
+                    OnOpenModal="OpenModal" 
+                    OnGoToCheckout="GoToCheckout" />
         }
 
         <div class="pagination-buttons"> 
@@ -139,261 +55,13 @@
     </div>
 </section>
 
-
-    @* SHOW EVENT MODAL  *@
-    @if (selectedEvent != null)
-    {
-        <div class="modal" style="@(isModalVisible ? "display:flex;" : "display:none;")">
-            <div class="modal-content">
-                <h3>@selectedEvent.Name
-                    <span class="close" @onclick="CloseModal"><i class="fas fa-circle-xmark"></i></span>
-                </h3>
-                
-                <div class="event-time-box">
-                    <p><strong>Start:</strong> @selectedEvent.StartTime.ToString("MMM dd @ HH:mm")</p>
-                    <p><strong>Slutar:</strong> @selectedEvent.EndTime.ToString("MMM dd @ HH:mm")</p>
-                </div>   
-                <p class="event-modal-description">@selectedEvent.Description</p>
-
-                @if (selectedEvent.AccessType != AccessType.Free)
-                {
-                    <p><strong>Pris:</strong> @(selectedEvent.Price)kr</p>
-                }
-                <p><strong>Biljetter kvar:</strong> @(selectedEvent.TicketsMax.HasValue ? (selectedEvent.TicketsMax - selectedEvent.TicketsSold + "st") : "Ej begränsat")</p>
-                
-                <p class="find-us-tab"><strong>Hitta hit:</strong> @selectedEvent.Address, @selectedEvent.City
-                    <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(selectedEvent.Address),@Uri.EscapeDataString(selectedEvent.City)"
-                        class="map-icon" target="_blank">
-                        <i class="fas fa-location-dot"></i>
-                    </a>
-                </p>
-                <iframe src="@($"https://www.google.com/maps?q={Uri.EscapeDataString(selectedEvent.Address + ' ' +selectedEvent.City)}&output=embed")"
-                allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-
-                @if (selectedEvent.AccessType == AccessType.Free && selectedEvent.HasSeat || selectedEvent.AccessType == AccessType.Free && selectedEvent.TicketsMax.HasValue)
-                {
-                    <button class="modal-buy-btn modal-buy-btn-transform" @onclick="() => GoToCheckout(selectedEvent.Id)">BOKA BILJETT</button>
-                 }
-                else if (selectedEvent.AccessType == AccessType.Free && !selectedEvent.HasSeat){
-                      <button class="modal-buy-btn modal-buy-btn-locked">Gratis!</button>
-                }
-                else
-                { 
-                    <button class="modal-buy-btn modal-buy-btn-transform" @onclick="() => GoToCheckout(selectedEvent.Id)">KÖP BILJETT</button>
-                }
-            </div>
-        </div>
-    }
-
-
-@* JS to the rescue - WHY WOULD YOU EVER SAY THAT!?*@
+<EventModal Event="selectedEvent"
+            IsVisible="isModalVisible"
+            OnClose="CloseModal"
+            OnGoToCheckout="GoToCheckout" />
+  
 <script>
     function scrollToEventSection() {
         document.getElementById('event-section').scrollIntoView();
-    }
-
+    } 
 </script>
-
-@code { 
-   
-private void GoToCheckout(int eventId)
-{
-     NavigationManager.NavigateTo($"/checkout/{eventId}");
-}
-
-    //PAGINATION
-    public int CurrentPage { get; set; } = 1;
-    public int PageSize { get; set; } = 4;
-
-    // making sure there's always atleast one page
-    public int TotalPages => Math.Max(1, (int)Math.Ceiling((double)FilteredEvents.Count / PageSize));
-
-    // skip and take to get the next 5 events
-    public List<EventDto> EventPages => FilteredEvents.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
-    public List<EventDto> events { get; set; } = new();
-
-    // bools for the onclick
-    public bool IsNextDisabled => CurrentPage == TotalPages;
-    public bool IsPreviousDisabled => CurrentPage == 1;
-
-    public async Task NextPage()
-    {
-        if (CurrentPage < TotalPages)
-        {
-            CurrentPage++;
-            await JS.InvokeVoidAsync("scrollToEventSection");
-        }
-    }
-
-    public void PreviousPage()
-    {
-        if (CurrentPage > 1)
-        {
-            CurrentPage--;
-        }
-    }
-
-    // GET EVENTS
-
-    public string searchEvent { get; set; } = "";
-    public List<EventDto> FilteredEvents { get; set; } = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        await GetEventsAsync();
-        FilteredEvents = new List<EventDto>(events);
-        SortEvents("date");
-    }
-
-    private async Task GetEventsAsync()
-    {
-        try
-        {
-            var response = await HttpClient.GetAsync("api/event/get");
-            if (response.IsSuccessStatusCode)
-            {
-                events = await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new();
-                FilteredEvents = new List<EventDto>(events);
-                StateHasChanged();
-            }
-            else
-            {
-                Console.WriteLine($"Error fetching events: {response.StatusCode}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception while fetching events: {ex.Message}");
-        }
-    }
-
-    // filter logic
-    private void FilterEvents()
-    {
-        if (!string.IsNullOrWhiteSpace(searchEvent))
-        {
-            string searchLower = searchEvent.ToLower();
-
-            FilteredEvents = events.Where(e =>
-            e.Name.ToLower().Contains(searchLower) ||
-            e.City.ToLower().Contains(searchLower) ||
-            e.Address.ToLower().Contains(searchLower) ||
-            e.Description.ToLower().Contains(searchLower) ||
-            e.StartTime.ToString("yyyy-MM-dd").Contains(searchLower) ||
-            e.StartTime.ToString("dd-MM").Contains(searchLower) ||
-            e.StartTime.ToString("MMMM", new System.Globalization.CultureInfo("sv-SE")).ToLower().Contains(searchLower)
-            ).ToList();
-            CurrentPage = 1;
-        }
-        else
-        {
-            FilteredEvents = new List<EventDto>(events);
-        }
-        SortEvents("");
-        StateHasChanged();
-        searchEvent = "";
-    }
-
-    private void HandleSearchKeyPress(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter")
-        {
-            FilterEvents();
-            searchEvent = "";
-        }
-    }
-
-    // sort method
-
-    private void SortChanged(ChangeEventArgs e)
-    {
-        string selectedSort = e.Value?.ToString() ?? "date";
-        SortEvents(selectedSort);
-    }
-
-    private void SortEvents(string sortBy)
-    {
-        switch (sortBy)
-        {
-            case "date":
-            case "":
-            default:
-            FilteredEvents = FilteredEvents.OrderBy(e => e.StartTime).ToList();
-            break;
-            case "date-desc":
-                FilteredEvents = FilteredEvents.OrderByDescending(e => e.StartTime).ToList();
-                break;
-            case "name":
-                FilteredEvents = FilteredEvents.OrderBy(e => e.Name).ToList();
-                break;
-            case "name-desc":
-                FilteredEvents = FilteredEvents.OrderByDescending(e => e.Name).ToList();
-                break;
-            case "city":
-                FilteredEvents = FilteredEvents.OrderBy(e => e.City).ToList();
-                break;
-            case "city-desc":
-                FilteredEvents = FilteredEvents.OrderByDescending(e => e.City).ToList();
-                break;
-            case "availability":
-                FilteredEvents = FilteredEvents.OrderByDescending(e => (e.TicketsMax ?? 0) - e.TicketsSold).ToList();
-                break;
-            case "availability-desc":
-                FilteredEvents = FilteredEvents.OrderBy(e => (e.TicketsMax ?? 0) - e.TicketsSold).ToList();
-                break;
-            case "size":
-                FilteredEvents = FilteredEvents.OrderBy(e => e.TicketsMax ?? int.MinValue).ToList();
-                break;
-            case "size-desc":
-                FilteredEvents = FilteredEvents.OrderByDescending(e => e.TicketsMax ?? int.MinValue).ToList();
-                break;
-        }
-        StateHasChanged();
-    }
-
-    private string GetClampedDescription(string description)
-    {
-        const int threshold = 220;
-
-        if (description.Length <= threshold)
-            return description;
-
-        return description.Substring(0, threshold) + "...";
-    }
-
-
-    @* OPEN SHOW MORE INFO MODAL *@
-
-    private bool isModalVisible = false;
-    private EventDto? selectedEvent;
-
-    private void OpenModal(EventDto currentEvent)
-    {
-        selectedEvent = currentEvent;
-        isModalVisible = true;
-    }
-
-    private void CloseModal()
-    {
-        isModalVisible = false;
-    }
-
-    // Login logic
-    private LoginDto? user;
-
-    protected async Task OnIntializedAsync()
-    {
-        var result = await SessionStorage.GetItemAsync<User>("user");
-
-        if (result != null)
-        {
-            user = new LoginDto() { Username = result.Username };
-        }
-        else
-        {
-            NavigationManager.NavigateTo("/login");
-        }
-    }
-}
