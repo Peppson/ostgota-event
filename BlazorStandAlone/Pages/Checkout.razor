@@ -11,62 +11,69 @@
     <section class="checkout-info">
 
 
-        @if (eventDetails != null)
-        {
-            <div class="header-div">
-
-                <h2>@eventDetails.Name</h2>
-                @if (user != null)
-                {
-                    <p><strong>Inloggad som:</strong> @user.Username</p>
-                }
-                else
-                {
-                    <p style="color: red;">Ingen användare, logga in</p>
-                }
-            </div>
-
-            <div class="ticket-info">
-                <p><strong>Plats:</strong> @eventDetails.Address, @eventDetails.City</p>
-                <p><strong>Datum:</strong> @eventDetails.StartTime.ToString("MMM dd @ HH:mm")</p>
-
-                @if (eventDetails.HasSeat)
-                {
-                    <div class="seat-div">
-
-                        <label for="seat-selection"><strong>Välj plats:</strong></label>
-                        <select id="seat-selection" @bind="selectedSeat">
-                            @foreach (var seat in availableSeats)
-                            {
-                                <option value="@seat">@seat</option>
-                            }
-                        </select>
-                    </div>
-                }
-                <div class="ticket-selector">
-                    <p><strong>Pris:</strong> @eventDetails.Price kr / styck</p>
-                    <button @onclick="DecrementTicketCount" disabled="@IsDecrementDisabled">-</button>
-                    <span>@ticketCount</span>
-                    <button @onclick="IncrementTicketCount" disabled="@IsIncrementDisabled">+</button>
-                </div>
-            </div>
-
-            <p class="total-price">Total Price: @TotalPrice kr</p>
-            @if (IsSoldOut)
+            @if (eventDetails != null)
             {
-                <p style="color:red">Tyvärr, inga biljetter kvar</p>
-            }
+                <div class="header-div">
 
-            <div class="buttons">
-                <button class="confirm-btn" @onclick="Confirmation" disabled="@IsSoldOut">Bekräfta köp</button>
-                <button class="cancel-btn" @onclick="GoBack">Gå tillbaka</button>
+                    <h2>@eventDetails.Name</h2>
+                    @if (user != null)
+                    {
+                        <p><strong>Inloggad som:</strong> @user.Username</p>
+                    }
+                    else
+                    {
+                        <p style="color: red;">Logga in för att Bekräfta köp</p>
+                    }
+                </div>
 
-            </div>
-        }
-        else
+                <div class="ticket-info">
+                    <p><strong>Plats:</strong> @eventDetails.Address, @eventDetails.City</p>
+                    <p><strong>Datum:</strong> @eventDetails.StartTime.ToString("MMM dd @ HH:mm")</p>
+
+                    @if (eventDetails.HasSeat)
+                    {
+                        <div class="seat-div">
+
+                            <label for="seat-selection"><strong>Välj plats:</strong></label>
+                            <select id="seat-selection" @bind="selectedSeat">
+                                @foreach (var seat in availableSeats)
+                                {
+                                    <option value="@seat">@seat</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    <div class="ticket-selector">
+                        <p><strong>Pris:</strong> @eventDetails.Price kr / styck</p>
+                        <button @onclick="DecrementTicketCount" disabled="@IsDecrementDisabled">-</button>
+                        <span>@ticketCount</span>
+                        <button @onclick="IncrementTicketCount" disabled="@IsIncrementDisabled">+</button>
+                    </div>
+                </div>
+
+                <p class="total-price">Total Price: @TotalPrice kr</p>
+                @if (IsSoldOut)
+                {
+                    <p style="color:red">Tyvärr, inga biljetter kvar</p>
+                }
+
+                <div class="buttons">
+                   
+        @if (user != null)
         {
-            <p>Laddar event...</p>
+            <button class="confirm-btn"   @onclick="Confirmation" disabled="@IsSoldOut">Bekräfta köp</button>
+        } else{
+            
+           <button class="confirm-btn" @onclick="Confirmation" disabled>Bekräfta köp</button>
         }
+                    <button class="cancel-btn" @onclick="GoBack">Gå tillbaka</button>
+
+                </div>
+            }
+            else
+            {
+                <p>Laddar event...</p>
+            }
     </section>
 
 </main>
@@ -167,7 +174,7 @@
             }
             // Save the tickets to session storage for easy access in the confirmation page
             await SessionStorage.SetItemAsync("purchasedTickets", purchasedTickets);
-            
+
             Navigation.NavigateTo("/confirmation");
         }
     }
