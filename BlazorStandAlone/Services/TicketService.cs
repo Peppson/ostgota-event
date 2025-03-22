@@ -1,93 +1,92 @@
 ﻿using BlazorStandAlone.Models;
 using System.Net.Http.Json;
 
-namespace BlazorStandAlone.Services
+namespace BlazorStandAlone.Services;
+
+public interface ITicketService
 {
-    public interface ITicketService
+    Task<List<TicketDto>> GetAllTickets();
+    TicketDto? GetTicketById(int id);
+    Task<bool> CreateTicket(TicketDto ticket);
+    Task<bool> DeleteTicket(int id);
+    List<TicketDto> Tickets { get; }
+    int TicketCount { get; }
+}
+
+public class TicketServiceException : Exception
+{
+    public TicketServiceException(string message, Exception? inner = null)
+        :base(message, inner) { }
+}
+
+public class TicketService : ITicketService
+{
+    private readonly HttpClient _httpClient;
+    private List<TicketDto> _tickets = new();
+    public List<TicketDto> Tickets => _tickets;
+
+    public int TicketCount => _tickets.Count;
+
+    public TicketService(HttpClient httpClient)
     {
-        Task<List<TicketDto>> GetAllTickets();
-        TicketDto? GetTicketById(int id);
-        Task<bool> CreateTicket(TicketDto ticket);
-        Task<bool> DeleteTicket(int id);
-        List<TicketDto> Tickets { get; }
-        int TicketCount { get; }
+        _httpClient = httpClient;
     }
 
-    public class TicketServiceException : Exception
+    public async Task<List<TicketDto>> GetAllTickets()
     {
-        public TicketServiceException(string message, Exception? inner = null)
-            :base(message, inner) { }
+        try
+        {
+            var response = await _httpClient.GetAsync("api/ticket/get");
+            if (response.IsSuccessStatusCode)
+            {
+                _tickets = await response.Content.ReadFromJsonAsync<List<TicketDto>>() ?? new();
+                return _tickets;
+            }
+            throw new TicketServiceException($"Failed to fetch ticket: {response.StatusCode}");
+        }
+        catch (Exception ex) when (ex is not TicketServiceException)
+        {
+            throw new TicketServiceException("An error occurred while fetching ticket", ex);
+        }
     }
 
-    public class TicketService : ITicketService
+    public TicketDto? GetTicketById(int id)
     {
-        private readonly HttpClient _httpClient;
-        private List<TicketDto> _tickets = new();
-        public List<TicketDto> Tickets => _tickets;
-
-        public int TicketCount => _tickets.Count;
-
-        public TicketService(HttpClient httpClient)
+        return _tickets.FirstOrDefault(t => t.Id == id);
+    }
+    public async Task<bool> CreateTicket(TicketDto ticket)
+    {
+        try
         {
-            _httpClient = httpClient;
+            var response = await _httpClient.PostAsJsonAsync("api/ticket/create", ticket);
+            if (response.IsSuccessStatusCode)
+            {
+                await GetAllTickets();
+                return true;
+            }
+            throw new TicketServiceException($"Failed to create ticket: {response.ReasonPhrase}");
         }
-
-        public async Task<List<TicketDto>> GetAllTickets()
+        catch (Exception ex) when (ex is not TicketServiceException)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync("api/ticket/get");
-                if (response.IsSuccessStatusCode)
-                {
-                    _tickets = await response.Content.ReadFromJsonAsync<List<TicketDto>>() ?? new();
-                    return _tickets;
-                }
-                throw new TicketServiceException($"Failed to fetch ticket: {response.StatusCode}");
-            }
-            catch (Exception ex) when (ex is not TicketServiceException)
-            {
-                throw new TicketServiceException("An error occurred while fetching ticket", ex);
-            }
+            throw new TicketServiceException("An error occurred while creating ticket", ex);
         }
-
-        public TicketDto? GetTicketById(int id)
+    }
+    
+    public async Task<bool> DeleteTicket(int id)
+    {
+        try
         {
-            return _tickets.FirstOrDefault(t => t.Id == id);
+            var response = await _httpClient.DeleteAsync($"api/ticket/delete/{id}");
+            if(response.IsSuccessStatusCode)
+            {
+                await GetAllTickets();
+                return true;
+            }
+            throw new TicketServiceException($"Failed to delete ticket: {response.StatusCode}");
         }
-        public async Task<bool> CreateTicket(TicketDto ticket)
+        catch(Exception ex) when (ex is not TicketServiceException)
         {
-            try
-            {
-                var response = await _httpClient.PostAsJsonAsync("api/ticket/create", ticket);
-                if (response.IsSuccessStatusCode)
-                {
-                    await GetAllTickets();
-                    return true;
-                }
-                throw new TicketServiceException($"Failed to create ticket: {response.ReasonPhrase}");
-            }
-            catch (Exception ex) when (ex is not TicketServiceException)
-            {
-                throw new TicketServiceException("An error occurred while creating ticket", ex);
-            }
-        }
-        
-        public async Task<bool> DeleteTicket(int id)
-        {
-            try
-            {
-                var response = await _httpClient.DeleteAsync($"api/ticket/delete/{id}");
-                if(response.IsSuccessStatusCode)
-                {
-                    await GetAllTickets();
-                    return true;
-                }
-                throw new TicketServiceException($"Failed to delete ticket: {response.StatusCode}");
-            }
-            catch(Exception ex) when (ex is not TicketServiceException)
-            {
-                throw new TicketServiceException("An error occured while deleting ticket",ex);
-            }
+            throw new TicketServiceException("An error occured while deleting ticket",ex);
         }
     }
 }

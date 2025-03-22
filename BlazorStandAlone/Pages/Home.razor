@@ -236,7 +236,6 @@ private void GoToCheckout(int eventId)
     }
 
     // GET EVENTS
-
     public string searchEvent { get; set; } = "";
     public List<EventDto> FilteredEvents { get; set; } = new();
 
@@ -306,7 +305,6 @@ private void GoToCheckout(int eventId)
     }
 
     // sort method
-
     private void SortChanged(ChangeEventArgs e)
     {
         string selectedSort = e.Value?.ToString() ?? "date";

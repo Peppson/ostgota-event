@@ -13,7 +13,7 @@ public class AuthService(IUserService userService) : IAuthService
         return user;   
     }
 
-    public async Task<User?> Register(string username, string password, string email, string? phonenumber)
+    public async Task<User?> Register(string username, string password, string email, string? phoneNumber)
     {   
         if (await _userService.DoesUserExist(username))
             return null;
@@ -23,7 +23,7 @@ public class AuthService(IUserService userService) : IAuthService
             Username = username, 
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(password), 
             Email = email, 
-            PhoneNumber = phonenumber 
+            PhoneNumber = phoneNumber 
         }; 
 
         await _userService.AddUser(user);
