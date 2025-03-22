@@ -1,0 +1,208 @@
+@using System.Globalization
+
+<div class="event-card">
+    <img class="event-img" src="@Event.ImagePath">
+
+    <div class="event-card-info">
+        <h3>@Event.Name</h3>
+        <p class="event-description">@GetClampedDescription(Event.Description)</p>
+        <p id="event-card-address">
+            @Event.Address, @Event.City
+            <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(Event.Address),@Uri.EscapeDataString(Event.City)"
+                class="map-icon" target="_blank">
+                <i class="fas fa-location-dot"></i>
+            </a>
+        </p>
+    </div>
+
+    <div class="event-card-buttons">
+        <p class="event-time">@Event.StartTime.ToString("MMM dd", new CultureInfo("sv-SV"))</p>
+
+        @{
+            int? remainingTickets = Event.TicketsMax.HasValue ? Event.TicketsMax - Event.TicketsSold : null;
+
+            int? lowTicketThreshold;
+            if (Event.TicketsMax.HasValue)
+            {
+                if (Event.TicketsMax < 100)
+                {
+                    lowTicketThreshold = 10;
+                }
+                else if (Event.TicketsMax < 1000)
+                {
+                    lowTicketThreshold = 50;
+                }
+                else
+                {
+                    lowTicketThreshold = 100;
+                }
+            }
+            else
+            {
+                lowTicketThreshold = null;
+            }
+        }
+
+        @if (remainingTickets.HasValue)
+        {
+            if (remainingTickets <= 0)
+            {
+                <p class="sold-out-text">Slutsålt!</p>
+            }
+            else if (remainingTickets <= lowTicketThreshold)
+            {
+                <p class="few-tickets-text">@remainingTickets biljetter kvar!</p>
+            }
+        }
+
+        <div class="event-card-button-container">
+            <button @onclick="() => OnOpenModal.InvokeAsync(Event)">Visa info</button>
+
+            @if (Event.AccessType == AccessType.Free && Event.HasSeat || Event.AccessType == AccessType.Free && Event.TicketsMax.HasValue)
+            {
+                <button @onclick="() => OnGoToCheckout.InvokeAsync(Event.Id)">Boka</button>
+            }
+            else if (Event.AccessType == AccessType.Free && !Event.HasSeat)
+            {
+                <button class="not-a-button">Gratis!</button> 
+            }
+            else
+            {
+                <button @onclick="() => OnGoToCheckout.InvokeAsync(Event.Id)">Köp</button>
+            }
+
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventDto Event { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<EventDto> OnOpenModal { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<int> OnGoToCheckout { get; set; } = default!;
+
+    private string GetClampedDescription(string description)
+    {
+        return description.Length > 100 ? description.Substring(0, 100) + "..." : description;
+    }
+}
+
+<style>
+    
+.event-card {
+    width: 1000px;
+    max-width: 80%;
+    background-color: transparent;
+    display: flex;
+
+}
+
+.event-img {
+    width: 300px;
+    height: 300px;
+    clip-path: polygon(0 6%, 100% 0, 100% 94%, 0 100%);
+}
+
+.event-card-info {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 20px;
+    padding-left: 30px;
+    font-size: 20px;
+    padding-bottom: 18px;
+}
+
+#event-card-address {
+    margin-top: auto;
+}
+
+.event-card-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: end;
+    padding-bottom: 10px;
+}
+
+.event-card-button-container {
+    display: flex;
+    gap: 10px;
+    padding-right: 10px;
+}
+
+.event-card-button-container button {
+    border: none;
+    background-color: var(--home-button-color);
+    padding: 15px;
+    cursor: pointer;
+    min-width: 90px;
+    font-size: 1rem;
+    transition: Transform 0.2s ease-in-out;
+}
+
+.event-card-button-container .not-a-button {
+    background-color: transparent !important;
+    color: var(--home-button-color);
+    cursor: default;
+    display: inline-block;
+    transform: scale(1.4);
+    transform-origin: center;
+}
+
+
+#event-card-address i {
+    transition: Transform 0.1s ease-in-out;
+}
+
+#event-card-address i:hover {
+    transform: scale(1.1);
+}
+
+.event-description {
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 400px;
+}
+
+.event-time {
+    font-size: 26px;
+    background-color: var(--home-date-color);
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+}
+
+.map-icon {
+    color: var(--home-date-color);
+    font-size: 28px;
+    padding-left: 6px;
+}
+
+
+.sold-out-text,
+.few-tickets-text {
+    font-size: 18px;
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+.sold-out-text {
+    color: var(--error-color);
+}
+
+.few-tickets-text {
+    color: var(--warning-color);
+}
+
+</style>
