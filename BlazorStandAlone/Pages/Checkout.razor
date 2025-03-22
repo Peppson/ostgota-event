@@ -9,6 +9,7 @@
 
 <main class="checkout-page">
     <img src="icons/favicon-black.svg" alt="Logo" class="logo">
+    <img src="icons/favicon-black.svg" alt="Logo-bg" class="logo-bg">
     
     <section class="checkout-info">
             @if (eventDetails != null)
@@ -26,6 +27,7 @@
                     }
                 </div>
 
+                    
 
                 <div class="ticket-info">
                     <p><strong>Plats:</strong> @eventDetails.Address, @eventDetails.City</p>
@@ -94,9 +96,9 @@
     private List<string> availableSeats = new() { "A1", "A2", "B1", "B2", "C1", "C2" };
     private string selectedSeat = "A1";
 
-    private async Task GoBack()
+    private void GoBack()
     {
-        await JS.InvokeVoidAsync("window.close");
+        Navigation.NavigateTo("#event-section");
     }
 
     private LoginDto? loginDto;
