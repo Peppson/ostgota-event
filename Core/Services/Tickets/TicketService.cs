@@ -56,7 +56,7 @@ public class TicketService(IDatabase DbContext) : ITicketService
         var user = ticket.User;
         var event1 = ticket.Event;
 
-        user.CancelTicket(ticket);
+        user.RemoveTicket(ticket);
         event1.CancelTicket();
         await _db.SaveChangesAsync();
 

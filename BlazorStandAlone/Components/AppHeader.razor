@@ -35,7 +35,7 @@
         {
             <div class="user-menu">
                 <NavLink class="nav-link" @onclick="ToggleUserMenu">
-                    <i id="user-icon" class="fa-solid fa-user-circle header-icons"></i> Inloggad
+                    <i id="user-icon" class="fa-solid fa-user-circle header-icons"></i> @currentUser
                 </NavLink>
                 @if (showUserMenu)
                 {
@@ -45,10 +45,12 @@
                             <span>@currentUser</span>
                         </div>
                         <div class="user-tickets">
-                            @foreach(var ticket in userTickets)
+                            @foreach (var ticket in uniqueTickets)
                             {
                                 <div class="user-tickets">Ticket: @ticket.Title</div>
                                 <div class="user-tickets">Price: @ticket.Price</div>
+                                <div class="user-tickets">x: @ticket.Count</div>
+
                             }
                         </div>
                         <button class="dropdown-item" @onclick="HandleLogout">
@@ -78,7 +80,10 @@
     private bool showUserMenu = false;
     private string currentUser = string.Empty;
 
+
     private List<TicketDto> userTickets = new();
+
+    private List<UserTicket> uniqueTickets = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -100,13 +105,31 @@
     {
         try
         {
-            var user = UserService.GetUserByUsername(currentUser);
-            userTickets = await UserService.GetUserTickets(user.Id);
+            var user = await UserService.GetUserByUsername(currentUser);
+            if (user != null)
+            {
+                userTickets = await UserService.GetUserTickets(user.Id);
+                uniqueTickets = GetUniqueTickets(userTickets);
+            }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            Console.WriteLine($"error: {ex}");
+            Console.WriteLine($"Error fetching user tickets: {ex.Message}");
+            ShowPopup("Error", "Failed to load tickets. Please try again later.");
         }
+    }
+
+    private List<UserTicket> GetUniqueTickets(List<TicketDto> userTickets)
+    {
+        return userTickets
+            .GroupBy(ticket => ticket.Title)
+            .Select(group => new UserTicket
+            {
+                Title = group.Key,
+                Price = group.First().Price,
+                Count = group.Count()
+            })
+            .ToList();
     }
 
     private void ShowLogin()
@@ -129,6 +152,8 @@
     private async Task HandleLogout()
     {
         await SessionStorageService.RemoveItemAsync("user");
+        userTickets.Clear();
+        uniqueTickets.Clear();
         isLoggedIn = false;
         currentUser = string.Empty;
         showUserMenu = false;
@@ -176,7 +201,7 @@
         try
         {
             var response = await HttpClient.PostAsJsonAsync("/api/auth/register", user);
-            
+
             if (response.IsSuccessStatusCode)
             {
                 ShowPopup("Success", "Registration successful! Welcome!");
@@ -212,8 +237,8 @@
     }
 
     .header-logo {
-        width: 110px;  
-        height: auto; 
+        width: 110px;
+        height: auto;
         position: absolute;
     }
 
@@ -262,7 +287,7 @@
     }
 
     header .nav-link:hover,
-    footer a:hover, 
+    footer a:hover,
     .nav .nav-link:hover {
         color: var(--text-color-hover);
         transform: scale(1.05);
@@ -277,24 +302,40 @@
         position: relative;
     }
 
+    .user-button {
+        padding: 16px 12px;
+    }
+
+    .user-button i {
+        font-size: 24px;
+        color: var(--text-color-light);
+        transition: color 0.4s ease-in-out;
+        position: relative;
+        top: -2px;
+    }
+
+    .user-button:hover i {
+        color: var(--text-color-hover);
+    }
+
     .user-dropdown {
         position: absolute;
         top: 100%;
         right: 0;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        min-width: 200px;
+        background-color: var(--background-color-light);
+        min-width: 240px;   
         z-index: 1000;
     }
 
     .user-info {
-        padding: 12px 16px;
         border-bottom: 1px solid #eee;
         display: flex;
         align-items: center;
+        font-size: 24px;
         gap: 8px;
         color: #333;
+        @* TODO *@
+        background-color: red;
     }
 
     .user-info i {
@@ -316,12 +357,12 @@
         transition: background-color 0.2s;
     }
 
-    .dropdown-item:hover {
-        background-color: #f5f5f5;
-    }
+        .dropdown-item:hover {
+            background-color: #f5f5f5;
+        }
 
-    .dropdown-item i {
-        font-size: 16px;
-        color: #666;
-    }
+        .dropdown-item i {
+            font-size: 16px;
+            color: #666;
+        }
 </style>

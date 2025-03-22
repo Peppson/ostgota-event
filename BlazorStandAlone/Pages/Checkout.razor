@@ -8,8 +8,7 @@
 @inject IUserService UserService
 
 <main class="checkout-page">
-    <section class="checkout-info">
-
+    <img src="icons/favicon-black.svg" alt="Logo" class="logo">
 
             @if (eventDetails != null)
             {
@@ -25,6 +24,7 @@
                         <p style="color: red;">Logga in för att Bekräfta köp</p>
                     }
                 </div>
+
 
                 <div class="ticket-info">
                     <p><strong>Plats:</strong> @eventDetails.Address, @eventDetails.City</p>
