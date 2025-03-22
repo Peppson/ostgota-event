@@ -98,7 +98,9 @@ public class UserService(IDatabase DbContext) : IUserService
         if (existingUser == null)
             return null;
 
-        existingUser.PasswordHash = updatedUser.PasswordHash;
+        if(!String.IsNullOrEmpty(updatedUser.PasswordHash))
+            existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(updatedUser.PasswordHash);
+
         existingUser.Email = updatedUser.Email;
         existingUser.PhoneNumber = updatedUser.PhoneNumber;
 

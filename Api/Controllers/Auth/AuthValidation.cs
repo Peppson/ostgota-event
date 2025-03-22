@@ -38,3 +38,14 @@ public class RegisterValidator : AbstractValidator<RegisterRequest>
             .MaximumLength(60);
     }
 }
+
+public class EditValidator : AbstractValidator<RegisterRequest>
+{
+    public EditValidator()
+    {
+        RuleFor(x => x.Email)
+            .NotEmpty().NotNull()
+            .EmailAddress()
+            .MaximumLength(60);
+    }
+}
