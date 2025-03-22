@@ -112,13 +112,13 @@
                     <div class="event-card-button-container">
                         <button @onclick="() => OpenModal(ev)">Visa info</button>
 
-                        @if (ev.AccessType == AccessType.Free && !ev.HasSeat)
-                        {
-                            <button class="not-a-button">Gratis!</button>
-                        }
-                        else if (ev.AccessType == AccessType.Free && ev.HasSeat)
+                        @if (ev.AccessType == AccessType.Free && ev.HasSeat || ev.AccessType == AccessType.Free && ev.TicketsMax.HasValue)
                         {
                             <button @onclick="() => GoToCheckout(ev.Id)">Boka</button>
+                        }
+                        else if (ev.AccessType == AccessType.Free && !ev.HasSeat)
+                        {
+                            <button class="not-a-button">Gratis!</button>
                         }
                         else
                         {
@@ -167,13 +167,21 @@
                         <i class="fas fa-location-dot"></i>
                     </a>
                 </p>
-                @if (selectedEvent.AccessType == AccessType.Free)
+                <iframe src="@($"https://www.google.com/maps?q={Uri.EscapeDataString(selectedEvent.Address + ' ' +selectedEvent.City)}&output=embed")"
+                allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+
+                @if (selectedEvent.AccessType == AccessType.Free && selectedEvent.HasSeat || selectedEvent.AccessType == AccessType.Free && selectedEvent.TicketsMax.HasValue)
                 {
-                    <button class="modal-buy-btn modal-buy-btn-locked">Gratis!</button>
+                    <button class="modal-buy-btn modal-buy-btn-transform" @onclick="() => GoToCheckout(selectedEvent.Id)">BOKA BILJETT</button>
+                 }
+                else if (selectedEvent.AccessType == AccessType.Free && !selectedEvent.HasSeat){
+                      <button class="modal-buy-btn modal-buy-btn-locked">Gratis!</button>
                 }
                 else
                 { 
-                    <button class="modal-buy-btn modal-buy-btn-transform" @onclick="() => GoToCheckout(selectedEvent.Id)">Köp BILJETT</button>
+                    <button class="modal-buy-btn modal-buy-btn-transform" @onclick="() => GoToCheckout(selectedEvent.Id)">KÖP BILJETT</button>
                 }
             </div>
         </div>
@@ -289,8 +297,9 @@ private async Task GoToCheckout(int eventId)
         {
             FilteredEvents = new List<EventDto>(events);
         }
-
+        SortEvents("");
         StateHasChanged();
+        searchEvent = "";
     }
 
     private void HandleSearchKeyPress(KeyboardEventArgs e)
@@ -298,6 +307,7 @@ private async Task GoToCheckout(int eventId)
         if (e.Key == "Enter")
         {
             FilterEvents();
+            searchEvent = "";
         }
     }
 
@@ -314,8 +324,10 @@ private async Task GoToCheckout(int eventId)
         switch (sortBy)
         {
             case "date":
-                FilteredEvents = FilteredEvents.OrderBy(e => e.StartTime).ToList();
-                break;
+            case "":
+            default:
+            FilteredEvents = FilteredEvents.OrderBy(e => e.StartTime).ToList();
+            break;
             case "date-desc":
                 FilteredEvents = FilteredEvents.OrderByDescending(e => e.StartTime).ToList();
                 break;
@@ -342,12 +354,6 @@ private async Task GoToCheckout(int eventId)
                 break;
             case "size-desc":
                 FilteredEvents = FilteredEvents.OrderByDescending(e => e.TicketsMax ?? int.MinValue).ToList();
-                break;
-            case "":
-                FilteredEvents = FilteredEvents.OrderBy(e => e.StartTime).ToList();
-                break;
-            default:
-                 FilteredEvents = FilteredEvents.OrderBy(e => e.StartTime).ToList();
                 break;
         }
         StateHasChanged();
