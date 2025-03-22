@@ -1,179 +1,178 @@
 ﻿using Core.Models;
 using System.Net.Http.Json;
 
-namespace BlazorStandAlone.Services
+namespace BlazorStandAlone.Services;
+
+public interface IUserService
 {
-    public interface IUserService
+    Task<List<UserDto>> GetAllUsers();
+    UserDto? GetUserById(int id);
+
+    Task<UserDto?> GetUserByUsername(string username);
+    Task<bool> CreateUser(UserDto user);
+    Task<bool> UpdateUserAdmin(UserDto user);
+    Task<bool> UpdateUser(RegisterUserDto user, int userId);
+    Task<bool> DeleteUser(int id);
+    Task<List<TicketDto>> GetUserTickets(int userId);
+    void UpdateTickets(List<TicketDto> tickets);
+    List<UserDto> Users { get; }
+    int UserCount { get; }
+
+}
+
+public class UserServiceException : Exception
+{
+    public UserServiceException(string message, Exception? inner = null) 
+        : base(message, inner) { }
+}
+
+public class UserService : IUserService
+{
+    private readonly HttpClient _httpClient;
+    private readonly ITicketService _ticketService;
+    private List<UserDto> _users = new();
+    public List<TicketDto> _tickets = new();
+
+    public List<UserDto> Users => _users;
+    public int UserCount => _users.Count;
+
+    public UserService(HttpClient httpClient, ITicketService ticketService)
     {
-        Task<List<UserDto>> GetAllUsers();
-        UserDto? GetUserById(int id);
-
-        Task<UserDto?> GetUserByUsername(string username);
-        Task<bool> CreateUser(UserDto user);
-        Task<bool> UpdateUserAdmin(UserDto user);
-        Task<bool> UpdateUser(RegisterUserDto user, int userId);
-        Task<bool> DeleteUser(int id);
-        Task<List<TicketDto>> GetUserTickets(int userId);
-        void UpdateTickets(List<TicketDto> tickets);
-        List<UserDto> Users { get; }
-        int UserCount { get; }
-
+        _httpClient = httpClient;
+        _ticketService = ticketService;
     }
 
-    public class UserServiceException : Exception
+    public async Task<List<UserDto>> GetAllUsers()
     {
-        public UserServiceException(string message, Exception? inner = null) 
-            : base(message, inner) { }
+        try
+        {
+            var response = await _httpClient.GetAsync("api/user/get");
+            if (response.IsSuccessStatusCode)
+            {
+                _users = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new();
+                foreach (var user in _users)
+                {
+                    user.Tickets = await GetUserTickets(user.Id);
+                }
+                return _users;
+            }
+            throw new UserServiceException($"Failed to fetch users: {response.StatusCode}");
+        }
+        catch (Exception ex) when (ex is not UserServiceException)
+        {
+            throw new UserServiceException("An error occurred while fetching users", ex);
+        }
     }
 
-    public class UserService : IUserService
+    public async Task<UserDto?> GetUserByUsername(string username)
     {
-        private readonly HttpClient _httpClient;
-        private readonly ITicketService _ticketService;
-        private List<UserDto> _users = new();
-        public List<TicketDto> _tickets = new();
-
-        public List<UserDto> Users => _users;
-        public int UserCount => _users.Count;
-
-        public UserService(HttpClient httpClient, ITicketService ticketService)
+        try
         {
-            _httpClient = httpClient;
-            _ticketService = ticketService;
+            var response = await _httpClient.GetAsync($"api/user/get/name/{username}");
+            if(response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<UserDto>();
+            }
+            Console.WriteLine($"Error while getting user: {response.StatusCode}");
+            return null;
         }
-
-        public async Task<List<UserDto>> GetAllUsers()
+        catch(Exception ex)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync("api/user/get");
-                if (response.IsSuccessStatusCode)
-                {
-                    _users = await response.Content.ReadFromJsonAsync<List<UserDto>>() ?? new();
-                    foreach (var user in _users)
-                    {
-                        user.Tickets = await GetUserTickets(user.Id);
-                    }
-                    return _users;
-                }
-                throw new UserServiceException($"Failed to fetch users: {response.StatusCode}");
-            }
-            catch (Exception ex) when (ex is not UserServiceException)
-            {
-                throw new UserServiceException("An error occurred while fetching users", ex);
-            }
+            Console.WriteLine($"Error in getting user: {ex}");
+            return null;
         }
+    }
 
-        public async Task<UserDto?> GetUserByUsername(string username)
+    public async Task<List<TicketDto>> GetUserTickets(int userId)
+    {
+        _tickets = await _ticketService.GetAllTickets();
+        return _tickets.Where(t => t.UserId == userId).ToList();
+    }
+
+    public UserDto? GetUserById(int id)
+    {
+        return _users.FirstOrDefault(u => u.Id == id);
+    }
+
+    public async Task<bool> CreateUser(UserDto user)
+    {
+        try
         {
-            try
+            var newUser = new RegisterUserDto(user.Username, user.Email, user.PhoneNumber, user.Role);
+            var response = await _httpClient.PostAsJsonAsync("api/user/create", newUser);
+            
+            if (response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"api/user/get/name/{username}");
-                if(response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadFromJsonAsync<UserDto>();
-                }
-                Console.WriteLine($"Error while getting user: {response.StatusCode}");
-                return null;
+                await GetAllUsers(); // Refresh the list
+                return true;
             }
-            catch(Exception ex)
-            {
-                Console.WriteLine($"Error in getting user: {ex}");
-                return null;
-            }
+            throw new UserServiceException($"Failed to create user: {response.ReasonPhrase}");
         }
-
-        public async Task<List<TicketDto>> GetUserTickets(int userId)
+        catch (Exception ex) when (ex is not UserServiceException)
         {
-            _tickets = await _ticketService.GetAllTickets();
-            return _tickets.Where(t => t.UserId == userId).ToList();
+            throw new UserServiceException("An error occurred while creating user", ex);
         }
+    }
 
-        public UserDto? GetUserById(int id)
+    public async Task<bool> UpdateUserAdmin(UserDto user)
+    {
+        try
         {
-            return _users.FirstOrDefault(u => u.Id == id);
+            var response = await _httpClient.PutAsJsonAsync($"api/user/update/admin/{user.Id}", user);
+            if (response.IsSuccessStatusCode)
+            {
+                await GetAllUsers(); // Refresh the list
+                return true;
+            }
+            throw new UserServiceException($"Failed to update user: {response.StatusCode}");
         }
-
-        public async Task<bool> CreateUser(UserDto user)
+        catch (Exception ex) when (ex is not UserServiceException)
         {
-            try
-            {
-                var newUser = new RegisterUserDto(user.Username, user.Email, user.PhoneNumber, user.Role);
-                var response = await _httpClient.PostAsJsonAsync("api/user/create", newUser);
-                
-                if (response.IsSuccessStatusCode)
-                {
-                    await GetAllUsers(); // Refresh the list
-                    return true;
-                }
-                throw new UserServiceException($"Failed to create user: {response.ReasonPhrase}");
-            }
-            catch (Exception ex) when (ex is not UserServiceException)
-            {
-                throw new UserServiceException("An error occurred while creating user", ex);
-            }
+            throw new UserServiceException("An error occurred while updating user", ex);
         }
+    }
 
-        public async Task<bool> UpdateUserAdmin(UserDto user)
+    public async Task<bool> UpdateUser(RegisterUserDto user, int userId)
+    {
+        try
         {
-            try
+            var response = await _httpClient.PutAsJsonAsync($"api/user/update/{userId}", user);
+            if (response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.PutAsJsonAsync($"api/user/update/admin/{user.Id}", user);
-                if (response.IsSuccessStatusCode)
-                {
-                    await GetAllUsers(); // Refresh the list
-                    return true;
-                }
-                throw new UserServiceException($"Failed to update user: {response.StatusCode}");
+                await GetAllUsers(); // Refresh the list
+                return true;
             }
-            catch (Exception ex) when (ex is not UserServiceException)
-            {
-                throw new UserServiceException("An error occurred while updating user", ex);
-            }
+            throw new UserServiceException($"Failed to update user: {response.StatusCode}");
         }
-
-        public async Task<bool> UpdateUser(RegisterUserDto user, int userId)
+        catch (Exception ex) when (ex is not UserServiceException)
         {
-            try
-            {
-                var response = await _httpClient.PutAsJsonAsync($"api/user/update/{userId}", user);
-                if (response.IsSuccessStatusCode)
-                {
-                    await GetAllUsers(); // Refresh the list
-                    return true;
-                }
-                throw new UserServiceException($"Failed to update user: {response.StatusCode}");
-            }
-            catch (Exception ex) when (ex is not UserServiceException)
-            {
-                throw new UserServiceException("An error occurred while updating user", ex);
-            }
+            throw new UserServiceException("An error occurred while updating user", ex);
         }
+    }
 
-        public async Task<bool> DeleteUser(int id)
+    public async Task<bool> DeleteUser(int id)
+    {
+        try
         {
-            try
+            var response = await _httpClient.DeleteAsync($"api/user/delete/{id}");
+            if (response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.DeleteAsync($"api/user/delete/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    await GetAllUsers(); // Refresh the list
-                    return true;
-                }
-                throw new UserServiceException($"Failed to delete user: {response.StatusCode}");
+                await GetAllUsers(); // Refresh the list
+                return true;
             }
-            catch (Exception ex) when (ex is not UserServiceException)
-            {
-                throw new UserServiceException("An error occurred while deleting user", ex);
-            }
+            throw new UserServiceException($"Failed to delete user: {response.StatusCode}");
         }
-
-        public void UpdateTickets(List<TicketDto> tickets)
+        catch (Exception ex) when (ex is not UserServiceException)
         {
-            foreach(var user in _users)
-            {
-                user.Tickets = tickets.Where(t => t.UserId == user.Id).ToList();
-            }
+            throw new UserServiceException("An error occurred while deleting user", ex);
+        }
+    }
+
+    public void UpdateTickets(List<TicketDto> tickets)
+    {
+        foreach(var user in _users)
+        {
+            user.Tickets = tickets.Where(t => t.UserId == user.Id).ToList();
         }
     }
 }
