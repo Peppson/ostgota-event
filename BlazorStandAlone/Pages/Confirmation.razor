@@ -7,6 +7,7 @@
 
 <main class="confirmation-page">
     <img src="icons/favicon-black.svg" alt="Logo" class="logo">
+     <img src="icons/favicon-black.svg" alt="Logo-bg" class="logo-bg">
 
     <section class="receipt-container">
         <h2>Tack för ditt köp!</h2>
@@ -41,20 +42,20 @@
             <p>Inga biljetter hittades.</p>
         }
 
-         <button class="cancel-btn" @onclick="CloseWindow">Stäng sidan</button>
+         <button class="cancel-btn" @onclick="NavigateToHome">Stäng sidan</button>
     </section>
 </main>
 
 @code {
-     private async Task CloseWindow()
+     private void NavigateToHome()
     {
-        await JS.InvokeVoidAsync("window.close");
+        Navigation.NavigateTo("/"); 
     }
     
     private List<TicketDto> tickets = new();
     private decimal TotalPrice => tickets.Sum(t => t.Price);
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync() 
     {
         tickets = await SessionStorage.GetItemAsync<List<TicketDto>>("purchasedTickets") ?? new();
     }

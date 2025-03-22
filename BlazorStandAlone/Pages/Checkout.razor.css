@@ -9,8 +9,8 @@
 .checkout-info {
     width: 50%;
     padding: 30px;
-    background-color: white;
-    margin: auto; 
+    background-color: rgba(255, 255, 255, 0);
+    margin: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -18,11 +18,11 @@
     text-align: start;
 }
 
-.header-div{
+.header-div {
     text-align: center;
 }
 
-.logo {  
+.logo {
     position: absolute;
     padding: 20px;
     width: 180px;
@@ -31,10 +31,22 @@
     left: 0;
 }
 
-.seat-div{
-    display: flex;
-    gap:10px;
+.logo-bg {
+    position: fixed;
+    top: -50px;
+    left: 0px;
+    height: 150%;
+    width: 150%;
+    z-index: -1;
+    opacity: 0.06;
 }
+
+
+.seat-div {
+    display: flex;
+    gap: 10px;
+}
+
 .checkout-page .checkout-info {
     flex: 1;
 }
@@ -60,6 +72,7 @@
     justify-content: start;
     align-items: center;
 }
+
 .ticket-selector p {
     margin-right: 10px;
 }
@@ -74,11 +87,13 @@
     cursor: pointer;
     min-width: 20px;
     transition: 0.3s;
-    
+
 }
-.ticket-selector button:hover{
+
+.ticket-selector button:hover {
     background-color: #218838;
 }
+
 .ticket-selector button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
@@ -95,9 +110,10 @@
     font-weight: bold;
     margin-bottom: 20px;
 }
-.buttons{
+
+.buttons {
     display: flex;
-    gap:10px;
+    gap: 10px;
     width: 50%;
     margin-bottom: 60px;
 }
@@ -112,14 +128,16 @@
     transition: 0.3s;
 }
 
-.confirm-btn{
-    background-color:var( --home-button-color);
+.confirm-btn {
+    background-color: var(--home-button-color);
 
 }
-.cancel-btn{
-    background-color:var(--warning-color);
+
+.cancel-btn {
+    background-color: var(--warning-color);
 }
-.cancel-btn:hover{
+
+.cancel-btn:hover {
     background-color: #333;
 }
 

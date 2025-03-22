@@ -194,20 +194,14 @@
         document.getElementById('event-section').scrollIntoView();
     }
 
-    window.openCheckoutWindow = (url) => {
-        window.open(url, "_blank", "width=1200,height=800,scrollbars=yes,resizable=yes");
-    };
 </script>
 
-
 @code { 
-
    
-private async Task GoToCheckout(int eventId)
+private void GoToCheckout(int eventId)
 {
-    await JS.InvokeVoidAsync("openCheckoutWindow", $"/checkout/{eventId}");
+     NavigationManager.NavigateTo($"/checkout/{eventId}");
 }
-
 
     //PAGINATION
     public int CurrentPage { get; set; } = 1;
@@ -385,23 +379,6 @@ private async Task GoToCheckout(int eventId)
     {
         isModalVisible = false;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // Login logic
     private LoginDto? user;
