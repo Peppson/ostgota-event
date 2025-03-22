@@ -10,7 +10,7 @@ public class EventCreateValidator : AbstractValidator<EventCreateDTO>
 
         RuleFor(x => x.Description)
             .NotEmpty()
-            .MaximumLength(800);
+            .MaximumLength(600);
 
         RuleFor(x => x.City)
             .NotEmpty()
@@ -53,7 +53,7 @@ public class EventUpdateValidator : AbstractValidator<EventUpdateDTO>
 
         RuleFor(x => x.Description)
             .NotEmpty()
-            .MaximumLength(800);
+            .MaximumLength(600);
 
         RuleFor(x => x.City)
             .NotEmpty()
