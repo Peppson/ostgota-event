@@ -85,7 +85,7 @@
     [Parameter]
     public EventCallback<int> OnGoToCheckout { get; set; } = default!;
 
-    private string GetClampedDescription(string description)
+    private string GetClampedDescription(string description) // Clamps the description to 220 characters
     {
         return description.Length > 220 ? description.Substring(0, 220) + "..." : description;
     }

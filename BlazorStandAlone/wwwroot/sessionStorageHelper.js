@@ -7,4 +7,4 @@
     getItemAsString: (key) => sessionStorage.getItem(key),
     removeItem: (key) => sessionStorage.removeItem(key),
     clear: () => sessionStorage.clear()
-}
+} //sessionstorage using Javascript so we can create a service to implement sessionstorage using c#.
