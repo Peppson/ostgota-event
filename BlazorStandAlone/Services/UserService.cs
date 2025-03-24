@@ -103,7 +103,7 @@ public class UserService : IUserService
             
             if (response.IsSuccessStatusCode)
             {
-                await GetAllUsers(); // Refresh the list
+                await GetAllUsers();
                 return true;
             }
             throw new UserServiceException($"Failed to create user: {response.ReasonPhrase}");
@@ -121,7 +121,7 @@ public class UserService : IUserService
             var response = await _httpClient.PutAsJsonAsync($"api/user/update/admin/{user.Id}", user);
             if (response.IsSuccessStatusCode)
             {
-                await GetAllUsers(); // Refresh the list
+                await GetAllUsers();
                 return true;
             }
             throw new UserServiceException($"Failed to update user: {response.StatusCode}");
@@ -139,7 +139,7 @@ public class UserService : IUserService
             var response = await _httpClient.PutAsJsonAsync($"api/user/update/{userId}", user);
             if (response.IsSuccessStatusCode)
             {
-                await GetAllUsers(); // Refresh the list
+                await GetAllUsers();
                 return true;
             }
             throw new UserServiceException($"Failed to update user: {response.StatusCode}");
@@ -157,7 +157,7 @@ public class UserService : IUserService
             var response = await _httpClient.DeleteAsync($"api/user/delete/{id}");
             if (response.IsSuccessStatusCode)
             {
-                await GetAllUsers(); // Refresh the list
+                await GetAllUsers();
                 return true;
             }
             throw new UserServiceException($"Failed to delete user: {response.StatusCode}");

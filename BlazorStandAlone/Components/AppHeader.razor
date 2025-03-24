@@ -14,7 +14,7 @@
 
     <nav class="nav">
         @* Admin Dashboard *@ 
-        @if (currentUser == "admin") @* This is just something *@
+        @if (IsAdmin)
         {
             <NavLink class="nav-link" href="/admin">
                 <i id="admin-icon" class="fa-solid fa-cog header-icons"></i> Admin
@@ -91,6 +91,8 @@
     private bool showUserMenu = false;
     private string currentUser = string.Empty;
 
+    private bool IsAdmin = false;
+
 
     private List<TicketDto> userTickets = new();
 
@@ -109,6 +111,22 @@
         {
             currentUser = user;
             await GetUsersTickets();
+        }
+        await CheckIfAdmin();
+
+    }
+
+    private async Task CheckIfAdmin()
+    {
+        var loggedInuser = await UserService.GetUserByUsername(currentUser);
+
+        if (loggedInuser != null && loggedInuser.Role == UserRole.Admin)
+        {
+            IsAdmin = true;
+        }
+        else
+        {
+            IsAdmin = false;
         }
     }
 
@@ -191,6 +209,7 @@
                     currentUser = newUser.Username;
                     await GetUsersTickets();
                     isLoggedIn = true;
+                    await CheckIfAdmin();
                     loginRef?.ClosePopup();
                 }
                 else

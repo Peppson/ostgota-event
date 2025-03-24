@@ -38,11 +38,11 @@
     public bool IsVisible { get; private set; }
     private bool isLoginTab = true;
 
-    public void Show()
+    public async void Show()
     {
         IsVisible = true;
         StateHasChanged();
-        DisableScrolling();
+        await DisableScrolling();
     }
 
     public async Task ClosePopup()
@@ -52,13 +52,13 @@
         {
             await OnClose.InvokeAsync();
         }
-        EnableScrolling();
+        await EnableScrolling();
     }
 
     private async Task HandleOverlayClick()
     {
         await ClosePopup();
-        EnableScrolling();
+        await EnableScrolling();
     }
     
     private async Task DisableScrolling()
