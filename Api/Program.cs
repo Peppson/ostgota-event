@@ -40,7 +40,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.DefaultModelsExpandDepth(-1);
+                c.DefaultModelsExpandDepth(-1); // Hide model-schemas
             });
         }
 
@@ -54,7 +54,7 @@ public class Program
             app.UseHsts();
 
         // Ensure SQLite DB is created and seeded on firstboot
-        bool resetDatabaseToDefault = true; // config file?
+        bool resetDatabaseToDefault = true;
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
@@ -62,10 +62,9 @@ public class Program
                 await db.ResetDatabase();
             else
                 await db.InitDatabase();
-        }
+        } //creating a scope for database in order to reset it base on development-bool
 
         var apiUrl = builder.Configuration["apiUrl"];
-        Console.WriteLine($"\n{apiUrl}/swagger\n");
 
         app.Run(apiUrl);
     }

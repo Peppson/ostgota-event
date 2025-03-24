@@ -12,7 +12,7 @@ public class SessionStorageService
         _jsRuntime = jsRuntime;
     }
 
-    public async Task SetItemAsync<T>(string key, T value)
+    public async Task SetItemAsync<T>(string key, T value) //using JsRuntime in order to save an object to localstorage. Can handle classes by "T" in order to handle more complex objects
     {
         await _jsRuntime.InvokeVoidAsync("sessionStorageHelper.setItem", key, value);
         // Debug: Log what's being stored

@@ -14,6 +14,9 @@ public class EventController(IEventService eventService, Validator validator) : 
         try
         {
             var events = await _eventService.GetAllEvents();
+
+            if (events == null) return NotFound("No events was found");
+
             return Ok(events);
         }
         catch (Exception ex)

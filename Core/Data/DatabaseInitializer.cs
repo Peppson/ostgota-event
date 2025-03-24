@@ -10,13 +10,12 @@ public class DatabaseInitializer(Database db)
         if (_db.Database.EnsureCreated())
         {
             await SeedDatabase();
-            //await SeedDatabaseDebug(); // Debug
         }
     }
 
     public async Task ResetDatabase()
     {
-        try // ¯\_(ツ)_/¯ 
+        try
         {
             _db.Database.EnsureDeleted();
             _db.Database.EnsureCreated();
@@ -37,8 +36,6 @@ public class DatabaseInitializer(Database db)
             Email = "arif@bil.com",
             PhoneNumber = "123-456-7890",
             Role = UserRole.User,
-            //CreatedAt = DateTime.UtcNow,      // default
-            //Tickets...                        // List<Tickets>
         };
 
         var admin = new User
@@ -48,8 +45,6 @@ public class DatabaseInitializer(Database db)
             Email = "admin@admin.com",
             PhoneNumber = "123-456-7890",
             Role = UserRole.Admin,
-            //CreatedAt = DateTime.UtcNow,      // default
-            //Tickets...                        // List<Tickets>
         };
 
         var sampleEvent1 = new Event
@@ -86,13 +81,13 @@ public class DatabaseInitializer(Database db)
 
         var sampleEvent3 = new Event
         {
-            Name = "Waifu Convention",
-            Description = "Den ultimata samlingsplatsen för alla anime- och waifu-entusiaster! Upplev en värld fylld av cosplay, figurinsamling, panels med röstskådespelare och exklusiva varor. Delta i tävlingar, diskutera dina favoriter och träffa likasinnade fans i en atmosfär fylld av passion och kreativitet. Oavsett om du vill hylla din kärlek eller bara njuta av den unika kulturen, är detta eventet för dig. Missa inte årets mest waifu-tastiska upplevelse!",
-            City = "Finspång",
+            Name = "NärCon",
+            Description = "NärCon är ett helt unikt event. Det är en alkohol- och drogfri festival där du skaffar nya vänner, cosplayar och spelar spel tillsammans. Det finns över 900 aktiviteter, från föreläsningar och scenshower till lekar och turneringar, men det är den sociala atmosfären som NärCon verkligen handlar om; det är en mötesplats för alla med nördiga intressen.",
+            City = "Linköping",
             AccessType = AccessType.Paid,
             StartTime = DateTime.SpecifyKind(new DateTime(2025, 5, 12, 12, 0, 0), DateTimeKind.Utc),
             EndTime = DateTime.SpecifyKind(new DateTime(2025, 5, 19, 18, 0, 0), DateTimeKind.Utc),
-            Address = "Gatan 2",
+            Address = "Linköpings Universitet",
             TicketsMax = 500,
             TicketsSold = 499,
             HasSeat = true,
@@ -111,7 +106,6 @@ public class DatabaseInitializer(Database db)
             Address = " Kristinagatan",
             TicketsMax = 200,
             TicketsSold = 79,
-            //HasSeat = false,                  // default
             ImagePath = "images/Art.jpg",
             Price = 199
         };
@@ -125,7 +119,7 @@ public class DatabaseInitializer(Database db)
             StartTime = DateTime.SpecifyKind(new DateTime(2025, 5, 28, 9, 0, 0), DateTimeKind.Utc),
             EndTime = DateTime.SpecifyKind(new DateTime(2025, 5, 29, 23, 0, 0), DateTimeKind.Utc),
             Address = "Tjällmo",
-            TicketsMax = null, 
+            TicketsMax = null,
             TicketsSold = 0,
             ImagePath = "images/Market.jpg",
             Price = 0
@@ -252,7 +246,7 @@ public class DatabaseInitializer(Database db)
             EventId = sampleEvent3.Id,
             Event = sampleEvent3,
             Price = sampleEvent3.Price,
-            Seat = null,  
+            Seat = null,
         };
 
         var ticket3 = new Ticket
@@ -262,7 +256,7 @@ public class DatabaseInitializer(Database db)
             EventId = sampleEvent9.Id,
             Event = sampleEvent9,
             Price = sampleEvent9.Price,
-            Seat = "A1",  
+            Seat = "A1",
         };
 
         user.BuyTicket(ticket0);
@@ -282,53 +276,6 @@ public class DatabaseInitializer(Database db)
         await _db.Tickets.AddAsync(ticket2);
         await _db.Tickets.AddAsync(ticket3);
 
-        await _db.SaveChangesAsync();
-    }
-
-    private async Task SeedDatabaseDebug()
-    {
-        var user = new User
-        {
-            Username = "arif",
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword("password"),
-            Email = "arif@example.com",
-            PhoneNumber = "123-456-7890",
-        };
-
-        var sampleEvent1 = new Event
-        {
-            Name = "Chad Event",
-            Description = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-            City = "Chad City",
-            AccessType = AccessType.Paid,
-            StartTime = DateTime.UtcNow,
-            EndTime = DateTime.UtcNow.AddHours(3),
-            Address = "Kungsberget 3",
-            TicketsMax = 2000,
-            TicketsSold = 10,
-            //HasSeat = false,                  // default
-            ImagePath = "images/Knight.jpg",   // nullable
-            Price = 999
-        };
-
-        await _db.Users.AddAsync(user);
-        await _db.Events.AddAsync(sampleEvent1);
-        await _db.SaveChangesAsync();
-
-        var ticket = new Ticket
-        {
-            UserId = _db.Users.First().Id,
-            User = _db.Users.First(),
-            EventId = _db.Events.First().Id,
-            Event = _db.Events.First(),
-            Price = _db.Events.First().AccessType == AccessType.Paid ? sampleEvent1.Price : 0,
-            Seat = "A1",
-        };
-
-        user.BuyTicket(ticket);
-        sampleEvent1.RegisterTicket();
-        
-        await _db.Tickets.AddAsync(ticket);
         await _db.SaveChangesAsync();
     }
 }

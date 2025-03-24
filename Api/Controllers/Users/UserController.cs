@@ -16,6 +16,9 @@ public class UserController(IUserService userService, Validator validator) : Con
         try
         {
             var users = await _userService.GetAllUsers();
+
+            if(users == null) return NotFound("No users where found");
+
             return Ok(GetUserDTO(users));
         }
         catch (Exception ex)
@@ -97,7 +100,7 @@ public class UserController(IUserService userService, Validator validator) : Con
     }
 
     [HttpPut("update/admin/{id}")]
-    public async Task<ActionResult<User>> UpdateUserAdmin(int id, [FromBody] UserCreateDTO user)
+    public async Task<ActionResult<User>> UpdateUserAdmin(int id, [FromBody] UserCreateDTO user) //update function used by admin
     {
         var validation = _validator.Validate(new UserValidator(), user);
         if (validation != null)
@@ -131,7 +134,7 @@ public class UserController(IUserService userService, Validator validator) : Con
     }
 
     [HttpPut("update/{id}")]
-    public async Task<ActionResult<User>> UpdateUser(int id, [FromBody] UserUpdateDTO user)
+    public async Task<ActionResult<User>> UpdateUser(int id, [FromBody] UserUpdateDTO user) //updatefunction used by users
     {
         
         var validation = _validator.Validate(new UserUpdateValidator(), user);

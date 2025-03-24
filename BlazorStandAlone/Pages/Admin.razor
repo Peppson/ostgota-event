@@ -56,7 +56,7 @@
                 </div>
                 <button @onclick="() => EditUser(_currentUser)">Edit</button>
                 <button @onclick="() => DeleteUser(_currentUser.Id)">Delete</button>
-                <button @onclick="ClearUser">Clear</button>
+                <button @onclick="ClearUser">Cancel</button>
             }
             @if (_userFormVisible)
             {
@@ -85,7 +85,7 @@
                 <div class="info-box"><strong>Price:</strong> @_currentTicket.Price</div>
                 <div class="info-box"><strong>Seat:</strong> @_currentTicket.Seat</div>
                 <button @onclick="() => DeleteTicket(_currentTicket.Id)">Delete</button>
-                <button @onclick="ClearTicket">Clear</button>
+                <button @onclick="ClearTicket">Cancel</button>
             }
             @if (_ticketFormVisible)
             {
@@ -120,7 +120,7 @@
                 <div class="info-box"><strong>Price:</strong> @_currentEvent.Price</div>
                 <button @onclick="() => EditEvent(_currentEvent)">Edit</button>
                 <button @onclick="() => DeleteEvent(_currentEvent.Id)">Delete</button>
-                <button @onclick="ClearEvent">Clear</button>
+                <button @onclick="ClearEvent">Cancel</button>
             }
             @if (_eventFormVisible)
             {
