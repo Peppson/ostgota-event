@@ -14,6 +14,9 @@ public class TicketController(ITicketService ticketService, Validator validator)
         try
         {
             var tickets = await _ticketService.GetAllTickets();
+
+            if (tickets == null) return NotFound("No tickets where found");
+
             return Ok( GetTicketDTO(tickets) );
         }
         catch (Exception ex)

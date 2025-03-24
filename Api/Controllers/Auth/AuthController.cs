@@ -15,7 +15,7 @@ public class LoginController(IAuthService authService, Validator validator) : Co
         if (validation != null)
             return validation;
 
-        var result = await _authService.Login(request.Username, request.Password);
+        var result = await _authService.Login(request.Username, request.Password); //verifying login with authservice.
         if (result == null)
             return NotFound("Invalid username or password");
 
@@ -31,7 +31,7 @@ public class LoginController(IAuthService authService, Validator validator) : Co
         if (validation != null)
             return validation;
 
-        var result = await _authService.Register(request.Username, request.Password, request.Email, request.PhoneNumber);
+        var result = await _authService.Register(request.Username, request.Password, request.Email, request.PhoneNumber); //creating user with authservice
         if (result == null)
         {
             return BadRequest("Username already exists");
