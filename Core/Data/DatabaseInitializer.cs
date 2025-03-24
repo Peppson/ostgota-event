@@ -81,13 +81,13 @@ public class DatabaseInitializer(Database db)
 
         var sampleEvent3 = new Event
         {
-            Name = "Waifu Convention",
-            Description = "Den ultimata samlingsplatsen för alla anime- och waifu-entusiaster! Upplev en värld fylld av cosplay, figurinsamling, panels med röstskådespelare och exklusiva varor. Delta i tävlingar, diskutera dina favoriter och träffa likasinnade fans i en atmosfär fylld av passion och kreativitet. Oavsett om du vill hylla din kärlek eller bara njuta av den unika kulturen, är detta eventet för dig. Missa inte årets mest waifu-tastiska upplevelse!",
-            City = "Finspång",
+            Name = "NärCon",
+            Description = "NärCon är ett helt unikt event. Det är en alkohol- och drogfri festival där du skaffar nya vänner, cosplayar och spelar spel tillsammans. Det finns över 900 aktiviteter, från föreläsningar och scenshower till lekar och turneringar, men det är den sociala atmosfären som NärCon verkligen handlar om; det är en mötesplats för alla med nördiga intressen.",
+            City = "Linköping",
             AccessType = AccessType.Paid,
             StartTime = DateTime.SpecifyKind(new DateTime(2025, 5, 12, 12, 0, 0), DateTimeKind.Utc),
             EndTime = DateTime.SpecifyKind(new DateTime(2025, 5, 19, 18, 0, 0), DateTimeKind.Utc),
-            Address = "Gatan 2",
+            Address = "Linköpings Universitet",
             TicketsMax = 500,
             TicketsSold = 499,
             HasSeat = true,
