@@ -116,11 +116,6 @@ namespace BlazorStandAlone.Pages
         }
 
         // Sort method
-        private void SortChanged(ChangeEventArgs e)
-        {
-            string selectedSort = e.Value?.ToString() ?? "date";
-            SortEvents(selectedSort);
-        }
 
         private void SortEvents(string sortBy)
         {
@@ -159,17 +154,8 @@ namespace BlazorStandAlone.Pages
                     FilteredEvents = FilteredEvents.OrderByDescending(e => e.TicketsMax ?? int.MinValue).ToList();
                     break;
             }
+            CurrentPage = 1;
             StateHasChanged();
-        }
-
-        private string GetClampedDescription(string description)
-        {
-            const int threshold = 220;
-
-            if (description.Length <= threshold)
-                return description;
-
-            return description.Substring(0, threshold) + "...";
         }
 
         // OPEN SHOW MORE INFO MODAL
