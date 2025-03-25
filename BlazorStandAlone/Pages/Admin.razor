@@ -69,34 +69,6 @@
     </div>
 
     <div class="box">
-        <div class="box-header">Tickets: @TicketService.TicketCount</div>
-        <div class="search-section">
-            <input @bind="_ticketId" placeholder="Enter Ticket ID" />
-            <button @onclick="GetTicketById">Search</button>
-            <button @onclick="AddTicket">Add Ticket</button>
-        </div>
-        <div class="box-content">
-            @if (_searchTicket && _currentTicket != null)
-            {
-                <div class="info-box"><strong>ID:</strong> @_currentTicket.Id</div>
-                <div class="info-box"><strong>Title:</strong> @_currentTicket.Title </div>
-                <div class="info-box"><strong>UserID:</strong> @_currentTicket.UserId</div>
-                <div class="info-box"><strong>EventID:</strong> @_currentTicket.EventId</div>
-                <div class="info-box"><strong>Price:</strong> @_currentTicket.Price</div>
-                <div class="info-box"><strong>Seat:</strong> @_currentTicket.Seat</div>
-                <button @onclick="() => DeleteTicket(_currentTicket.Id)">Delete</button>
-                <button @onclick="ClearTicket">Cancel</button>
-            }
-            @if (_ticketFormVisible)
-            {
-                <TicketForm TicketModel="_currentTicket"
-                OnSave="SaveTicket"
-                OnCancel="HideTicketForm" />
-            }
-        </div>
-    </div>
-
-    <div class="box">
         <div class="box-header">Events: @EventService.EventCount</div>
         <div class="search-section">
             <input @bind="_eventId" placeholder="Enter Event ID" />
@@ -128,6 +100,34 @@
                 IsEventEditMode="@_isEventEditMode"
                 OnSave="SaveEvent"
                 OnCancel="HideEventForm" />
+            }
+        </div>
+    </div>
+
+    <div class="box">
+        <div class="box-header">Tickets: @TicketService.TicketCount</div>
+        <div class="search-section">
+            <input @bind="_ticketId" placeholder="Enter Ticket ID" />
+            <button @onclick="GetTicketById">Search</button>
+            <button @onclick="AddTicket">Add Ticket</button>
+        </div>
+        <div class="box-content">
+            @if (_searchTicket && _currentTicket != null)
+            {
+                <div class="info-box"><strong>ID:</strong> @_currentTicket.Id</div>
+                <div class="info-box"><strong>Title:</strong> @_currentTicket.Title </div>
+                <div class="info-box"><strong>UserID:</strong> @_currentTicket.UserId</div>
+                <div class="info-box"><strong>EventID:</strong> @_currentTicket.EventId</div>
+                <div class="info-box"><strong>Price:</strong> @_currentTicket.Price</div>
+                <div class="info-box"><strong>Seat:</strong> @_currentTicket.Seat</div>
+                <button @onclick="() => DeleteTicket(_currentTicket.Id)">Delete</button>
+                <button @onclick="ClearTicket">Cancel</button>
+            }
+            @if (_ticketFormVisible)
+            {
+                <TicketForm TicketModel="_currentTicket"
+                OnSave="SaveTicket"
+                OnCancel="HideTicketForm" />
             }
         </div>
     </div>
