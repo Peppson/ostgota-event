@@ -1,7 +1,7 @@
 ﻿@* Popup.razor *@
 
 <div class="popup-overlay" style="@(IsVisible ? "display: flex;" : "display: none;")">
-    <div class="popup-content">
+    <div class="popup-content" id="error-popup-window">
         <h3>@Title</h3>
         <p>@Message</p>
         <button @onclick="ClosePopup">Ok</button>
