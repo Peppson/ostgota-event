@@ -69,3 +69,18 @@ footer a:hover,
     color: var(--home-date-color);
     transform: scale(1.02);
 }
+
+
+
+@media all and (max-width: 600px) {
+
+    
+    .footer-container{
+        display: flex;
+        flex-direction: column;
+    }
+    .footer {
+        
+        clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
+    }
+}
