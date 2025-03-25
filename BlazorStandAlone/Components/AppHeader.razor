@@ -156,7 +156,7 @@
         .GroupBy(ticket => ticket.Title)
         .Select(group => new UserTicket
         {
-            Title = group.Key,
+            Title = group.Key!,
             Price = group.First().Price,
             Count = group.Count()
         })

@@ -98,7 +98,7 @@ public class UserService : IUserService
     {
         try
         {
-            var newUser = new RegisterUserDto(user.Username, user.Email, user.PhoneNumber, user.Role);
+            var newUser = new RegisterUserDto(user.Username, user.Email, user.PhoneNumber!, user.Role);
             var response = await _httpClient.PostAsJsonAsync("api/user/create", newUser);
             
             if (response.IsSuccessStatusCode)
