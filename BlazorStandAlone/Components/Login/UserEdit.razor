@@ -13,7 +13,7 @@
                 <div class="form-fields">
                     <div class="form-group">
                         <label for="password">Lösenord<span>*</span></label>
-                        <InputText type="password" id="password" @bind-Value="EditModel.Password" class="form-control" autocomplete="new-password" />
+                        <InputText type="password" id="password" @bind-Value="EditModel!.Password" class="form-control" autocomplete="new-password" />
                     </div>
                     <div class="form-group">
                         <label for="email">E-post<span>*</span></label>
@@ -42,7 +42,7 @@
         string username = await SessionStorageService.GetItemAsync<string>("user");
         var newUser = await UserService.GetUserByUsername(username);
 
-        EditModel.Username = newUser.Username;
+        EditModel!.Username = newUser!.Username;
         EditModel.Email = newUser.Email;
         EditModel.PhoneNumber = newUser.PhoneNumber;
     }
@@ -54,7 +54,7 @@
         StateHasChanged();
     }
 
-    public async Task ClosePopup()
+    public void ClosePopup()
     {
         IsVisible = false;
         StateHasChanged();
@@ -65,7 +65,7 @@
         if (OnEdit.HasDelegate)
         {
             await OnEdit.InvokeAsync(EditModel);
-            await ClosePopup();
+            ClosePopup();
         }
     }
 }
