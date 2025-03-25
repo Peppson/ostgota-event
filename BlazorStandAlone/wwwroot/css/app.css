@@ -4,23 +4,18 @@
     --text-color-hover: var(--header-color);
 
     --header-color: #313131;
-    /*#313131*/
     --background-color-light: white;
     --background-color-mid: rgb(241, 241, 241);
-    --background-color-grey: rgb(55, 165, 40);
-    --background-color-dark: rgb(153, 136, 136);
-
-    --home-button-color: #73c770;
+    
+    --home-button-color: #5ec95a;
     --home-button-color-grey: lightgray;
-    --home-date-color: rgb(124, 199, 209);
-    --home-free-color: #198754;
+    --home-date-color: rgb(88, 197, 211);
 
-    --success-color: #198754;
-    --warning-color: rgb(255, 123, 0);
-    --error-color: #da2828;
+    --warning-color: rgb(255, 132, 0);
+    --error-color: #ff2929;
 
-    --admin-button-color: #3498db;
-    --admin-border-color: #3498db;
+    --admin-button-color: #595959;
+    --admin-border-color: var(--header-color);
     --admin-button-hover: #bdc3c7;
 }
 

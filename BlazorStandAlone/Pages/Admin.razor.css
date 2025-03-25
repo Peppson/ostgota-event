@@ -34,7 +34,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/images/fullsize/Festival.webp');
+    background-image: url('/images/fullsize/Whiskey.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -45,7 +45,6 @@
 .box {
     background: #ffffff;
     border-radius: 0px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     -moz-box-sizing: inherit;
     -webkit-box-sizing: inherit;
     box-sizing: inherit;
@@ -53,15 +52,13 @@
     display: flex;
     flex-direction: column;
     height: 80vh;
-    width: 500px;
-    border: 0px solid #e0e0e0;
     word-wrap: break-word;
     position: relative;
 }
 
 /* Header section */
 .box-header {
-    background: #2c3e50;
+    background: var(--header-color);
     color: white;
     padding: 1.25rem;
     text-align: center;
@@ -96,9 +93,8 @@
 }
 
 .search-section input:focus {
-    border-color: #3498db;
+    border-color: var(--header-color);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
 .search-section button {
@@ -154,7 +150,7 @@
 
 /* Button styling */
 button {
-    background: #3498db;
+    background: var(--admin-button-color);
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -165,7 +161,7 @@ button {
 }
 
 button:hover {
-    background: #2980b9;
+    background: var(--home-date-color);
     transform: translateY(-1px);
 }
 
@@ -176,7 +172,6 @@ button:active {
 /* Hover effects */
 .box:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
     transition: all 0.3s ease;
 }
 
@@ -191,22 +186,15 @@ button:active {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #3498db;
+    background: var(--home-date-color);
     border-radius: 0px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #2980b9;
+    background: var(--home-date-color);
 }
 
-/* Responsive design */
-@media (max-width: 1200px) {
-    .admin-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1400px) {
     .admin-container {
         grid-template-columns: 1fr;
     }
