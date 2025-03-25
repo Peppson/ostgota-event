@@ -3,15 +3,16 @@
     --text-color-dark: black;
     --text-color-hover: var(--header-color);
 
-    --header-color: #313131; /*#313131*/
+    --header-color: #313131;
+    /*#313131*/
     --background-color-light: white;
     --background-color-mid: rgb(241, 241, 241);
     --background-color-grey: rgb(55, 165, 40);
     --background-color-dark: rgb(153, 136, 136);
-    
+
     --home-button-color: #73c770;
     --home-button-color-grey: lightgray;
-    --home-date-color: rgb(124, 199, 209); 
+    --home-date-color: rgb(124, 199, 209);
     --home-free-color: #198754;
 
     --success-color: #198754;
@@ -91,4 +92,38 @@ body {
     position: absolute;
     right: 0.75rem;
     top: 0.5rem;
+}
+
+@media all and (max-width: 600px) {
+
+
+    #site-header {
+        margin-bottom: 60vh;
+        padding: 0px;
+        padding-right: 0px;
+        padding-left: 0px
+    }
+    
+    header {
+        padding: 0px;
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    #site-header .header-logo{
+        width: 80px;
+    }
+    #site-header .nav {
+        margin-top:20px;
+        padding-top: 0px;
+        padding-right: 0px;
+        padding:10px;
+        gap: 5px;
+    }
+    #site-header .nav-link{
+        font-size: 18px;
+        padding: 5px;
+    }
+
+
 }
