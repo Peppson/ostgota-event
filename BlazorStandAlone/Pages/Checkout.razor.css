@@ -149,3 +149,19 @@
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+@media all and (max-width: 600px) {
+
+    .logo {
+        display: none;
+    }
+
+    .checkout-info {
+        width: 100%;
+    }
+
+    .buttons {
+        width: 100%;
+    }
+
+}
