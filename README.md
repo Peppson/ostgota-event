@@ -102,7 +102,7 @@ This will run both projects at the same time.
 
 ## 🧪 Testing
 
-The project includes comprehensive backend testing using Reqnroll with xUnit. Tests focus on validating service functionality and business logic.
+The project includes backend testing for the UserService using Reqnroll with xUnit. Tests focus on validating service functionality and business logic.
 
 ## 🛠️ Development
 
