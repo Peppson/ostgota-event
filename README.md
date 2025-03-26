@@ -10,7 +10,7 @@
 
 A modern event ticketing platform for Östergötland County, built with Blazor WebAssembly and .NET 9. This application enables users to discover, search, and purchase tickets for local events while providing administrators with powerful management tools.
 
-![Östgöta Event Logo](Misc/kalv.png)
+![Östgöta Event Logo](/BlazorStandAlone/wwwroot/icons/logo-white.svg)
 
 ## 🌟 Features
 
@@ -53,7 +53,7 @@ The solution follows a hybrid approach combining Vertical Slice and Onion Archit
 - A modern web browser
 - IDE (recommended: Visual Studio 2022 or later)
 
-### Installation
+### Installation using Visual Studio 2022
 1. Clone the repository
 ```bash
 git clone https://github.com/your-username/ostgota-event.git
@@ -64,10 +64,37 @@ git clone https://github.com/your-username/ostgota-event.git
 cd ostgota-event
 ```
 
-3. Run the application
+3. Run the backend API
+```bash
+dotnet run --project Api
+```
+
+4. Run the application
 ```bash
 dotnet run --project BlazorStandAlone
 ```
+
+#### Using Visual Studio Code
+1. Clone the repository
+```bash
+git clone https://github.com/your-username/ostgota-event.git
+```
+
+2. Navigate to the solution directory
+```bash
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+cd ostgota-event
+```
+
+3. Open the Command Palette CTRL + Shift + P
+```bash
+CTRL + Shift + P
+```
+
+4. Run the Task "kör"
+
+This will run both projects at the same time.
 
 ## 🏗️ Project Structure
 
@@ -78,6 +105,7 @@ The project includes comprehensive backend testing using Reqnroll with xUnit. Te
 ## 🛠️ Development
 
 The project includes development-friendly features:
+- Database will initialize on run
 - Database reset capabilities
 - Quick admin access toggles
 - Session storage for authentication state
@@ -85,9 +113,9 @@ The project includes development-friendly features:
 ## 🤝 Contributing
 
 This project is maintained by:
-- TungViktor
-- JeppaJogg
-- FlutterJocke
+- [Viktor](https://github.com/ThoernVE)
+- [Jesper](https://github.com/Peppson)
+- [Joakim](https://github.com/Jockebjers)
 
 [View our KanBan Board](https://github.com/orgs/Ett-bra-team-som-samarbetar-bra/projects/1/views/1)
 
@@ -100,7 +128,7 @@ This project is maintained by:
 
 ## 📝 License
 
-[Your chosen license]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ---
 
