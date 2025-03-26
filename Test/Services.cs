@@ -26,9 +26,6 @@ namespace Test
             // Add services
             services.AddScoped<IDatabase, Database>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ITicketService, TicketService>();
-            services.AddScoped<IEventService, EventService>();
-            services.AddScoped<IAuthService, AuthService>();
 
             // Build the service provider and initialize the database
             var serviceProvider = services.BuildServiceProvider();
