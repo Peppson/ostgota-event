@@ -1,13 +1,4 @@
-using System;
-using System.Data;
-using Core.Data;
-using Core.Models;
-using Core.Services.Users;
-using Reqnroll;
-using Microsoft.EntityFrameworkCore;
-using Xunit;
-
-namespace Test.StepDefinitions
+namespace Test.ostgotaevent.specs.Core.UserServiceFeatures.StepDefinitions
 {
     [Binding]
     public class ClientShouldBeAbleToGetAUserFromDatabasByTheUsername_IfTheUserDoesNotExistItShouldGetNullBack_StepDefinitions

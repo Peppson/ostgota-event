@@ -1,12 +1,4 @@
-using System;
-using Core.Models;
-using Core.Services.Users;
-using Core.Data;
-using Reqnroll;
-using Microsoft.EntityFrameworkCore;
-using Xunit;
-
-namespace Test.StepDefinitions
+namespace Test.ostgotaevent.specs.Core.UserServiceFeatures.StepDefinitions
 {
     [Binding]
     public class ClientCanCheckWhetherAUserExistsInTheSystemStepDefinitions
