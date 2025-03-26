@@ -11,7 +11,7 @@
 Welcome to Östgöta Event! A modern event ticketing platform for Östergötland County, built with Blazor WebAssembly and .NET 9. This application enables users to discover, search, and purchase tickets for local events while providing administrators with powerful management tools.
 This is a sideproject created by Viktor Thörn, Joakim Bjerselius and Jesper Wallentin. The events on this application is fabricated and while inspiration has been taken from existing events, the application has no connection to any real events nor proper functionality in real world ticket sales.
 
-![Östgöta Event Logo](/BlazorStandAlone/wwwroot/icons/logo-white.svg)
+![Östgöta Event Logo](/images/home-img.png)
 
 ## 🌟 Features
 
@@ -129,5 +129,30 @@ This project was created by:
 - Input validation on both frontend and backend
 
 ---
+
+## 📸 Images
+
+  <details>
+  <summary><strong>🎨 Design & inspiration</strong></summary>
+
+  ![Idea](images/idea.png)
+  ![Full Page](images/fullpage.png)
+
+  </details>
+
+  <details>
+  <summary><strong>⚙️ Various images</strong></summary>
+
+  ![Admin Panel](images/admin.png)
+  ![Receipt](images/receipt.png)
+  ![User Screen](/images/userscreen.png)
+  ![Event Modal](/images/eventmodal.png)
+
+
+  </details>
+
+---
+
+<br>
 
 Built with ❤️ in Östergötland, Sweden
