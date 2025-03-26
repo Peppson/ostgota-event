@@ -23,7 +23,7 @@ namespace BlazorStandAlone.Pages
 
         // Skip and take to get the next set of events
         public List<EventDto> EventPages => FilteredEvents.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
-        public List<EventDto> events { get; set; } = new();
+        public List<EventDto> Events { get; set; } = new();
 
         // Bools for the onclick
         public bool IsNextDisabled => CurrentPage == TotalPages;
@@ -53,7 +53,7 @@ namespace BlazorStandAlone.Pages
         protected override async Task OnInitializedAsync()
         {
             await GetEventsAsync();
-            FilteredEvents = new List<EventDto>(events);
+            FilteredEvents = new List<EventDto>(Events);
             SortEvents("date");
         }
 
@@ -64,8 +64,8 @@ namespace BlazorStandAlone.Pages
                 var response = await HttpClient.GetAsync("api/event/get");
                 if (response.IsSuccessStatusCode)
                 {
-                    events = await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new();
-                    FilteredEvents = new List<EventDto>(events);
+                    Events = await response.Content.ReadFromJsonAsync<List<EventDto>>() ?? new();
+                    FilteredEvents = new List<EventDto>(Events);
                     StateHasChanged();
                 }
                 else
@@ -86,7 +86,7 @@ namespace BlazorStandAlone.Pages
             {
                 string searchLower = searchEvent.ToLower();
 
-                FilteredEvents = events.Where(e =>
+                FilteredEvents = Events.Where(e =>
                     e.Name.ToLower().Contains(searchLower) ||
                     e.City.ToLower().Contains(searchLower) ||
                     e.Address.ToLower().Contains(searchLower) ||
@@ -99,7 +99,7 @@ namespace BlazorStandAlone.Pages
             }
             else
             {
-                FilteredEvents = new List<EventDto>(events);
+                FilteredEvents = new List<EventDto>(Events);
             }
             SortEvents("");
             StateHasChanged();

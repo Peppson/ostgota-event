@@ -26,7 +26,7 @@
         <div class="event-controls">
 
             <div class="event-input-box">
-
+                @* Video tag works a bit so so, Blazor's fault, not ours. *@
                 <input type="text" id="event-search" @bind="searchEvent" @bind:event="oninput"
                     @onkeypress="HandleSearchKeyPress" placeholder="Sök efter namn, stad, datum">
                 <button class="drop-btn" @onclick="FilterEvents">Sök</button>
