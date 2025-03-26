@@ -65,7 +65,7 @@ public class DatabaseInitializer(Database db)
 
         var sampleEvent2 = new Event
         {
-            Name = "Resturang Jord",
+            Name = "Restaurang Jord",
             Description = "Restaurang Jord i Linköping har tilldelats en grön stjärna i Guide Michelin för sitt starka engagemang för hållbarhet. Deras filosofi \"från skog till tallrik\" innebär att de använder vilda och hyper-säsongsbetonade ingredienser, inklusive egenplockade örter, frukter och bär, samt viltkött jagat av ägaren Andreas Landén. Restaurangen erbjuder en överraskningsavsmakningsmeny med kreativa rätter som kombinerar olika smaker och texturer. Dessutom är Jord en miljösäkrad verksamhet som använder en ekologisk träbyggnad, återvinner regnvatten och drivs av solenergi.",
             City = "Linköping",
             AccessType = AccessType.Free,
@@ -191,8 +191,8 @@ public class DatabaseInitializer(Database db)
             Description = "Polustus är en älskad karnevalstradition i Grytgöl som har funnits i över 70 år! Varje midsommarafton samlas bybor och besökare för ett humoristiskt och festligt tågtåg som driver med lokala och globala händelser från det gångna året. Med skojiga inslag och en lekfull ton har Polustus blivit en årlig höjdpunkt för både unga och gamla. På vår sida hittar du bilder, historia och allt du behöver veta om detta unika karnevalståg. Välkommen att ta del av traditionen och skriv gärna en rad i vår gästbok!",
             City = "Grytgöl",
             AccessType = AccessType.Free,
-            StartTime = DateTime.SpecifyKind(new DateTime(2025, 7, 23, 7, 0, 0), DateTimeKind.Utc),
-            EndTime = DateTime.SpecifyKind(new DateTime(2025, 7, 24, 12, 0, 0), DateTimeKind.Utc),
+            StartTime = DateTime.SpecifyKind(new DateTime(2025, 6, 21, 10, 0, 0), DateTimeKind.Utc),
+            EndTime = DateTime.SpecifyKind(new DateTime(2025, 6, 21, 21, 0, 0), DateTimeKind.Utc),
             Address = "Grytgöl",
             TicketsMax = null,
             TicketsSold = 0,

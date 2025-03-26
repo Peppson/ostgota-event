@@ -6,7 +6,7 @@
     --header-color: #313131;
     --background-color-light: white;
     --background-color-mid: rgb(241, 241, 241);
-    
+
     --home-button-color: #5ec95a;
     --home-button-color-grey: lightgray;
     --home-date-color: rgb(88, 197, 211);
@@ -98,27 +98,27 @@ body {
         padding-right: 0px;
         padding-left: 0px
     }
-    
+
     header {
         padding: 0px;
         padding-right: 0px;
         padding-left: 0px;
     }
 
-    #site-header .header-logo{
+    #site-header .header-logo {
         width: 80px;
     }
+
     #site-header .nav {
-        margin-top:20px;
+        margin-top: 20px;
         padding-top: 0px;
         padding-right: 0px;
-        padding:10px;
+        padding: 10px;
         gap: 5px;
     }
-    #site-header .nav-link{
+
+    #site-header .nav-link {
         font-size: 18px;
         padding: 5px;
     }
-
-
 }
