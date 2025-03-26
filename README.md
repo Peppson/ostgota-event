@@ -8,16 +8,17 @@
 [![BCrypt](https://img.shields.io/badge/Security-BCrypt-blue)](https://github.com/BcryptNet/bcrypt.net)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A modern event ticketing platform for Östergötland County, built with Blazor WebAssembly and .NET 9. This application enables users to discover, search, and purchase tickets for local events while providing administrators with powerful management tools.
+Welcome to Östgöta Event! A modern event ticketing platform for Östergötland County, built with Blazor WebAssembly and .NET 9. This application enables users to discover, search, and purchase tickets for local events while providing administrators with powerful management tools.
+This is a sideproject created by Viktor Thörn, Joakim Bjerselius and Jesper Wallentin. The events on this application is fabricated and while inspiration has been taken from existing events, the application has no connection to any real events nor proper functionality in real world ticket sales.
 
 ![Östgöta Event Logo](/BlazorStandAlone/wwwroot/icons/logo-white.svg)
 
 ## 🌟 Features
 
 ### For Users
-- **Event Discovery**: Browse, search, and sort events by various criteria
+- **Event Discovery**: Browse, search, and sort events by date, name, city, size or amount of tickets left.
 - **Secure Authentication**: BCrypt-powered user registration and login
-- **Ticket Management**: View and manage purchased tickets
+- **Ticket Management**: View purchased tickets easily while logged in
 - **Profile Management**: Update contact information and password
 - **Responsive Design**: Seamless experience across all devices
 
@@ -25,33 +26,36 @@ A modern event ticketing platform for Östergötland County, built with Blazor W
 - **Comprehensive Dashboard**: Manage events, users, and tickets
 - **CRUD Operations**: Full control over system entities
 - **Search Functionality**: Quick access to specific records by ID
-- **Secure Access**: Role-based authorization system
+- **Secure Access**: Role-based authorization system connected to backend-services
 
 ## 🏗️ Architecture
 
 The solution follows a hybrid approach combining Vertical Slice and Onion Architecture principles, organized into four main projects:
 
-- **BlazorStandAlone**: Frontend WASM application with reusable components
+- **BlazorStandAlone**: Frontend WASM application built with reusable components
 - **Api**: Backend REST API with controller endpoints
 - **Core**: Central business logic and data models
-- **Test**: Backend service testing using Reqnroll
+- **Test**: Backend service testing using Reqnroll xUnit
 
 ### Key Technical Aspects
 - **Frontend**: Blazor WebAssembly with component-based architecture
 - **Backend**: .NET 9 API with controller endpoints
 - **Database**: SQLite with Entity Framework Core
 - **Authentication**: Custom authentication with BCrypt password hashing
-- **Authorization**: Session-based with role verification
+- **Authorization**: Session-based with role verification connected to backend
 - **Validation**: 
   - Frontend: DataAnnotations
   - Backend: FluentValidation
 
 ## 🚀 Getting Started
 
+<details>
+<summary>Click to expand installation instructions</summary>
+
 ### Prerequisites
 - .NET 9 SDK
 - A modern web browser
-- IDE (recommended: Visual Studio 2022 or later)
+- IDE (recommended: Visual Studio 2022 or later, alternatively Visual Studio Code)
 
 ### Installation using Visual Studio 2022
 1. Clone the repository
@@ -82,12 +86,10 @@ git clone https://github.com/your-username/ostgota-event.git
 
 2. Navigate to the solution directory
 ```bash
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
-
 cd ostgota-event
 ```
 
-3. Open the Command Palette CTRL + Shift + P
+3. Open the Command Palette with the following keybinds:
 ```bash
 CTRL + Shift + P
 ```
@@ -96,7 +98,7 @@ CTRL + Shift + P
 
 This will run both projects at the same time.
 
-## 🏗️ Project Structure
+</details>
 
 ## 🧪 Testing
 
@@ -105,14 +107,14 @@ The project includes comprehensive backend testing using Reqnroll with xUnit. Te
 ## 🛠️ Development
 
 The project includes development-friendly features:
-- Database will initialize on run
-- Database reset capabilities
+- Database will initialize when the api boots up
+- Database reset capabilities between reboots
 - Quick admin access toggles
 - Session storage for authentication state
 
-## 🤝 Contributing
+## 🤝 Contributors
 
-This project is maintained by:
+This project was created by:
 - [Viktor](https://github.com/ThoernVE)
 - [Jesper](https://github.com/Peppson)
 - [Joakim](https://github.com/Jockebjers)
@@ -125,10 +127,6 @@ This project is maintained by:
 - Role-based access control
 - Session-based authentication
 - Input validation on both frontend and backend
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ---
 
