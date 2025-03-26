@@ -83,165 +83,153 @@
 </script>
 
 <style>
-    .popup-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: flex-end;
-        align-items: flex-start;
-        z-index: 1000;
-    }
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    z-index: 1000;
+}
 
-    .popup-content {
-        background-color: var(--background-color-light);
-        padding: 24px;
-        position: relative;
-        width: 380px;
-        height: 520px;
-        display: flex;
-        flex-direction: column;
-        margin-right: 68px;
-        margin-top: 120px;
-    }
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--header-color);
+    transition: color 0.1s;
+}
 
-    .close-button {
-        position: absolute;
-        top: 10px;
-        right: 14px;
-        background: none;
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-        color: var(--header-color);
-        transition: color 0.1s;
-    }
+.close-button:hover {
+    color: #000000;
+}
 
-    .close-button:hover {
-        color: #000000;
-    }
+.auth-tabs {
+    display: flex;
+    margin-bottom: 40px;
+    border-bottom: 2px solid #eee;
+}
 
-    .auth-tabs {
-        display: flex;
-        margin-bottom: 40px;
-        border-bottom: 2px solid #eee;
-    }
+.tab-button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: none;
+    font-size: 18px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-    .tab-button {
-        flex: 1;
-        padding: 10px;
-        border: none;
-        background: none;
-        font-size: 18px;
-        color: #666;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+.tab-button.active {
+    color: var(--text-color-dark);
+    border-bottom: 3px solid var(--home-button-color);
+    margin-bottom: -2px;
+}
 
-    .tab-button.active {
-        color: var(--text-color-dark);
-        border-bottom: 3px solid var(--home-button-color);
-        margin-bottom: -2px;
-    }
+.tab-button:hover {
+    color: var(--home-button-color);
+}
 
-    .tab-button:hover {
-        color: var(--home-button-color);
-    }
+/* Form Styles */
+.form-group {
+    margin-bottom: 0.75rem;
+    padding-bottom: 4px;
+}
 
-    /* Form Styles */
-    .form-group {
-        margin-bottom: 0.75rem;
-        padding-bottom: 4px;
-    }
+.form-group label {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--text-color-dark);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
 
-    .form-group label {
-        display: block;
-        margin-bottom: 0.25rem;
-        color: var(--text-color-dark);
-        font-weight: 500;
-        font-size: 0.9rem;
-    }
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+    padding: 10px;
+}
 
-    .form-group input {
-        width: 100%;
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        font-size: 0.9rem;
-        transition: border-color 0.2s;
-        padding: 10px;
-    }
+.form-group input:focus {
+    outline: none;
+    border-color: var(--header-color);
+}
 
-    .form-group input:focus {
-        outline: none;
-        border-color: var(--header-color);
-    }
+.form-group .validation-message {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
 
-    .form-group .validation-message {
-        color: #dc3545;
-        font-size: 0.8rem;
-        margin-top: 0.25rem;
-    }
+.form-fields span {
+    color: grey;
+}
 
-    .form-fields span {
-        color: grey;
-    }
+.submit-button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: var(--header-color);
+    color: var(--text-color-light);
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 18px;
+}
 
-    .submit-button {
-        width: 100%;
-        padding: 0.8rem;
-        background-color: var(--header-color);
-        color: var(--text-color-light);
-        border: none;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        margin-top: 18px;
-    }
+.submit-button:hover {
+    opacity: 0.9;
+}
 
-    .submit-button:hover {
-        opacity: 0.9;
-    }
+.submit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
 
-    .submit-button:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
+/* Title Styles */
+.form-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
 
-    /* Title Styles */
-    .form-title {
-        text-align: center;
-        color: #333;
-        margin-bottom: 1rem;
-        font-size: 1.25rem;
-        font-weight: 600;
-    }
+/* Error Message Styles */
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
 
-    /* Error Message Styles */
-    .error-message {
-        color: #dc3545;
-        background-color: #f8d7da;
-        border: 1px solid #f5c6cb;
-        border-radius: 4px;
-        padding: 0.75rem;
-        margin-bottom: 1rem;
-        font-size: 0.875rem;
-    }
+/* Success Message Styles */
+.success-message {
+    color: #28a745;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
 
-    /* Success Message Styles */
-    .success-message {
-        color: #28a745;
-        background-color: #d4edda;
-        border: 1px solid #c3e6cb;
-        border-radius: 4px;
-        padding: 0.75rem;
-        margin-bottom: 1rem;
-        font-size: 0.875rem;
-    }
+.no-scroll {
+    overflow: hidden;
+}
 
-    .no-scroll {
-        overflow: hidden;
-    }
 </style>
-
