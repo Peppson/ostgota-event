@@ -1,12 +1,4 @@
-using System;
-using System.Runtime.CompilerServices;
-using Core.Services.Users;
-using Core.Data;
-using Reqnroll;
-using Microsoft.EntityFrameworkCore;
-using Core.Models;
-
-namespace Test.StepDefinitions
+namespace Test.ostgotaevent.specs.Core.UserServiceFeatures.StepDefinitions
 {
     [Binding]
     public class ClientCanAddAUserToTheSystemStepDefinitions
