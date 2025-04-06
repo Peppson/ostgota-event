@@ -22,7 +22,6 @@ public class EventServiceException : Exception
 
 public class EventService : IEventService
 {
-
     private readonly HttpClient _httpClient;
     private List<EventDto> _events = new();
     public List<EventDto> Events => _events;
