@@ -62,7 +62,7 @@ public class Program
                 await db.ResetDatabase();
             else
                 await db.InitDatabase();
-        } //creating a scope for database in order to reset it base on development-bool
+        } //creating a scope for database in order to reset it based on development-bool
 
         var apiUrl = builder.Configuration["apiUrl"];
 
