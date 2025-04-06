@@ -126,7 +126,7 @@ This project was created by:
 
 ---
 
-## 📸 images
+## 📸 Images
 
   <details>
   <summary><strong>🎨 Design & inspiration</strong></summary>
@@ -137,7 +137,7 @@ This project was created by:
   </details>
 
   <details>
-  <summary><strong>⚙️ Various images</strong></summary>
+  <summary><strong>⚙️ Various Images</strong></summary>
 
   ![Admin Panel](images/admin.png)
   ![Receipt](images/receipt.png)
