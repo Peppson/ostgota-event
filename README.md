@@ -49,14 +49,14 @@ dotnet run --project Api & dotnet run --project BlazorStandAlone
 
 ## Images
 
-<details>
+<details open>
 <summary><strong>Full Homepage View</strong></summary>
 
 ![Fullpage View](images/fullpage.png)
 
 </details>
 
-<details>
+<details open>
 <summary><strong>Various Images</strong></summary>
   
 ![Event Modal](images/eventmodal2.PNG)
